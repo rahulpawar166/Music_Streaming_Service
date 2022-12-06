@@ -15,12 +15,8 @@
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  height: 150px;
+  padding: 20px;
   color: white;
 }
 
@@ -35,4 +31,78 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.navigation {
+  background: #282c34;
+}
+
+.navigation ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navigation a:link,
+.navigation a:visited {
+  color: white;
+  text-decoration: none;
+}
+
+.active {
+  font-weight: bold;
+  color: red !important;
+}
+
+.error {
+  font-weight: bold;
+  color: red !important;
+}
+
+.forgotPassword {
+  background: none !important;
+  border: none !important;
+  text-decoration: underline;
+  margin-left: 5px;
+  color: #069;
+}
+
+.forgotPassword:hover {
+  text-decoration: none;
+  color: red;
+}
+
+/* Sign-in and Sign-up */
+
+.text-field {
+  width: 100%;
+  margin-bottom: 10px;
+}
+.login-button {
+  background-color: #eef0ff;
+  color: #2c303d;
+  border-radius: 10px;
+  padding: 10px 40px;
+  margin: 10px;
+  text-decoration: none;
+  font-weight: bold;
+}
+.login-button:hover {
+  background-color: #2c303d;
+  color: #eef0ff;
+}
+.login-text {
+  text-align: center;
+  margin-bottom: 10px;
+}
+.login-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.switch-form {
+  text-align: center;
+  color: #2c303d;
+  cursor: pointer;
 }
