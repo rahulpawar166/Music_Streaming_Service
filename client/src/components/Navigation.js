@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { Auth, AppUserLogout } from "../firebase/Firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import "../App.css";
 const auth = Auth();
 
@@ -28,6 +29,16 @@ const Navigation = () => {
   return <div>{user ? <NavigationAuth /> : <NavigationNonAuth />}</div>;
 };
 
+const handleSignOut = (event) => {
+  AppUserLogout();
+  localStorage.removeItem("user");
+  toast.info("Logged Out");
+  // navigate("/");
+  setTimeout(() => {
+    window.location.reload();
+  }, 1000);
+};
+
 const NavigationAuth = () => {
   return (
     <nav className="navigation">
@@ -41,7 +52,11 @@ const NavigationAuth = () => {
         <li>
           <NavLink to="/account">Account</NavLink>
         </li>
-        <li>{/* <SignOutButton /> */}</li>
+        <li>
+          <NavLink to="/" onClick={handleSignOut}>
+            Sign Out
+          </NavLink>
+        </li>
       </ul>
     </nav>
   );
