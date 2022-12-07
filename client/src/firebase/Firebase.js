@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import {
   createUserWithEmailAndPassword,
   getAuth,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
@@ -50,7 +51,7 @@ async function AppUserDb(username, uid) {
 
 async function AppUserCreation(data) {
   console.log("data in fb", data);
-  console.log("auth", auth);
+  console.log("auth", getAuth());
   let user;
   try {
     let user = await createUserWithEmailAndPassword(
@@ -87,7 +88,7 @@ async function AppUserLogout() {
 
 async function AppUserLogin(data) {
   console.log("userlogin", data);
-  console.log("auth", auth);
+  console.log("auth", getAuth());
   let user;
   try {
     user = await signInWithEmailAndPassword(
@@ -101,4 +102,9 @@ async function AppUserLogin(data) {
     return error;
   }
 }
-export { AppUserCreation, AppUserLogin, AppUserLogout, Auth };
+
+async function doPasswordReset(email) {
+  await sendPasswordResetEmail(getAuth(), email);
+}
+
+export { AppUserCreation, AppUserLogin, AppUserLogout, Auth, doPasswordReset };

@@ -1,0 +1,67 @@
+.container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.card {
+  width: 400px;
+  min-height: 250px;
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 1rem;
+  padding: 8px;
+  z-index: 10;
+  color: whitesmoke;
+}
+
+.card h1 {
+  font-size: 2.2rem;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.subtitle {
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.card .text-field {
+  border: 1px solid rgb(188, 188, 188);
+  width: 100%;
+  border-radius: 4px;
+  color: white;
+}
+
+.card .text-field input {
+  color: white;
+}
+
+.card .text-field label {
+  color: rgb(144, 144, 144);
+}
+
+.card .smallBtn {
+  color: rgb(3, 173, 215);
+}
+
+.btn {
+  background: none;
+  border: none;
+  text-align: center;
+  font-size: 1rem;
+  color: whitesmoke;
+  background-color: #fa709a;
+  padding: 0.8rem 1.8rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  margin: 24px auto;
+  display: block;
+}

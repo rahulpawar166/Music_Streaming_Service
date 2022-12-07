@@ -3,7 +3,8 @@ import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import Navigation from "./components/Navigation";
-import UserAuth from "./components/UserAuth";
+import UserAuth from "./pages/UserAuth/UserAuth";
+import ForgotPassword from "./pages/UserAuth/ForgotPassword";
 
 // import PrivateRoute from "./components/PrivateRoute";
 function App() {
@@ -23,6 +24,7 @@ function App() {
             <Route path="/account" element={<Account />} />
           </Route> */}
         <Route path="/userauth" element={<UserAuth />} />
+        <Route path="/forgotpassword" element={<ForgotPassword />}></Route>
       </Routes>
     </Router>
   );
