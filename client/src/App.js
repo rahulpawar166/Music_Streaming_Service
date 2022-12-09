@@ -4,9 +4,14 @@ import generateToken, { isTokenValid } from "./generateToken";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import NewRelease from "./components/NewRelease";
 import Navigation from "./components/Navigation";
-import UserAuth from "./components/UserAuth";
+
 import Home from "./components/Home";
 import { AuthProvider } from "./providers/AuthProvider";
+
+import UserAuth from "./pages/UserAuth/UserAuth";
+import ForgotPassword from "./pages/UserAuth/ForgotPassword";
+
+
 // import PrivateRoute from "./components/PrivateRoute";
 
 console.log(process.env.REACT_APP_ALBUMS_URL);
@@ -33,7 +38,11 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/userauth" element={<UserAuth />} />
+
         <Route path="/new-release" element={<NewRelease />} />
+
+        <Route path="/forgotpassword" element={<ForgotPassword />}></Route>
+
       </Routes>
     </Router>
   );
