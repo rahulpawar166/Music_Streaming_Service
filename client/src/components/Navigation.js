@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { Auth, AppUserLogout } from "../firebase/Firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import NewRelease from "./NewRelease";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "../App.css";
@@ -41,24 +42,29 @@ const handleSignOut = (event) => {
 
 const NavigationAuth = () => {
   return (
-    <nav className="navigation">
-      <ul>
-        <li>
-          <NavLink to="/">Landing</NavLink>
-        </li>
-        <li>
-          <NavLink to="/home">Home</NavLink>
-        </li>
-        <li>
-          <NavLink to="/account">Account</NavLink>
-        </li>
-        <li>
-          <NavLink to="/" onClick={handleSignOut}>
-            Sign Out
-          </NavLink>
-        </li>
-      </ul>
-    </nav>
+    <div>
+      <nav className="navigation">
+        <ul>
+          <li>
+            <NavLink to="/">Landing</NavLink>
+          </li>
+          <li>
+            <NavLink to="/home">Home</NavLink>
+          </li>
+          <li>
+            <NavLink to="/account">Account</NavLink>
+          </li>
+          <li>
+            <NavLink to="/new-release">new-relese</NavLink>
+          </li>
+          <li>
+            <NavLink to="/" onClick={handleSignOut}>
+              Sign Out
+            </NavLink>
+          </li>
+        </ul>
+      </nav>
+    </div>
   );
 };
 
