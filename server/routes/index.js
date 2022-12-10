@@ -1,6 +1,13 @@
+const playlistRoutes = require("./playlist");
+
 const constructorMethod = (app) => {
-  app.use("*", (req, res) => {
-    res.status(404).json({ error: "Not found" });
+    console.log("here in roiutes")
+  app.use("/playlist", playlistRoutes);
+
+  app.use("*", (request, response) => {
+    response.status(404).json({
+      error: "Not found",
+    });
   });
 };
 
