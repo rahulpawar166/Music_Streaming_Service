@@ -26,7 +26,7 @@ const generateToken = async () => {
     qs.stringify({
       grant_type: "client_credentials",
     }),
-    headers
+    headers,
   );
 
   // return {
