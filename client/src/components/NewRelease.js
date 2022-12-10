@@ -47,11 +47,23 @@ const NewRelease = () => {
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
   const [found, setFound] = useState(false);
+  const [playlistData, setPlayListData] = useState({});
 
   console.log(
     "accessstoken from new release=",
     window.localStorage.getItem("token")
   );
+
+  const addToPlaylist = async (albumId) => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:3008/playlist/6393c998ba7131648ed117dc/${albumId}`
+      );
+      setPlayListData(data);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
   const getNewMusicAlbumReleases = async () => {
     const requestInit = {
@@ -71,6 +83,7 @@ const NewRelease = () => {
       setLoading(false);
       setFound(true);
       setMusicAlbums(response.data.albums.items);
+      console.log("THIS IS URL DATA", response);
       // console.log(musicAlbums);
     } catch (error) {
       setFound(false);
@@ -99,7 +112,20 @@ const NewRelease = () => {
               />
             </Link>
           </CardActions>
-          <Button className={classes.button}>Add</Button>
+          <Button
+            className={classes.button}
+            onClick={() => addToPlaylist(album.id)}
+          >
+            Add
+          </Button>
+          <br />
+          <Button>
+            {album?.tracks?.itmes[0]?.external_urls.spotify}
+            {/* {album?.disc_number} */}
+            {/* {album?.artists[0]?.map((i) => {
+              return i.external_urls;
+            })} */}
+          </Button>
         </Card>
       </Grid>
     );
