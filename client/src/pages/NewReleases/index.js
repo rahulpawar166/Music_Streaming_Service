@@ -51,7 +51,7 @@ const NewRelease = () => {
 
   console.log(
     "accessstoken from new release=",
-    window.localStorage.getItem("token")
+    window.localStorage.getItem("token"),
   );
 
   const addToPlaylist = async (albumId) => {
@@ -76,7 +76,7 @@ const NewRelease = () => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_NEW_RELEASE}`,
-        requestInit
+        requestInit,
       );
       console.log("we get response");
       console.log(response);

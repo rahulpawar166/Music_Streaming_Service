@@ -58,7 +58,7 @@ async function AppUserCreation(data) {
       getAuth(),
       data.email,
       data.password,
-      data.name
+      data.name,
     );
     if (user.user) {
       updateProfile(getAuth().currentUser, {
@@ -94,7 +94,7 @@ async function AppUserLogin(data) {
     user = await signInWithEmailAndPassword(
       getAuth(),
       data.email,
-      data.password
+      data.password,
     );
     return true;
   } catch (error) {
