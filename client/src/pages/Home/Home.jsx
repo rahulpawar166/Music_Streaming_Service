@@ -67,7 +67,7 @@ const Home = () => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_ALBUMS_URL}?ids=${process.env.REACT_APP_ALBUMS_ID}`,
-        requestInit
+        requestInit,
       );
       console.log("we get response");
       console.log(response);
