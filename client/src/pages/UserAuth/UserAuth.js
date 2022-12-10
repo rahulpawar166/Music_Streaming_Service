@@ -1,9 +1,9 @@
+import "../../styles/App.css";
+import "../../styles/UserAuth.css";
 import { TextField, Button } from "@mui/material";
 import { Container } from "@mui/system";
 import React, { useState } from "react";
 import { StyledEngineProvider } from "@mui/system";
-import "../../App.css";
-import "./UserAuth.css";
 import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
