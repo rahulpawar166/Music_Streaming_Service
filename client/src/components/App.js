@@ -13,6 +13,8 @@ import { AuthProvider } from "../providers/AuthProvider";
 import UserAuth from "../pages/UserAuth/UserAuth";
 import { makeStyles } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/core/styles";
+import Album from "@material-ui/icons/Album";
+import AlbumSong from "../pages/AlbumSong"
 
 // import PrivateRoute from "./components/PrivateRoute";
 
@@ -54,6 +56,7 @@ function App() {
               <Route path="/userauth" element={<UserAuth />} />
               <Route path="/forgotpassword" element={<ForgotPassword />} />
               <Route path="/new-release" element={<NewRelease />} />
+              <Route path="/AlbumSong/:AlbumId" element={<AlbumSong/>}/>
             </Routes>
           </main>
           <footer>{/* <PlayerControls /> */}</footer>
