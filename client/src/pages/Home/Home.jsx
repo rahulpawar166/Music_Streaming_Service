@@ -43,20 +43,17 @@ const useStyles = makeStyles({
 });
 
 const Home = () => {
-  const [musicAlbums, setMusicAlbums] = useState([]);
   const classes = useStyles();
+
+  const [musicAlbums, setMusicAlbums] = useState([]);
   const [loading, setLoading] = useState(true);
   const [found, setFound] = useState(false);
 
-  // const albumsid = process.env.REACT_APP_ALBUMS_ID;
-  // const albumsURL = process.env.REACT_APP_ALBUMS_URL;
-
   console.log("accessstoken from Home=", window.localStorage.getItem("token"));
-  // console.log(process.env.REACT_APP_ALBUMS_ID);
-  // console.log(process.env.REACT_APP_ALBUMS_URL);
-  // console.log(`${albumsURL}?ids=${albumsid}`);
+
 
   const getAlbums = async () => {
+
     const requestInit = {
       headers: {
         Authorization: `Bearer ${window.localStorage.getItem("token")}`,
@@ -71,10 +68,11 @@ const Home = () => {
       );
       console.log("we get response");
       console.log(response);
+
       setLoading(false);
       setFound(true);
       setMusicAlbums(response.data.albums);
-      // console.log(musicAlbums);
+      
     } catch (error) {
       setFound(false);
       setLoading(false);
@@ -91,7 +89,7 @@ const Home = () => {
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={album?.id}>
         <Card className={classes.card} variant="outlined">
           <CardActions>
-            <Link to={`/${album?.id}`}>
+            <Link to={`/AlbumSong/${album?.id}`}>
               <CardHeader className={classes.titleHead} title={album?.name} />
 
               <CardMedia
@@ -102,7 +100,7 @@ const Home = () => {
               />
             </Link>
           </CardActions>
-          <Button className={classes.button}>Add</Button>
+          {/* <Button className={classes.button}>Explore</Button> */}
         </Card>
       </Grid>
     );
