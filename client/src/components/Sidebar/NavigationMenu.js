@@ -1,45 +1,25 @@
-// React
-import { useState, useEffect } from "react";
+import { useContext } from "react";
+import { AuthContext } from "../../firebase/Auth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-// Auth
-import { Auth, AppUserLogout } from "../../firebase/Firebase";
-import { onAuthStateChanged } from "firebase/auth";
-// Lists
+import { doSignOut } from "../../firebase/FirebaseFunctions";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-// Icons
 import HomeIcon from "@material-ui/icons/Home";
 import SearchIcon from "@material-ui/icons/Search";
 import AlbumIcon from "@material-ui/icons/Album";
 import LibraryMusicIcon from "@material-ui/icons/LibraryMusic";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 const NavigationMenu = () => {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState(null);
-  const auth = Auth();
-
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log("userinnavbar", user);
-        setUser(user);
-        localStorage.setItem("user", JSON.stringify(user));
-        setIsLoading(false);
-      } else {
-        localStorage.removeItem("user");
-        setUser(null);
-      }
-    });
-  }, []);
+  const { currentUser } = useContext(AuthContext);
 
   const handleSignOut = () => {
-    AppUserLogout();
-    localStorage.removeItem("user");
+    doSignOut();
     toast.info("Logged Out");
     navigate("/");
     setTimeout(() => {
@@ -59,8 +39,8 @@ const NavigationMenu = () => {
   const NavItems = [
     buildNavItem("Home", "home", "/", <HomeIcon />),
     buildNavItem("Search", "search", "/search", <SearchIcon />),
-    buildNavItem("New Releases", "newreleases", "/new-release", <AlbumIcon />),
-    buildNavItem("PlayList", "playlist", "/playlist", <LibraryMusicIcon />),
+    buildNavItem("New Releases", "newreleases", "/new-releases", <AlbumIcon />),
+    buildNavItem("Library", "playlists", "/playlists", <LibraryMusicIcon />),
   ];
 
   return (
@@ -73,15 +53,15 @@ const NavigationMenu = () => {
           </ListItem>
         );
       })}
-      {user ? (
+      {currentUser ? (
         <ListItem button onClick={handleSignOut} key="signout">
           <ListItemIcon>
-            <AccountCircleIcon />
+            <ExitToAppIcon />
           </ListItemIcon>
-          <ListItemText primary="Sign On" />
+          <ListItemText primary="Sign Out" />
         </ListItem>
       ) : (
-        <ListItem button onClick={() => navigate("/userauth")} key="signin">
+        <ListItem button onClick={() => navigate("/signin")} key="signin">
           <ListItemIcon>
             <AccountCircleIcon />
           </ListItemIcon>

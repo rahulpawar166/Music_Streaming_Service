@@ -1,16 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link,useParams } from "react-router-dom";
-import {
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  CardMedia,
-  Grid,
-  makeStyles,
-  Button,
-} from "@material-ui/core";
+import { useParams } from "react-router-dom";
+import { Card, CardHeader, Grid, makeStyles, Button } from "@material-ui/core";
 // import { Default } from "react-toastify/dist/utils";
 import DefaultImage from "../img/DefaultImage.jpeg";
 // import { playlist } from "../../../server/config/mongoCollections";
@@ -47,12 +38,11 @@ const useStyles = makeStyles({
 });
 
 const AlbumSong = () => {
-  
   const classes = useStyles();
   //to get data of particular albums
   const {AlbumId}=useParams();
 
-  const [playListId, setPlayListId]=useState();
+  const [playListId, setPlayListId] = useState();
   const [trackAlbums, setTrackAlbums] = useState();
   const [loading, setLoading] = useState(true);
   const [found, setFound] = useState(false);
@@ -89,7 +79,6 @@ const AlbumSong = () => {
     
 
   const getAlbums = async () => {
-
     const requestInit = {
       headers: {
         Authorization: `Bearer ${window.localStorage.getItem("token")}`,
@@ -104,13 +93,11 @@ const AlbumSong = () => {
       );
 
       console.log("we get response");
-      console.log("data=",response.data);
+      console.log("data=", response.data);
 
       setLoading(false);
       setFound(true);
       setTrackAlbums(response.data);
-
-   
     } catch (error) {
       setFound(false);
       setLoading(false);
@@ -126,11 +113,12 @@ const AlbumSong = () => {
     return (
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.id}>
         <Card className={classes.card} variant="outlined">
-          
-             <CardHeader className={classes.titleHead} title={track?.id} />
-              <CardHeader className={classes.titleHead} title={track?.name} />
-        <br/>
-          <Button  onClick={() => addToPlaylist(track?.id)}>Add To PlayList</Button>
+          <CardHeader className={classes.titleHead} title={track?.id} />
+          <CardHeader className={classes.titleHead} title={track?.name} />
+          <br />
+          <Button onClick={() => addToPlaylist(track?.id)}>
+            Add To PlayList
+          </Button>
         </Card>
       </Grid>
     );
@@ -149,10 +137,8 @@ const AlbumSong = () => {
     return (
       <div>
         <h1>{" tracks"}</h1>
-       
-  
- 
- {/* <CardMedia
+
+        {/* <CardMedia
                 className={classes.media}
                 component="img"
                 image={
@@ -163,16 +149,15 @@ const AlbumSong = () => {
                 title="Album"
               />  */}
 
-<img
-            className="Album"
-            src={trackAlbums?.images[0]?.url}
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = DefaultImage;
-            }}
-            alt="Album"
-          />
-
+        <img
+          className="Album"
+          src={trackAlbums?.images[0]?.url}
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = DefaultImage;
+          }}
+          alt="Album"
+        />
 
         <br />
         <Grid container className={classes.grid} spacing={5}>

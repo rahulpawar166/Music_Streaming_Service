@@ -8,7 +8,6 @@ import {
   CardMedia,
   Grid,
   makeStyles,
-  Button,
 } from "@material-ui/core";
 
 const useStyles = makeStyles({
@@ -44,16 +43,13 @@ const useStyles = makeStyles({
 
 const Home = () => {
   const classes = useStyles();
-
   const [musicAlbums, setMusicAlbums] = useState([]);
   const [loading, setLoading] = useState(true);
   const [found, setFound] = useState(false);
 
-  console.log("accessstoken from Home=", window.localStorage.getItem("token"));
-
+  console.log("accessToken from Home: ", window.localStorage.getItem("token"));
 
   const getAlbums = async () => {
-
     const requestInit = {
       headers: {
         Authorization: `Bearer ${window.localStorage.getItem("token")}`,
@@ -66,17 +62,13 @@ const Home = () => {
         `${process.env.REACT_APP_ALBUMS_URL}?ids=${process.env.REACT_APP_ALBUMS_ID}`,
         requestInit,
       );
-      console.log("we get response");
-      console.log(response);
-
       setLoading(false);
       setFound(true);
       setMusicAlbums(response.data.albums);
-      
     } catch (error) {
       setFound(false);
       setLoading(false);
-      console.log(error);
+      console.error(error);
     }
   };
 

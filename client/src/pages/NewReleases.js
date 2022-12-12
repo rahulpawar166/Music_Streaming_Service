@@ -43,7 +43,7 @@ const useStyles = makeStyles({
   },
 });
 
-const NewRelease = () => {
+const NewReleases = () => {
   const [musicAlbums, setMusicAlbums] = useState([]);
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
@@ -58,14 +58,13 @@ const NewRelease = () => {
   const addToPlaylist = async (albumId) => {
     try {
       const { data } = await axios.get(
-        `http://localhost:3008/playlist/6393c998ba7131648ed117dc/${albumId}`
+        `http://localhost:3008/playlist/6393c998ba7131648ed117dc/${albumId}`,
       );
       setPlayListData(data);
     } catch (error) {
       console.log("error", error);
     }
   };
-  
 
   const getNewMusicAlbumReleases = async () => {
     const requestInit = {
@@ -159,4 +158,4 @@ const NewRelease = () => {
     );
 };
 
-export default NewRelease;
+export default NewReleases;
