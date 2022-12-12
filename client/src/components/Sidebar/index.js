@@ -8,7 +8,7 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import MenuIcon from "@material-ui/icons/Menu";
 import IconButton from "@material-ui/core/IconButton";
 import NavigationMenu from "./NavigationMenu";
-import PlaylistList from "./PlaylistList";
+// import PlaylistList from "./PlaylistList";
 
 const drawerWidth = "12rem";
 const useStyles = makeStyles((theme) => ({
@@ -49,7 +49,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Sidebar = () => {
-  const theme = useTheme();
   const classes = useStyles();
   const [open, setOpen] = useState(false);
 
