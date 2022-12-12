@@ -60,7 +60,7 @@ const NavigationMenu = () => {
     buildNavItem("Home", "home", "/", <HomeIcon />),
     buildNavItem("Search", "search", "/search", <SearchIcon />),
     buildNavItem("New Releases", "newreleases", "/new-release", <AlbumIcon />),
-    buildNavItem("Library", "library", "/library", <LibraryMusicIcon />),
+    buildNavItem("PlayList", "playlist", "/playlist", <LibraryMusicIcon />),
   ];
 
   return (

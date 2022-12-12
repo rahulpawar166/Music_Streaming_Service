@@ -1,5 +1,5 @@
 import "../styles/App.css";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import generateToken, { isTokenValid } from "../generateToken";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -15,6 +15,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/core/styles";
 import Album from "@material-ui/icons/Album";
 import AlbumSong from "../pages/AlbumSong"
+import axios from "axios"
+import PlayList from "../pages/PlayList";
 
 // import PrivateRoute from "./components/PrivateRoute";
 
@@ -31,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
 
 //this will return token for spotify api and we will store it inside local storage
 function App() {
+  const [playListId,setPlayListId]=useState()
+
+
   const classes = useStyles();
   async function getToken() {
     let token = "";
@@ -41,6 +46,21 @@ function App() {
   useEffect(() => {
     getToken();
   }, []);
+
+  const createPlaylist=async()=>{
+    try {
+      const { data } = await axios.get(
+        `http://localhost:3008/playlist/create/myplayList`  
+      );
+      console.log(data)
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+
+  useEffect(()=>{
+    createPlaylist()
+  },[])
 
   return (
     <ThemeProvider theme={theme}>
@@ -57,6 +77,7 @@ function App() {
               <Route path="/forgotpassword" element={<ForgotPassword />} />
               <Route path="/new-release" element={<NewRelease />} />
               <Route path="/AlbumSong/:AlbumId" element={<AlbumSong/>}/>
+              <Route path="/playlist" element={<PlayList/>}/>
             </Routes>
           </main>
           <footer>{/* <PlayerControls /> */}</footer>
