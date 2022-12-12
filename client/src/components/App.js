@@ -1,24 +1,20 @@
 import "../styles/App.css";
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
-import generateToken, { isTokenValid } from "../generateToken";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Home from "../pages/Home/Home";
-import NewRelease from "../pages/NewReleases";
-import ForgotPassword from "../pages/UserAuth/ForgotPassword";
+import generateToken from "../generateToken";
+import { AuthProvider } from "../firebase/Auth";
+import SignUp from "../pages/SignUp";
+import SignIn from "../pages/SignIn";
+import ForgotPassword from "../pages/ForgotPassword";
+// import PrivateRoute from "./components/PrivateRoute";
+import Home from "../pages/Home";
+import NewReleases from "../pages/NewReleases";
 import Sidebar from "./Sidebar";
-import PlayerControls from "./PlayerControls";
 import theme from "../styles/MuiTheme";
-import { AuthProvider } from "../providers/AuthProvider";
-import UserAuth from "../pages/UserAuth/UserAuth";
 import { makeStyles } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/core/styles";
-import Album from "@material-ui/icons/Album";
-import AlbumSong from "../pages/AlbumSong"
-
-// import PrivateRoute from "./components/PrivateRoute";
-
-console.log(process.env.REACT_APP_ALBUMS_URL);
+import AlbumSong from "../pages/AlbumSong";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,40 +25,42 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-//this will return token for spotify api and we will store it inside local storage
 function App() {
   const classes = useStyles();
   async function getToken() {
     let token = "";
     token = await generateToken();
-    console.log("token", token);
     window.localStorage.setItem("token", token);
   }
+  // Hook to generate token for Spotify's API and cache in localStorage
   useEffect(() => {
     getToken();
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
-      <Helmet>
-        <meta name="viewport" content="initial-scale=1, width=device-width" />
-      </Helmet>
-      <div className={classes.root}>
-        <Router>
-          <Sidebar />
-          <main className={classes.content}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/userauth" element={<UserAuth />} />
-              <Route path="/forgotpassword" element={<ForgotPassword />} />
-              <Route path="/new-release" element={<NewRelease />} />
-              <Route path="/AlbumSong/:AlbumId" element={<AlbumSong/>}/>
-            </Routes>
-          </main>
-          <footer>{/* <PlayerControls /> */}</footer>
-        </Router>
-      </div>
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider theme={theme}>
+        <Helmet>
+          <meta name="viewport" content="initial-scale=1, width=device-width" />
+        </Helmet>
+        <div className={classes.root}>
+          <Router>
+            <Sidebar />
+            <main className={classes.content}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/signin" element={<SignIn />} />
+                <Route path="/forgotpassword" element={<ForgotPassword />} />
+                <Route path="/new-releases" element={<NewReleases />} />
+                <Route path="/AlbumSong/:AlbumId" element={<AlbumSong />} />
+              </Routes>
+            </main>
+            <footer>{/* <PlayerControls /> */}</footer>
+          </Router>
+        </div>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
 

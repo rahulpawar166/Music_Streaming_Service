@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
+import { Link } from "react-router-dom";
 import {
   Card,
   CardActions,
@@ -8,9 +8,7 @@ import {
   CardMedia,
   Grid,
   makeStyles,
-  Button,
 } from "@material-ui/core";
-import { Link } from "react-router-dom";
 
 const useStyles = makeStyles({
   card: {
@@ -43,31 +41,15 @@ const useStyles = makeStyles({
   },
 });
 
-const NewRelease = () => {
-  const [musicAlbums, setMusicAlbums] = useState([]);
+const Home = () => {
   const classes = useStyles();
+  const [musicAlbums, setMusicAlbums] = useState([]);
   const [loading, setLoading] = useState(true);
   const [found, setFound] = useState(false);
-  const [playlistData, setPlayListData] = useState({});
 
-  console.log(
-    "accessstoken from new release=",
-    window.localStorage.getItem("token"),
-  );
+  console.log("accessToken from Home: ", window.localStorage.getItem("token"));
 
-  const addToPlaylist = async (albumId) => {
-    try {
-      const { data } = await axios.get(
-        `http://localhost:3008/playlist/6393c998ba7131648ed117dc/${albumId}`
-      );
-      setPlayListData(data);
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-  
-
-  const getNewMusicAlbumReleases = async () => {
+  const getAlbums = async () => {
     const requestInit = {
       headers: {
         Authorization: `Bearer ${window.localStorage.getItem("token")}`,
@@ -77,25 +59,21 @@ const NewRelease = () => {
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_NEW_RELEASE}`,
+        `${process.env.REACT_APP_ALBUMS_URL}?ids=${process.env.REACT_APP_ALBUMS_ID}`,
         requestInit,
       );
-      console.log("we get response");
-      console.log(response);
       setLoading(false);
       setFound(true);
-      setMusicAlbums(response.data.albums.items);
-      console.log("THIS IS URL DATA", response);
-      // console.log(musicAlbums);
+      setMusicAlbums(response.data.albums);
     } catch (error) {
       setFound(false);
       setLoading(false);
-      console.log(error);
+      console.error(error);
     }
   };
 
   useEffect(() => {
-    getNewMusicAlbumReleases();
+    getAlbums();
   }, []);
 
   const buildCard = (album) => {
@@ -103,7 +81,7 @@ const NewRelease = () => {
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={album?.id}>
         <Card className={classes.card} variant="outlined">
           <CardActions>
-            <Link to={`/${album?.id}`}>
+            <Link to={`/AlbumSong/${album?.id}`}>
               <CardHeader className={classes.titleHead} title={album?.name} />
 
               <CardMedia
@@ -114,20 +92,7 @@ const NewRelease = () => {
               />
             </Link>
           </CardActions>
-          {/* <Button
-            className={classes.button}
-            onClick={() => addToPlaylist(album.id)}
-          >
-            Add
-          </Button> */}
-          <br />
-          <Button>
-            {album?.tracks?.itmes[0]?.external_urls.spotify}
-            {/* {album?.disc_number} */}
-            {/* {album?.artists[0]?.map((i) => {
-              return i.external_urls;
-            })} */}
-          </Button>
+          {/* <Button className={classes.button}>Explore</Button> */}
         </Card>
       </Grid>
     );
@@ -145,18 +110,12 @@ const NewRelease = () => {
   } else
     return (
       <div>
-        <h1>{"New Released Albums"}</h1>
+        <h1>{" Albums"}</h1>
         <br />
         <Grid container className={classes.grid} spacing={5}>
           {musicAlbums?.map((album) => buildCard(album))}
         </Grid>
-        {/* <ul>
-          {musicAlbums?.map((album) => (
-            <li key={album.id}>{album.name}</li>
-          ))} 
-        </ul>*/}
       </div>
     );
 };
-
-export default NewRelease;
+export default Home;
