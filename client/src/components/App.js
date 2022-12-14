@@ -15,7 +15,7 @@ import theme from "../styles/MuiTheme";
 import { makeStyles } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/core/styles";
 import AlbumSong from "../pages/AlbumSong";
-
+import Search from "./Search";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -54,6 +54,7 @@ function App() {
                 <Route path="/forgotpassword" element={<ForgotPassword />} />
                 <Route path="/new-releases" element={<NewReleases />} />
                 <Route path="/AlbumSong/:AlbumId" element={<AlbumSong />} />
+                <Route path="/search" element={<Search />} />
               </Routes>
             </main>
             <footer>{/* <PlayerControls /> */}</footer>

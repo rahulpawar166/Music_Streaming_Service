@@ -43,6 +43,7 @@ const useStyles = makeStyles({
 });
 
 const NewRelease = () => {
+  
   const [musicAlbums, setMusicAlbums] = useState([]);
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
