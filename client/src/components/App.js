@@ -11,12 +11,12 @@ import ForgotPassword from "../pages/ForgotPassword";
 import Home from "../pages/Home";
 import NewReleases from "../pages/NewReleases";
 import Sidebar from "./Sidebar";
+import Player from "./Player";
 import theme from "../styles/MuiTheme";
 import { makeStyles } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/core/styles";
 import AlbumSong from "../pages/AlbumSong";
-import Album from "@material-ui/icons/Album";
-import axios from "axios"
+import axios from "axios";
 import PlayList from "../pages/PlayList";
 
 const useStyles = makeStyles((theme) => ({
@@ -29,8 +29,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
-  const [playListId,setPlayListId]=useState()
-
+  const [playListId, setPlayListId] = useState();
 
   const classes = useStyles();
   async function getToken() {
@@ -43,20 +42,20 @@ function App() {
     getToken();
   }, []);
 
-  const createPlaylist=async()=>{
+  const createPlaylist = async () => {
     try {
       const { data } = await axios.get(
-        `http://localhost:3008/playlist/create/myplayList`  
+        `http://localhost:3008/playlist/create/myplayList`,
       );
-      console.log(data)
+      console.log(data);
     } catch (error) {
       console.log("error", error);
     }
-  }
+  };
 
-  useEffect(()=>{
-    createPlaylist()
-  },[])
+  useEffect(() => {
+    createPlaylist();
+  }, []);
 
   return (
     <AuthProvider>
@@ -75,10 +74,10 @@ function App() {
                 <Route path="/forgotpassword" element={<ForgotPassword />} />
                 <Route path="/new-releases" element={<NewReleases />} />
                 <Route path="/AlbumSong/:AlbumId" element={<AlbumSong />} />
-                <Route path="/playlists" element={<PlayList/>} />
+                <Route path="/playlists" element={<PlayList />} />
               </Routes>
             </main>
-            <footer>{/* <PlayerControls /> */}</footer>
+            <Player />
           </Router>
         </div>
       </ThemeProvider>
