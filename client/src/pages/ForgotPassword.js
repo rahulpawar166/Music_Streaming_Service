@@ -6,6 +6,8 @@ import { Container } from "@mui/system";
 import { useState, forwardRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { doPasswordReset } from "../firebase/FirebaseFunctions";
+import * as Yup from 'yup';
+import { useFormik, Form, FormikProvider } from 'formik';
 
 const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -37,12 +39,25 @@ const ForgotPassword = () => {
     });
   };
 
+  const ForgorPasswordSchema = Yup.object().shape({
+    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
+  });
+  const formik = useFormik({
+    initialValues: {
+      email: ''
+    },
+    validationSchema: ForgorPasswordSchema,
+  });
+  const { errors, touched, values, isSubmitting, getFieldProps, handleChange } = formik;
+
+
   const forgotPassword = async (e) => {
     e.preventDefault();
     try {
-      if (email) {
-        await doPasswordReset(email);
+      if (values.email) {
+        await doPasswordReset(values.email);
         notifyPopup("Password reset email was sent!", "success");
+        navigate("/signin");
       } else {
         notifyPopup("Please enter an email address!", "error");
       }
@@ -77,14 +92,17 @@ const ForgotPassword = () => {
             Please enter your valid email address to get password reset link
           </p>
           <TextField
-            key="email"
-            id="outlined-basic"
-            label="Email"
-            variant="outlined"
-            className="text-field"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-          />
+              key="email"
+              id="email"
+              label="Email"
+              variant="outlined"
+              className="text-field"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+              {...getFieldProps('email')}
+              error={Boolean(touched.email && errors.email)}
+              helperText={touched.email && errors.email}
+            />
           <Button variant="contained" className="btn" onClick={forgotPassword}>
             Send Reset Link!
           </Button>
