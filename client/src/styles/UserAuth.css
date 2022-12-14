@@ -56,16 +56,7 @@
   display: block;
 }
 
-.btn {
-  background: none;
-  border: none;
-  text-align: center;
-  font-size: 1rem;
-  color: whitesmoke;
-  background-color: #fa709a;
-  padding: 0.25rem;
-  border-radius: 2rem;
-  cursor: pointer;
-  margin: 24px auto;
-  display: block;
+.googleBtn {
+  width: 250px;
+  height: 50Px;
 }
