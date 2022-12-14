@@ -1,5 +1,5 @@
 import "../styles/App.css";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import generateToken from "../generateToken";
@@ -15,6 +15,9 @@ import theme from "../styles/MuiTheme";
 import { makeStyles } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/core/styles";
 import AlbumSong from "../pages/AlbumSong";
+import Album from "@material-ui/icons/Album";
+import axios from "axios"
+import PlayList from "../pages/PlayList";
 import Search from "./Search";
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
+  const [playListId,setPlayListId]=useState()
+
+
   const classes = useStyles();
   async function getToken() {
     let token = "";
@@ -36,6 +42,21 @@ function App() {
   useEffect(() => {
     getToken();
   }, []);
+
+  const createPlaylist=async()=>{
+    try {
+      const { data } = await axios.get(
+        `http://localhost:3008/playlist/create/myplayList`  
+      );
+      console.log(data)
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+
+  useEffect(()=>{
+    createPlaylist()
+  },[])
 
   return (
     <AuthProvider>
@@ -55,6 +76,7 @@ function App() {
                 <Route path="/new-releases" element={<NewReleases />} />
                 <Route path="/AlbumSong/:AlbumId" element={<AlbumSong />} />
                 <Route path="/search" element={<Search />} />
+                <Route path="/playlists" element={<PlayList/>} />
               </Routes>
             </main>
             <footer>{/* <PlayerControls /> */}</footer>
