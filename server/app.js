@@ -35,3 +35,8 @@ app.listen(PORT, () => {
   console.log(`Server started at http://localhost:${PORT}`);
 });
 
+
+app.listen(3008, () => {
+  console.log("We've now got a server!");
+  console.log("Your routes will be running on http://localhost:3008");
+});
