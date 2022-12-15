@@ -4,7 +4,7 @@ const validate = require("./validate");
 let { ObjectId } = require("mongodb");
 
 let exportedMethods = {
-  async createPlaylist(name = "New Playlist", description = "", ownerId = "") {
+  async createPlaylist(name = "New Playlist", description = "") {
     try {
       name = validate.checkName(name);
       description = validate.checkDescription(description);
@@ -31,8 +31,6 @@ let exportedMethods = {
 
   async addAlbum(playlistId, albumId) {
     let newObjId = ObjectId(playlistId);
-
-    console.log("inside data addalumb");
     const playlistsCollection = await playlists();
     const fetch_data = await playlistsCollection.findOne({ _id: newObjId });
     if (fetch_data === null) throw "No playlist with that id";

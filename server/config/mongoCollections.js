@@ -13,7 +13,8 @@ const getCollectionFn = (collection) => {
   };
 };
 
-
 module.exports = {
-  playlist: getCollectionFn("playlist")
+  playlists: getCollectionFn("playlists"),
+  tracks: getCollectionFn("tracks"),
+  albums: getCollectionFn("albums"),
 };
