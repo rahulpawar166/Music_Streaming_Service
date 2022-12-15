@@ -13,14 +13,14 @@ import {
 const auth = getAuth();
 const user = auth.currentUser;
 
-async function doSignUp(data) {
-  await createUserWithEmailAndPassword(auth, data.email, data.password);
-  await updateProfile(auth.currentUser, { displayName: data.name });
+async function doSignUp(email, password, username) {
+  await createUserWithEmailAndPassword(auth, email, password);
+  await updateProfile(auth.currentUser, { displayName: username });
   return;
 }
 
-async function doSignIn(data) {
-  await signInWithEmailAndPassword(auth, data.email, data.password);
+async function doSignIn(email, password) {
+  await signInWithEmailAndPassword(auth, email, password);
   return;
 }
 
