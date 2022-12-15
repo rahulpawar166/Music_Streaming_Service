@@ -23,7 +23,10 @@ const SearchSongs = (props) => {
           onChange={handleChange}
         />
       </label>
+      <br/>
+      <br/>
     </form>
+    
   );
 };
 
