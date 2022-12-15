@@ -3,7 +3,7 @@ const MongoClient = require("mongodb").MongoClient;
 const settings = {
   mongoConfig: {
     serverUrl: "mongodb://localhost:27017/",
-    database: "Playlist",
+    database: "Music",
   },
 };
 
@@ -20,6 +20,13 @@ module.exports = {
       });
       _db = await _connection.db(mongoConfig.database);
     }
+
+    return _db;
+  },
+  closeConnection: () => {
+    _connection.close();
+  },
+};
 
     return _db;
   },

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+
 import {
   Card,
   CardActions,
@@ -10,6 +10,7 @@ import {
   makeStyles,
   Button,
 } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles({
   card: {
@@ -42,17 +43,28 @@ const useStyles = makeStyles({
   },
 });
 
-const NewRelease = () => {
-  
+const NewReleases = () => {
   const [musicAlbums, setMusicAlbums] = useState([]);
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
   const [found, setFound] = useState(false);
+  const [playlistData, setPlayListData] = useState({});
 
   console.log(
     "accessstoken from new release=",
-    window.localStorage.getItem("token")
+    window.localStorage.getItem("token"),
   );
+
+  const addToPlaylist = async (albumId) => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:3008/playlist/6393c998ba7131648ed117dc/${albumId}`,
+      );
+      setPlayListData(data);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
   const getNewMusicAlbumReleases = async () => {
     const requestInit = {
@@ -65,13 +77,14 @@ const NewRelease = () => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_NEW_RELEASE}`,
-        requestInit
+        requestInit,
       );
       console.log("we get response");
       console.log(response);
       setLoading(false);
       setFound(true);
       setMusicAlbums(response.data.albums.items);
+      console.log("THIS IS URL DATA", response);
       // console.log(musicAlbums);
     } catch (error) {
       setFound(false);
@@ -100,7 +113,20 @@ const NewRelease = () => {
               />
             </Link>
           </CardActions>
-          <Button className={classes.button}>Add</Button>
+          {/* <Button
+            className={classes.button}
+            onClick={() => addToPlaylist(album.id)}
+          >
+            Add
+          </Button> */}
+          <br />
+          <Button>
+            {album?.tracks?.itmes[0]?.external_urls.spotify}
+            {/* {album?.disc_number} */}
+            {/* {album?.artists[0]?.map((i) => {
+              return i.external_urls;
+            })} */}
+          </Button>
         </Card>
       </Grid>
     );
@@ -132,4 +158,4 @@ const NewRelease = () => {
     );
 };
 
-export default NewRelease;
+export default NewReleases;

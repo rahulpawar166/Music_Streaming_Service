@@ -58,6 +58,9 @@ const NavigationAuth = () => {
             <NavLink to="/new-release">new-relese</NavLink>
           </li>
           <li>
+            <NavLink to="/search">Search</NavLink>
+          </li>
+          <li>
             <NavLink to="/" onClick={handleSignOut}>
               Sign Out
             </NavLink>
