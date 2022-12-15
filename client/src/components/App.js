@@ -18,7 +18,7 @@ import AlbumSong from "../pages/AlbumSong";
 import Album from "@material-ui/icons/Album";
 import axios from "axios"
 import PlayList from "../pages/PlayList";
-
+import Search from "./Search";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -75,6 +75,7 @@ function App() {
                 <Route path="/forgotpassword" element={<ForgotPassword />} />
                 <Route path="/new-releases" element={<NewReleases />} />
                 <Route path="/AlbumSong/:AlbumId" element={<AlbumSong />} />
+                <Route path="/search" element={<Search />} />
                 <Route path="/playlists" element={<PlayList/>} />
               </Routes>
             </main>
