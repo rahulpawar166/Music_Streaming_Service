@@ -2,6 +2,7 @@ const express=require("express")
 const data=require("../data");
 const router = express.Router()
  const playlistData = data.playlistData
+ const axios = require('axios');
 
 //return playlist data
 router.get("/playListData",async(req,res)=>{
@@ -22,7 +23,6 @@ router.get("/playListData",async(req,res)=>{
   }
 
 })
-
 
 router.get("/create/:name", async(req,res)=>{
   
@@ -74,4 +74,22 @@ router.get("/:playlistId/:albumId",async(req,res)=>{
       }
     }
 })
+
+router.get('/:albumId', async(req, res) => { //
+  try {
+    // console.log(1)
+      const albumId = req.params.albumId;   
+      if (!ObjectId.isValid(albumId)){
+          return res.status(400).json({error: "NO ALBUM WITH THAT ID FOUND"});
+      }
+      console.log(3)
+      const getalbum = await playlistData.get(albumId);
+      res.json(getalbum);
+      res.status(200);
+  } catch (e) {
+      return res.status(400).json({error: "ALBUM BY ID IS NOT FOUND"});
+  }
+})
+
+
 module.exports=router

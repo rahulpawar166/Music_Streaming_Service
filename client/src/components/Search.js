@@ -72,10 +72,10 @@ const Search = () => {
         const query = encodeURIComponent(`${searchTerm}`) //encoding URL component does for query string
         // console.log(query)
         const response = await axios.get(
-            `${process.env.REACT_APP_SEARCH_SONG}`+ `?q=${query}&type=track,artist,album`,
+            `${process.env.REACT_APP_SEARCH_SONG}`+ `?q=${query}&type=album`,
             requestInit
         );
-        console.log(response.data);
+        // console.log(response.data);
         setSearchData(response.data.albums.items);
         // setSearchData(response.data.artists.items);
         // setSearchData(response.data.tracks.items);
@@ -117,14 +117,14 @@ const searchValue = async (value) => {
     );
   };
 
-  if (searchTerm) {
-    card =
-      searchData &&
-      searchData.map((song) => {
-        // let {character} = characters;
-        return buildCard(song);
-      });
-}
+//   if (searchTerm) {
+//     card =
+//       searchData &&
+//       searchData.map((song) => {
+//         // let {character} = characters;
+//         return buildCard(song);
+//       });
+// }
 
 
   if (loading) {

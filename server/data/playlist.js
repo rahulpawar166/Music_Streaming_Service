@@ -4,6 +4,16 @@ let {ObjectId} = require("mongodb")
 const uuid = require('uuid')
 
 let exportedMethods = {
+    // async AlbumIDAPI() {
+    //   const requestInit = {
+    //     headers: {
+    //       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+    //       "Content-Type": "application/json",
+    //     },
+    //   };
+    //     const { data } = await axios.get('https://api.spotify.com/v1/albums/')
+    //     return data;
+    // },
     async createPlaylist(name){
 
         name=name.trim()
@@ -26,15 +36,15 @@ let exportedMethods = {
 
     },
 
-    async getAllPlayListData(){
-      try {
-        const playlistCollection = await playlist()
-        const fetch_data = await playlistCollection.find({}).toArray();
-        return fetch_data;
-      } catch  {if(e)
-        { throw { message :'Error in all PlayList'}}
-      }
-    },
+    // async getAllPlayListData(){
+    //   try {
+    //     const playlistCollection = await playlist()
+    //     const fetch_data = await playlistCollection.find({}).toArray();
+    //     return fetch_data;
+    //   } catch  {if(e)
+    //     { throw { message :'Error in all PlayList'}}
+    //   }
+    // },
 
     async addAlbum(playlistId, albumId) {
         
@@ -71,24 +81,29 @@ let exportedMethods = {
         }
         return playlistCollection;
     },
-      async get(playlistId) {
+      async get(albumId) { // get the albums --- after songslist - go to song
         const playlistCollection = await playlist();
-        if (!playlistId) {
+        console.log("help me")
+        if (!albumId) {
           throw "ERROR: ID DOES NOT EXIST";
         }
-        if (typeof playlistId !== "string") {
+        if (typeof albumId !== "string") {
           throw "ERROR: ID MUST BE A STRING";
         }
-        if (playlistId.trim().length === 0) {
+        if (albumId.trim().length === 0) {
           throw "ERROR: ID CAN'T BE EMPTY STRING";
         }
-        playlistId = playlistId.trim();
-        if (!ObjectId.isValid(playlistId)) {
+        albumId = albumId.trim();
+        if (!ObjectId.isValid(albumId)) {
           throw "ERROR: NOT A VALID ID - DOESN'T EXIST!";
         }
+        console.log("find id")
+
         const getPlaylist = await playlistCollection.findOne({
-          _id: ObjectId(playlistId),
+          _id: ObjectId(albumId),
         });
+        console.log("did youfind id")
+
         if (!getPlaylist) {
           throw "ERROR: CAN'T FIND PLAYLIST BY ID";
         }
