@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import logo from '../icons/incognitomode2.png';
 import {
   Card,
   CardActions,
@@ -130,7 +131,9 @@ const Home = () => {
   } else
     return (
       <div>
-        <h1>{" Albums"}</h1>
+        <img class="logo" src={logo} alt="logo" width={100} height={100}/>
+        <h1>Incognito</h1>
+        <h2>{" Albums"}</h2>
         <br />
         <Grid container className={classes.grid} spacing={5}>
           {musicAlbums?.map((album) => buildCard(album))}

@@ -1,7 +1,14 @@
 main {
   text-align: center;
 }
-h1{
+.logo {
+  margin-bottom: -2em;
+}
+h1{ 
+  font-size: 30pt;
+  color: #9494df;
+}
+h2{
   color: #9494df;
 }
 .active {
