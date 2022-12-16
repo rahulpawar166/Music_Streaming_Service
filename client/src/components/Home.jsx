@@ -61,29 +61,33 @@ const Home = () => {
       headers: {
         Authorization: `Bearer ${window.localStorage.getItem("token")}`,
         "Content-Type": "application/json",
+        "Accept": "application/json"
       },
     };
 
     try {
+      const country= 'US';
+      const offset=0;
+      const limit=20;
       const response = await axios.get(
-        `${process.env.REACT_APP_ALBUMS_URL}?ids=${process.env.REACT_APP_ALBUMS_ID}`,
-        requestInit
+        `https://api.spotify.com/v1/browse/categories?country=${country}&offset=${offset}&limit=${limit}`,
+        requestInit,
       );
-      console.log("we get response");
-      console.log(response);
+      console.log(response)
+      console.log(response.data.categories.items);
       setLoading(false);
       setFound(true);
-      setMusicAlbums(response.data.albums);
-      // console.log(musicAlbums);
+      setMusicAlbums(response.data.categories.items);
     } catch (error) {
       setFound(false);
       setLoading(false);
-      console.log(error);
+      console.error(error);
     }
   };
 
   useEffect(() => {
     getAlbums();
+    // getPlayList()
   }, []);
 
   const buildCard = (album) => {
@@ -91,7 +95,7 @@ const Home = () => {
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={album?.id}>
         <Card className={classes.card} variant="outlined">
           <CardActions>
-            <Link to={`/${album?.id}`}>
+            <Link to={`/Categories/${album?.id}`}>
               <CardHeader className={classes.titleHead} title={album?.name} />
 
               <CardMedia

@@ -2,8 +2,10 @@ import React, { useEffect, useState,useContext } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Card, CardHeader, Grid, makeStyles, CardMedia, Button } from "@material-ui/core";
+// import { Default } from "react-toastify/dist/utils";
 import DefaultImage from "../img/DefaultImage.jpeg";
 import { AuthProvider, AuthContext } from "../firebase/Auth";
+// import { playlist } from "../../../server/config/mongoCollections";
 
 const useStyles = makeStyles({
   card: {
@@ -40,27 +42,27 @@ const AlbumSong = () => {
   const classes = useStyles();
   const {currentUser} = useContext(AuthContext);
   //to get data of particular albums
-  const {AlbumId}=useParams();
+  const {Id}=useParams();
   const [playListId, setPlayListId] = useState();
   const [trackAlbums, setTrackAlbums] = useState();
   const [loading, setLoading] = useState(true);
   const [found, setFound] = useState(false);
 
 
-  const addToPlaylist = async (trackId) => {
+//   const addToPlaylist = async (trackId) => {
     
-    try {
-      const { data } = await axios.post(
-        `http://localhost:3008/playlist/addTrack`,{
-          playlistId:currentUser.uid,  
-          albumId:trackId
+//     try {
+//       const { data } = await axios.post(
+//         `http://localhost:3008/playlist/addTrack`,{
+//           playlistId:currentUser.uid,  
+//           albumId:trackId
           
-        }
-      );
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
+//         }
+//       );
+//     } catch (error) {
+//       console.log("error", error);
+//     }
+//   };
 
   // const getPlayList=async()=>{
   
@@ -76,7 +78,7 @@ const AlbumSong = () => {
   //  }
 
 
-  const getAlbums = async () => {
+  const getCategories = async () => {
     const requestInit = {
       headers: {
         Authorization: `Bearer ${window.localStorage.getItem("token")}`,
@@ -86,7 +88,7 @@ const AlbumSong = () => {
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_URL_ALBUMS_ID_TRACKS}/${AlbumId}`,
+        `https://api.spotify.com/v1/browse/categories/${Id}/playlists`,
         requestInit,
       );
 
@@ -104,9 +106,9 @@ const AlbumSong = () => {
   };
 
   useEffect(() => {
-    console.log("inside album song ",currentUser)
-    getAlbums();
-  }, [currentUser,AlbumId]);
+    console.log("inside categories song")
+    getCategories();
+  }, [Id]);
 
   const buildCard = (track) => {
     return (
@@ -115,10 +117,7 @@ const AlbumSong = () => {
           {/* <CardHeader className={classes.titleHead} title={track?.id} /> */}
           <CardHeader className={classes.titleHead} title={track?.name} />
           <br />
-          <Button onClick={() => addToPlaylist(track?.id)}>
-            Add To PlayList
-          </Button>
-          <Button>Play</Button>
+          {/* <Button>Play</Button> */}
         </Card>
       </Grid>
     );
@@ -137,20 +136,19 @@ const AlbumSong = () => {
     return (
       <div>
         <h1>{trackAlbums?.name}</h1>
-
-        <img
-          className="Album"
+        {/* <img
+          className="Categories"
           src={trackAlbums?.images[0]?.url}
           onError={(e) => {
             e.target.onerror = null;
             e.target.src = DefaultImage;
           }}
           alt="Album"
-        />
+        /> */}
         <br />
         <br />
         <Grid container className={classes.grid} spacing={5}>
-          {trackAlbums?.tracks?.items.map((track) => buildCard(track))}
+          {trackAlbums?.playlists.items.map((track) => buildCard(track))}
         </Grid>
       </div>
     );
