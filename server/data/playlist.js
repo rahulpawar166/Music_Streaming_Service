@@ -31,14 +31,18 @@ let exportedMethods = {
 
     },
 
-    async getAllPlayListData(){
-      try {
-        const playlistCollection = await playlist()
-        const fetch_data = await playlistCollection.find({}).toArray();
-        return fetch_data;
-      } catch  {if(e)
-        { throw { message :'Error in all PlayList'}}
-      }
+    async getPlayListData(uid){
+
+      console.log("inside data")
+      if(!uid || uid.trim() === "") throw "please provide uid"
+      uid=uid.trim()
+     
+      const playlistCollection = await playlist()
+      const fetch_data = await playlistCollection.findOne({ _id: uid });
+      console.log(fetch_data)
+      if (fetch_data === null) throw "No playlist with this playlist id";
+      return fetch_data;
+    
     },
 
     async deleteAlbum(playlistId, albumId){
