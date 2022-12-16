@@ -49,84 +49,86 @@ const useStyles = makeStyles({
 const PlayList = () => {
 
   const classes = useStyles();
-  const {currentUser} = useContext(AuthContext);
 
   const [trackData,setTrackData]=useState();
   const [playlistData,setPlayListData]=useState();
   const [loading, setLoading] = useState(true);
   const [found, setFound] = useState(false);
 
+
+  const getData = async () => {
+
+    console.log("inside playlist get data")
+      const requestInit = {
+        headers: {
+          Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+      };
+  
+      let trackId=playlistData
+      trackId=trackId.join(",")
+      console.log(trackId)
+  
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_GET_TRACKS}?ids=${trackId}` ,
+          requestInit,
+        );
+       
+        console.log("data=",response);
+        setLoading(false);
+        setFound(true);
+        setTrackData(response.data.tracks);
+  
+     
+      } catch (error) {
+        setFound(false);
+        setLoading(false);
+        console.log(error);
+      }
+    };
+
+
   const getPlayList=async()=>{
    
     try {
+      console.log("frontend getplaylist function")
       const { data } = await axios.post(
-        `http://localhost:3008/playlist/playListData`,{uid:currentUser.uid}
+        `http://localhost:3008/playlist/playListData`,{uid:window.localStorage.getItem("currentUser")}
       );
       console.log(data)
       //SET LIST OF ALBBUMS INSIDE PLAYLISTDATA
       setPlayListData(data.albums)
+      if(playlistData){
+        console.log("inside if statement")
+        getData()
+      }
+     
 
     } catch (error) {
       console.log("error", error);
     }
    }
 
-  const getData = async () => {
-
-  console.log("inside playlist get data")
-    const requestInit = {
-      headers: {
-        Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    };
-
-    let trackId=playlistData
-    trackId=trackId.join(",")
-    console.log(trackId)
-
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_GET_TRACKS}?ids=${trackId}` ,
-        requestInit,
-      );
-     
-      console.log("data=",response);
-      setLoading(false);
-      setFound(true);
-      setTrackData(response.data.tracks);
-
-   
-    } catch (error) {
-      setFound(false);
-      setLoading(false);
-      console.log(error);
-    }
-  };
-
-  
-
   useEffect(() => {
     getPlayList()
-    if(playlistData){
-      getData()
-    }
-  }, [currentUser]);
+  }, []);
 
-  const deleteFromPlaylist = async (trackId) => {
-    console.log("button clicked")
-    try {
-      const { data } = await axios.post(
-        `http://localhost:3008/playlist/deleteTrack`,{
-          playlistId:currentUser.uid,  
-          albumId:trackId
+  // const deleteFromPlaylist = async (trackId) => {
+  //   console.log("button clicked")
+  //   try {
+  //     const { data } = await axios.post(
+  //       `http://localhost:3008/playlist/deleteTrack`,{
+  //         playlistId:window.localStorage.getItem("currentUser"),  
+  //         albumId:trackId
           
-        }
-      );
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
+  //       }
+  //     );
+  //   } catch (error) {
+  //     console.log("error", error);
+  //   }
+  // };
 
   const buildCard = (track) => {
     return (
@@ -136,7 +138,7 @@ const PlayList = () => {
              <CardHeader className={classes.titleHead} title={track?.id} />
             <CardHeader className={classes.titleHead} title={track?.name} />
         
-          <Button  onClick={() => deleteFromPlaylist(track?.id)}>delete From PlayList</Button>
+          {/* <Button  onClick={() => deleteFromPlaylist(track?.id)}>delete From PlayList</Button> */}
           <br/>
         </Card>
       </Grid>
@@ -169,24 +171,3 @@ export default PlayList;
 
 
 
-
-{/* <CardMedia
-                className={classes.media}
-                component="img"
-                image={
-                    trackAlbums?.images[0]?.url
-                    ? trackAlbums?.images[0]?.url
-                    : DefaultImage
-                }
-                title="Album"
-              />  */}
-
-{/* <img
-            className="Album"
-            src={trackAlbums?.images[0]?.url}
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = DefaultImage;
-            }}
-            alt="Album"
-          /> */}

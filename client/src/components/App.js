@@ -20,6 +20,7 @@ import Album from "@material-ui/icons/Album";
 import axios from "axios";
 import PlayList from "../pages/PlayList";
 import Search from "./Search";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -48,7 +49,7 @@ function App() {
   const createPlaylist = async () => {
     try {
       const { data } = await axios.post(
-        `http://localhost:3008/playlist/create`,{uid:currentUser.uid}
+        `http://localhost:3008/playlist/create`,{uid:window.localStorage.getItem("currentUser")}
       );
     } catch (error) {
       console.error(error);
@@ -58,6 +59,8 @@ function App() {
   useEffect(() => {
     if (currentUser) {
     console.log("I am=",currentUser)
+    window.localStorage.setItem("currentUser", (currentUser.uid));
+    console.log("from app local storage",window.localStorage.getItem("currentUser"))
     createPlaylist();
     }
   }, [currentUser]);
