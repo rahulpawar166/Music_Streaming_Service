@@ -10,25 +10,6 @@ app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-
-// app.use("/public", express.static(__dirname + "/public"));
-// app.use(
-//   express.urlencoded({
-//     extended: true,
-//   })
-// );
-
-// app.use(
-//   session({
-//     name: "Mycookie",
-//     secret: "given cookies",
-//     resave: false,
-//     saveUninitialized: true,
-//   })
-// );
-
-
 configRoutes(app);
 
 app.listen(PORT, () => {
