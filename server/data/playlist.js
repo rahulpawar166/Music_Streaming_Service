@@ -121,25 +121,31 @@ let exportedMethods = {
         }
         return playlistCollection;
     },
+
     
       async get(playlistId) {
         const playlistCollection = await playlist();
-        if (!playlistId) {
+        console.log("help me")
+        if (!albumId) {
           throw "ERROR: ID DOES NOT EXIST";
         }
-        if (typeof playlistId !== "string") {
+        if (typeof albumId !== "string") {
           throw "ERROR: ID MUST BE A STRING";
         }
-        if (playlistId.trim().length === 0) {
+        if (albumId.trim().length === 0) {
           throw "ERROR: ID CAN'T BE EMPTY STRING";
         }
-        playlistId = playlistId.trim();
-        if (!ObjectId.isValid(playlistId)) {
+        albumId = albumId.trim();
+        if (!ObjectId.isValid(albumId)) {
           throw "ERROR: NOT A VALID ID - DOESN'T EXIST!";
         }
+        console.log("find id")
+
         const getPlaylist = await playlistCollection.findOne({
-          _id: ObjectId(playlistId),
+          _id: ObjectId(albumId),
         });
+        console.log("did youfind id")
+
         if (!getPlaylist) {
           throw "ERROR: CAN'T FIND PLAYLIST BY ID";
         }
