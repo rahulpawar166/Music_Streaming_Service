@@ -28,9 +28,4 @@ module.exports = {
   },
 };
 
-    return _db;
-  },
-  closeConnection: () => {
-    _connection.close();
-  },
-};
+   
