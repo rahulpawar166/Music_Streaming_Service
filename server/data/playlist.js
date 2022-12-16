@@ -121,7 +121,9 @@ let exportedMethods = {
         }
         return playlistCollection;
     },
-      async get(albumId) { // get the albums --- after songslist - go to song
+
+    
+      async get(playlistId) {
         const playlistCollection = await playlist();
         console.log("help me")
         if (!albumId) {

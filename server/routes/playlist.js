@@ -1,14 +1,19 @@
 const express=require("express")
 const data=require("../data");
 const router = express.Router()
- const playlistData = data.playlistData
- const xss = require("xss");
- const requestInit = {
-  headers: {
-    Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-    "Content-Type": "application/json",
-  },
-};
+const playlistData = data.playlistData
+const axios=require("axios")
+const xss = require("xss");
+
+const flat = require("flat");
+const unflatten = flat.unflatten;
+const redis = require("redis");
+const client = redis.createClient();
+client.connect().then(() => {});
+
+
+
+
 //return playlist data
 router.post("/playListData",async(req,res)=>{
 

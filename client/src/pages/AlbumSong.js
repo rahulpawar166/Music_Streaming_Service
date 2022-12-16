@@ -38,7 +38,7 @@ const useStyles = makeStyles({
 
 const AlbumSong = () => {
   const classes = useStyles();
-  const {currentUser} = useContext(AuthContext);
+  // const {currentUser} = useContext(AuthContext);
   //to get data of particular albums
   const {AlbumId}=useParams();
   const [playListId, setPlayListId] = useState();
@@ -52,7 +52,7 @@ const AlbumSong = () => {
     try {
       const { data } = await axios.post(
         `http://localhost:3008/playlist/addTrack`,{
-          playlistId:currentUser.uid,  
+          playlistId:window.localStorage.getItem("currentUser"),  
           albumId:trackId
           
         }
@@ -104,9 +104,9 @@ const AlbumSong = () => {
   };
 
   useEffect(() => {
-    console.log("inside album song ",currentUser)
+    console.log("inside album song ")
     getAlbums();
-  }, [currentUser,AlbumId]);
+  }, [AlbumId]);
 
   const buildCard = (track) => {
     return (
