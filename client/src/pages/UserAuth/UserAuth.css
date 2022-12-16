@@ -34,6 +34,7 @@
 }
 
 .card .text-field {
+  border: 1px solid rgb(188, 188, 188);
   width: 100%;
   border-radius: 4px;
   color: white;
@@ -48,15 +49,19 @@
 }
 
 .card .smallBtn {
-  padding: 0.25rem;
   color: rgb(3, 173, 215);
 }
 
-.displayBlock {
+.btn {
+  background: none;
+  border: none;
+  text-align: center;
+  font-size: 1rem;
+  color: whitesmoke;
+  background-color: #fa709a;
+  padding: 0.8rem 1.8rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  margin: 24px auto;
   display: block;
-}
-
-.googleBtn {
-  width: 250px;
-  height: 50Px;
 }

@@ -8,6 +8,7 @@ import {
   CardMedia,
   Grid,
   makeStyles,
+  Button,
 } from "@material-ui/core";
 
 const useStyles = makeStyles({
@@ -41,15 +42,19 @@ const useStyles = makeStyles({
   },
 });
 
-const Home = () => {
-  const classes = useStyles();
+const NewRelease = () => {
+  
   const [musicAlbums, setMusicAlbums] = useState([]);
+  const classes = useStyles();
   const [loading, setLoading] = useState(true);
   const [found, setFound] = useState(false);
 
-  console.log("accessToken from Home: ", window.localStorage.getItem("token"));
+  console.log(
+    "accessstoken from new release=",
+    window.localStorage.getItem("token")
+  );
 
-  const getAlbums = async () => {
+  const getNewMusicAlbumReleases = async () => {
     const requestInit = {
       headers: {
         Authorization: `Bearer ${window.localStorage.getItem("token")}`,
@@ -59,41 +64,24 @@ const Home = () => {
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_ALBUMS_URL}?ids=${process.env.REACT_APP_ALBUMS_ID}`,
-        requestInit,
+        `${process.env.REACT_APP_NEW_RELEASE}`,
+        requestInit
       );
+      console.log("we get response");
+      console.log(response);
       setLoading(false);
       setFound(true);
-      setMusicAlbums(response.data.albums);
+      setMusicAlbums(response.data.albums.items);
+      // console.log(musicAlbums);
     } catch (error) {
       setFound(false);
       setLoading(false);
-      console.error(error);
+      console.log(error);
     }
   };
 
-  // const getPlayList =async()=>{
-  //   const requestInit = {
-  //     headers: {
-  //       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-  //       "Content-Type": "application/json",
-  //     },
-  //   };
-
-  //   try {
-  //     const response = await axios.get(
-  //       `https://api.spotify.com/v1/me/playlists`,
-  //       requestInit,
-  //     );
-  //    console.log(response)
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
-
   useEffect(() => {
-    getAlbums();
-    // getPlayList()
+    getNewMusicAlbumReleases();
   }, []);
 
   const buildCard = (album) => {
@@ -101,7 +89,7 @@ const Home = () => {
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={album?.id}>
         <Card className={classes.card} variant="outlined">
           <CardActions>
-            <Link to={`/AlbumSong/${album?.id}`}>
+            <Link to={`/${album?.id}`}>
               <CardHeader className={classes.titleHead} title={album?.name} />
 
               <CardMedia
@@ -112,7 +100,7 @@ const Home = () => {
               />
             </Link>
           </CardActions>
-          {/* <Button className={classes.button}>Explore</Button> */}
+          <Button className={classes.button}>Add</Button>
         </Card>
       </Grid>
     );
@@ -130,12 +118,18 @@ const Home = () => {
   } else
     return (
       <div>
-        <h1>{" Albums"}</h1>
+        <h1>{"New Released Albums"}</h1>
         <br />
         <Grid container className={classes.grid} spacing={5}>
           {musicAlbums?.map((album) => buildCard(album))}
         </Grid>
+        {/* <ul>
+          {musicAlbums?.map((album) => (
+            <li key={album.id}>{album.name}</li>
+          ))} 
+        </ul>*/}
       </div>
     );
 };
-export default Home;
+
+export default NewRelease;

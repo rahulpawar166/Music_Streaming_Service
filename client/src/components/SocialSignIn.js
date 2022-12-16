@@ -1,5 +1,7 @@
 import React from "react";
 import { doSocialSignIn } from "../firebase/FirebaseFunctions";
+import googleBtn from "../icons/sign_in_google.png"
+import "../styles/UserAuth.css"
 
 const SocialSignIn = () => {
   const socialSignOn = async (provider) => {
@@ -13,15 +15,12 @@ const SocialSignIn = () => {
     <div>
       <img
         onClick={() => socialSignOn("google")}
-        alt="google signin"
-        src="/icons/sign_in_google.png"
-      />
-      <img
-        onClick={() => socialSignOn("facebook")}
-        alt="facebook signin"
-        src="/icons/sign_in_facebook.png"
+        alt="google signup"
+        src= {googleBtn}
+        className = "googleBtn"
       />
     </div>
+
   );
 };
 

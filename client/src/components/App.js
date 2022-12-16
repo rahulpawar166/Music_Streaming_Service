@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import generateToken from "../generateToken";
-import { AuthContext } from "../firebase/Auth";
+import { AuthProvider, AuthContext } from "../firebase/Auth";
 import SignUp from "../pages/SignUp";
 import SignIn from "../pages/SignIn";
 import ForgotPassword from "../pages/ForgotPassword";
@@ -19,7 +19,7 @@ import AlbumSong from "../pages/AlbumSong";
 import Album from "@material-ui/icons/Album";
 import axios from "axios";
 import PlayList from "../pages/PlayList";
-
+import Search from "./Search";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -46,8 +46,9 @@ function App() {
 
   const createPlaylist = async () => {
     try {
-      const { data } = await axios.get(
-        `http://localhost:3008/playlist/create/myplayList`,
+      const { data } = await axios.post(
+        `http://localhost:3008/playlist/create`,
+        { uid: currentUser.uid },
       );
     } catch (error) {
       console.error(error);
@@ -55,7 +56,9 @@ function App() {
   };
 
   useEffect(() => {
-    createPlaylist();
+    if (currentUser) {
+      createPlaylist();
+    }
   }, [currentUser]);
 
   return (
@@ -74,10 +77,11 @@ function App() {
               <Route path="/forgotpassword" element={<ForgotPassword />} />
               <Route path="/new-releases" element={<NewReleases />} />
               <Route path="/AlbumSong/:AlbumId" element={<AlbumSong />} />
+              <Route path="/search" element={<Search />} />
               <Route path="/playlists" element={<PlayList />} />
             </Routes>
           </main>
-          <Player />
+          {/* <Player /> */}
         </Router>
       </div>
     </ThemeProvider>

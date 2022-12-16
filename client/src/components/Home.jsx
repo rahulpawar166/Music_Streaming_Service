@@ -8,6 +8,7 @@ import {
   CardMedia,
   Grid,
   makeStyles,
+  Button,
 } from "@material-ui/core";
 
 const useStyles = makeStyles({
@@ -42,12 +43,18 @@ const useStyles = makeStyles({
 });
 
 const Home = () => {
-  const classes = useStyles();
   const [musicAlbums, setMusicAlbums] = useState([]);
+  const classes = useStyles();
   const [loading, setLoading] = useState(true);
   const [found, setFound] = useState(false);
 
-  console.log("accessToken from Home: ", window.localStorage.getItem("token"));
+  // const albumsid = process.env.REACT_APP_ALBUMS_ID;
+  // const albumsURL = process.env.REACT_APP_ALBUMS_URL;
+
+  console.log("accessstoken from Home=", window.localStorage.getItem("token"));
+  // console.log(process.env.REACT_APP_ALBUMS_ID);
+  // console.log(process.env.REACT_APP_ALBUMS_URL);
+  // console.log(`${albumsURL}?ids=${albumsid}`);
 
   const getAlbums = async () => {
     const requestInit = {
@@ -60,40 +67,23 @@ const Home = () => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_ALBUMS_URL}?ids=${process.env.REACT_APP_ALBUMS_ID}`,
-        requestInit,
+        requestInit
       );
+      console.log("we get response");
+      console.log(response);
       setLoading(false);
       setFound(true);
       setMusicAlbums(response.data.albums);
+      // console.log(musicAlbums);
     } catch (error) {
       setFound(false);
       setLoading(false);
-      console.error(error);
+      console.log(error);
     }
   };
 
-  // const getPlayList =async()=>{
-  //   const requestInit = {
-  //     headers: {
-  //       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-  //       "Content-Type": "application/json",
-  //     },
-  //   };
-
-  //   try {
-  //     const response = await axios.get(
-  //       `https://api.spotify.com/v1/me/playlists`,
-  //       requestInit,
-  //     );
-  //    console.log(response)
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
-
   useEffect(() => {
     getAlbums();
-    // getPlayList()
   }, []);
 
   const buildCard = (album) => {
@@ -101,7 +91,7 @@ const Home = () => {
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={album?.id}>
         <Card className={classes.card} variant="outlined">
           <CardActions>
-            <Link to={`/AlbumSong/${album?.id}`}>
+            <Link to={`/${album?.id}`}>
               <CardHeader className={classes.titleHead} title={album?.name} />
 
               <CardMedia
@@ -112,7 +102,7 @@ const Home = () => {
               />
             </Link>
           </CardActions>
-          {/* <Button className={classes.button}>Explore</Button> */}
+          <Button className={classes.button}>Add</Button>
         </Card>
       </Grid>
     );
