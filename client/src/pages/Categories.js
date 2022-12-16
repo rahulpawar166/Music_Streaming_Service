@@ -1,7 +1,7 @@
 import React, { useEffect, useState,useContext } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { Card, CardHeader, Grid, makeStyles, CardMedia, Button } from "@material-ui/core";
+import { Link, Card, CardHeader, Grid, makeStyles, CardMedia, Button } from "@material-ui/core";
 // import { Default } from "react-toastify/dist/utils";
 import DefaultImage from "../img/DefaultImage.jpeg";
 import { AuthProvider, AuthContext } from "../firebase/Auth";
@@ -114,10 +114,17 @@ const AlbumSong = () => {
     return (
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.id}>
         <Card className={classes.card} variant="outlined">
-          {/* <CardHeader className={classes.titleHead} title={track?.id} /> */}
           <CardHeader className={classes.titleHead} title={track?.name} />
+          {/* <Link to={`${track?.id}`} /> */}
+          <span>{track?.description}</span> 
+          <CardMedia
+                className={classes.media}
+                component="img"
+                image={track?.images[0]?.url}
+                title="categories image"
+              />
+          {/* <img src={track?.images[0].url} width={100} height={100}/> */}
           <br />
-          {/* <Button>Play</Button> */}
         </Card>
       </Grid>
     );
@@ -135,16 +142,6 @@ const AlbumSong = () => {
   } else
     return (
       <div>
-        <h1>{trackAlbums?.name}</h1>
-        {/* <img
-          className="Categories"
-          src={trackAlbums?.images[0]?.url}
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src = DefaultImage;
-          }}
-          alt="Album"
-        /> */}
         <br />
         <br />
         <Grid container className={classes.grid} spacing={5}>

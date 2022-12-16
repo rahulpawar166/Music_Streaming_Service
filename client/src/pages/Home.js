@@ -116,10 +116,10 @@ const Home = () => {
     return <h1>404: not enough data for this page</h1>;
   } else
     return (
-      <div class="fancy-border">
-        <img class="logo"src={logo} alt="logo" width={100} height={100}/>
+      <div className="fancy-border">
+        <img className="logo" src={logo} alt="logo" width={100} height={100}/>
         <h1>incognito.</h1>
-        <h2>{"Browse Categories"}</h2>
+        <h2>Browse Categories</h2>
         <br />
         <Grid container className={classes.grid} spacing={5}>
           {musicAlbums?.map((album) => buildCard(album))}
