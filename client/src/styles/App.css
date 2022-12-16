@@ -13,7 +13,13 @@ h1{
   font-weight: bold;
   color: red !important;
 }
+input{
+  height:20px;
+  width: 200px;
+}
 span{
+  font-size: 16pt;
+  font-weight: bolder;
   color: #9c9cfc;
 }
 .forgotPassword {

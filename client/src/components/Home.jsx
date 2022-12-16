@@ -47,7 +47,7 @@ const Home = () => {
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
   const [found, setFound] = useState(false);
-
+  const {id} = useParams();
   // const albumsid = process.env.REACT_APP_ALBUMS_ID;
   // const albumsURL = process.env.REACT_APP_ALBUMS_URL;
 

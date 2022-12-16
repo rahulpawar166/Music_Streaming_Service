@@ -1,7 +1,7 @@
 import React, { useEffect, useState,useContext } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { Card, CardHeader, Grid, makeStyles, Button } from "@material-ui/core";
+import { Card, CardHeader, Grid, makeStyles, CardMedia, Button } from "@material-ui/core";
 // import { Default } from "react-toastify/dist/utils";
 import DefaultImage from "../img/DefaultImage.jpeg";
 import { AuthProvider, AuthContext } from "../firebase/Auth";
@@ -114,7 +114,7 @@ const AlbumSong = () => {
     return (
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.id}>
         <Card className={classes.card} variant="outlined">
-          <CardHeader className={classes.titleHead} title={track?.id} />
+          {/* <CardHeader className={classes.titleHead} title={track?.id} /> */}
           <CardHeader className={classes.titleHead} title={track?.name} />
           <br />
           <Button onClick={() => addToPlaylist(track?.id)}>
@@ -138,18 +138,7 @@ const AlbumSong = () => {
   } else
     return (
       <div>
-        <h1>{" tracks"}</h1>
-
-        {/* <CardMedia
-                className={classes.media}
-                component="img"
-                image={
-                    trackAlbums?.images[0]?.url
-                    ? trackAlbums?.images[0]?.url
-                    : DefaultImage
-                }
-                title="Album"
-              />  */}
+        <h1>{trackAlbums?.name}</h1>
 
         <img
           className="Album"
