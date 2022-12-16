@@ -72,8 +72,28 @@ const Home = () => {
     }
   };
 
+  // const getPlayList =async()=>{
+  //   const requestInit = {
+  //     headers: {
+  //       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+  //       "Content-Type": "application/json",
+  //     },
+  //   };
+
+  //   try {
+  //     const response = await axios.get(
+  //       `https://api.spotify.com/v1/me/playlists`,
+  //       requestInit,
+  //     );
+  //    console.log(response)
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
+
   useEffect(() => {
     getAlbums();
+    // getPlayList()
   }, []);
 
   const buildCard = (album) => {

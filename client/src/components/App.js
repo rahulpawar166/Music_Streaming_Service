@@ -1,9 +1,9 @@
 import "../styles/App.css";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import generateToken from "../generateToken";
-import { AuthProvider } from "../firebase/Auth";
+import { AuthProvider, AuthContext } from "../firebase/Auth";
 import SignUp from "../pages/SignUp";
 import SignIn from "../pages/SignIn";
 import ForgotPassword from "../pages/ForgotPassword";
@@ -11,12 +11,13 @@ import ForgotPassword from "../pages/ForgotPassword";
 import Home from "../pages/Home";
 import NewReleases from "../pages/NewReleases";
 import Sidebar from "./Sidebar";
+// import Player from "./Player";
 import theme from "../styles/MuiTheme";
 import { makeStyles } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/core/styles";
 import AlbumSong from "../pages/AlbumSong";
 import Album from "@material-ui/icons/Album";
-import axios from "axios"
+import axios from "axios";
 import PlayList from "../pages/PlayList";
 import Search from "./Search";
 import Songs from "./Songs";
@@ -30,8 +31,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
-  const [playListId,setPlayListId]=useState()
-
+  const {currentUser} = useContext(AuthContext);
+  const [playListId, setPlayListId] = useState();
+  
 
   const classes = useStyles();
   async function getToken() {
@@ -44,23 +46,24 @@ function App() {
     getToken();
   }, []);
 
-  const createPlaylist=async()=>{
+  const createPlaylist = async () => {
     try {
-      const { data } = await axios.get(
-        `http://localhost:3008/playlist/create/myplayList`  
+      const { data } = await axios.post(
+        `http://localhost:3008/playlist/create`,{uid:currentUser.uid}
       );
-      console.log(data)
     } catch (error) {
-      console.log("error", error);
+      console.error(error);
     }
-  }
+  };
 
-  useEffect(()=>{
-    createPlaylist()
-  },[])
+  useEffect(() => {
+    if (currentUser) {
+    console.log("I am=",currentUser)
+    createPlaylist();
+    }
+  }, [currentUser]);
 
   return (
-    <AuthProvider>
       <ThemeProvider theme={theme}>
         <Helmet>
           <meta name="viewport" content="initial-scale=1, width=device-width" />
@@ -81,11 +84,10 @@ function App() {
                 <Route path='/:id' element={<Songs />} />
               </Routes>
             </main>
-            <footer>{/* <PlayerControls /> */}</footer>
+            {/* <Player /> */}
           </Router>
         </div>
       </ThemeProvider>
-    </AuthProvider>
   );
 }
 
