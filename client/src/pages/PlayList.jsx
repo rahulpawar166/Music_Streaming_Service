@@ -46,12 +46,13 @@ const useStyles = makeStyles({
   },
 });
 
+
 const PlayList = () => {
 
   const classes = useStyles();
 
-  const [trackData,setTrackData]=useState();
-  const [playlistData,setPlayListData]=useState();
+  const [trackData, setTrackData]=useState();
+  const [playlistData, setPlayListData]=useState();
   const [loading, setLoading] = useState(true);
   const [found, setFound] = useState(false);
 
@@ -81,7 +82,6 @@ const PlayList = () => {
         setFound(true);
         setTrackData(response.data.tracks);
   
-     
       } catch (error) {
         setFound(false);
         setLoading(false);
@@ -89,9 +89,8 @@ const PlayList = () => {
       }
     };
 
+  const getPlayList = async()=>{
 
-  const getPlayList=async()=>{
-   
     try {
       console.log("frontend getplaylist function")
       const { data } = await axios.post(
@@ -100,20 +99,18 @@ const PlayList = () => {
       console.log(data)
       //SET LIST OF ALBBUMS INSIDE PLAYLISTDATA
       setPlayListData(data.albums)
-      if(playlistData){
-        console.log("inside if statement")
-        getData()
-      }
-     
-
     } catch (error) {
       console.log("error", error);
     }
-   }
+  }
 
   useEffect(() => {
-    getPlayList()
+    getPlayList();
   }, []);
+  
+  useEffect(()=>{
+    getData();
+  },[playlistData])
 
   // const deleteFromPlaylist = async (trackId) => {
   //   console.log("button clicked")
@@ -132,6 +129,7 @@ const PlayList = () => {
 
   const buildCard = (track) => {
     return (
+      
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.id}>
         <Card className={classes.card} variant="outlined">
           
@@ -157,9 +155,7 @@ const PlayList = () => {
   } else
     return (
       <div>
-        <h1>{" tracks"}</h1>
-       {/* {trackData.tracks} */}
-  
+        <h1>{" tracks"}</h1>  
         <br />
         <Grid container className={classes.grid} spacing={5}>
           {trackData?.map((track) => buildCard(track))}
