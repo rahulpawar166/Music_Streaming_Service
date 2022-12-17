@@ -67,18 +67,15 @@ const Search = () => {
     };
     
   try{ 
-        setSearchTerm("justin bieber"); 
+        setSearchTerm("christmas"); 
         console.log(`in fetch searchTerm: ${searchTerm}`);
         const query = encodeURIComponent(`${searchTerm}`) //encoding URL component does for query string
         // console.log(query)
         const response = await axios.get(
-            `${process.env.REACT_APP_SEARCH_SONG}`+ `?q=${query}&type=track,artist,album`,
+            `${process.env.REACT_APP_SEARCH_SONG}`+ `?q=${query}&type=album`,
             requestInit
         );
-        console.log(response.data);
         setSearchData(response.data.albums.items);
-        // setSearchData(response.data.artists.items);
-        // setSearchData(response.data.tracks.items);
         setLoading(false);
         setFound(true);
         setMusicAlbums(response.data.albums.items);
@@ -101,7 +98,7 @@ const searchValue = async (value) => {
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={album?.id}>
         <Card className={classes.card} variant="outlined">
           <CardActions>
-            <Link to={`/${album?.id}`}>
+            <Link to={`/AlbumSong/${album?.id}`}>
               <CardHeader className={classes.titleHead} title={album?.name} />
               <CardMedia
                 className={classes.media}
