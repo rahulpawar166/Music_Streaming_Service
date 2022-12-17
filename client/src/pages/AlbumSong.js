@@ -1,7 +1,7 @@
 import React, { useEffect, useState,useContext } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { Card, CardHeader, Grid, makeStyles, CardMedia, Button } from "@material-ui/core";
+import { Link, Card, CardHeader, Grid, makeStyles, CardMedia, Button } from "@material-ui/core";
 import DefaultImage from "../img/DefaultImage.jpeg";
 import { AuthProvider, AuthContext } from "../firebase/Auth";
 
@@ -108,7 +108,7 @@ const AlbumSong = () => {
     getAlbums();
   }, [AlbumId]);
 
-  const buildCard = (track) => {
+  const buildCard = (artist,track) => {
     return (
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.id}>
         <Card className={classes.card} variant="outlined">
@@ -119,6 +119,7 @@ const AlbumSong = () => {
             Add To PlayList
           </Button>
           <Button>Play</Button>
+          <Link to={`/Lyrics/${artist}/${track?.name}`}>Lyrics</Link>
         </Card>
       </Grid>
     );
