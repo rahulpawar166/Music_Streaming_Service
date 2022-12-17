@@ -11,7 +11,8 @@ import { AuthProvider } from "./providers/AuthProvider";
 import UserAuth from "./pages/UserAuth/UserAuth";
 import ForgotPassword from "./pages/UserAuth/ForgotPassword";
 import Search from "./components/Search";
-
+import { playlist } from "../../server/config/mongoCollections";
+import Playlist from './pages/PlayList';
 
 
 // import PrivateRoute from "./components/PrivateRoute";
@@ -40,11 +41,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/userauth" element={<UserAuth />} />
-
         <Route path="/new-release" element={<NewRelease />} />
         <Route path="/search" element={<Search />} />
-        <Route path="/forgotpassword" element={<ForgotPassword />}></Route>
-
+        <Route path="/forgotpassword" element={<ForgotPassword />}/>
+        <Route path = "/playlists/:id" element={<Playlist />} />
       </Routes>
     </Router>
   );
