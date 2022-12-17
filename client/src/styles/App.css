@@ -1,8 +1,9 @@
 main {
   text-align: center;
 }
-.logo {
-  margin-bottom: -2em;
+
+h1{
+  color: #0f0f29;
 }
 h1{ 
   font-size: 30pt;
@@ -10,6 +11,7 @@ h1{
 }
 h2{
   color: #9494df;
+
 }
 .active {
   font-weight: bold;
@@ -25,6 +27,8 @@ input{
   width: 200px;
 }
 span{
+
+  color: #202042;
   font-size: 12pt;
   font-weight: bold;
   color: #9c9cfc;

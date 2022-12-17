@@ -97,6 +97,9 @@
     inset 100px 100px 0 0px #fa709a, inset 200px 200px 0 0px #784ba8,
     inset 300px 300px 0 0px #2b86c5;
 }
+.MuiTypography-displayBlock{
+  font-size:17px;
+}
 
 @-webkit-keyframes move {
   from {

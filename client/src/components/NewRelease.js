@@ -118,12 +118,16 @@ const NewRelease = () => {
   } else
     return (
       <div>
-        <h1>New Released Albums</h1>
+        <h1>{"New Released Albums"}</h1>
         <br />
         <Grid container className={classes.grid} spacing={5}>
           {musicAlbums?.map((album) => buildCard(album))}
         </Grid>
-       
+        {/* <ul>
+          {musicAlbums?.map((album) => (
+            <li key={album.id}>{album.name}</li>
+          ))} 
+        </ul>*/}
       </div>
     );
 };

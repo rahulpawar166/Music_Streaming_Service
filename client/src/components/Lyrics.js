@@ -1,57 +1,95 @@
-import { useState, useEffect } from "react"
+import React, { useEffect, useState,useContext } from "react";
 import axios from "axios";
-// import { Link } from "react-router-dom";
-// import {
-//   Card,
-//   CardActions,
-//   CardHeader,
-//   CardMedia,
-//   Grid,
-//   makeStyles,
-//   Button,
-// } from "@material-ui/core";
+import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Card, CardHeader, Grid, makeStyles, Button } from "@material-ui/core";
+import DefaultImage from "../img/DefaultImage.jpeg";
 
+
+const useStyles = makeStyles({
+  card: {
+    maxWidth: 250,
+    height: "auto",
+    marginLeft: "auto",
+    marginRight: "auto",
+    borderRadius: 5,
+    border: "1px solid #1e8678",
+    boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
+  },
+  titleHead: {
+    // borderBottom: "1px solid #1e8678",
+    // fontWeight: "bold",
+  },
+  grid: {
+    flexGrow: 1,
+    flexDirection: "row",
+  },
+  media: {
+    height: "200px",
+    width: "200px",
+    maxHeight: "200px",
+    maxWidth: "200px",
+  },
+  button: {
+    // color: "#1e8678",
+    fontWeight: "bold",
+    fontSize: 12,
+  },
+});
 
 const Lyrics = () => {
+  const classes = useStyles();
+  
+  const {artist,trackName}=useParams();
+  const [found, setFound] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [lyricsData, setLyrics] = useState()
 
-const [playingTrack, setPlayingTrack] = useState()
-const [lyrics, setLyrics] = useState("")
 
-function chooseTrack(track) {
-    setPlayingTrack(track)
-    
-    setLyrics("")
-  }
+  const showLyrics=async(artist,trackName)=>{
+    console.log("lyrics ")
+    try {
+      const { data } = await axios.get(
+        `http://localhost:3008/lyrics/${artist}/${trackName}`
+      );
+      console.log("lyrics",data)
+      setLyrics(data)
+      setFound(true);
+      setLoading(false);
+    } catch (error) {
+      setFound(false);
+      setLoading(false);
+      console.log("error", error);
+    }
+   }
 
 
   useEffect(() => {
-    if (!playingTrack) return
+    console.log("inside Lyrics ")
+    showLyrics(artist,trackName);
+  }, [artist,trackName]);
 
-    axios
-      .get(`http://localhost:3008/lyrics/${playingTrack.title}/${playingTrack.artist}`, {
-       
-      })
-      .then(res => {
-        setLyrics(res.data.lyrics)
-      })
-  }, [playingTrack])
-
-  return (
-    <Container className="d-flex flex-column py-2" style={{ height: "100vh" }}>
-    
-      <div className="flex-grow-1 my-2" style={{ overflowY: "auto" }}>
-        {searchResults.length === 0 && (
-          <div className="text-center" style={{ whiteSpace: "pre" }}>
-            {lyrics}
-          </div>
-        )}
-      </div>
+  if (loading) {
+    return (
       <div>
-        <Player accessToken={accessToken} trackUri={playingTrack?.uri} />
+        <h2> {"Loading please wait for few second"}</h2>
+        <h2> {"................................."}</h2>
       </div>
-    </Container>
-  )
+    );
+  } 
+  else if (!found) {
+    return <h1>404: not enough data for this page</h1>;
+  }
+   else
+    return (
+      <div>
+        <h1> Lyrics</h1>
+        <p>{lyricsData}</p>
 
-}
+ 
 
-export default Lyrics
+        
+      </div>
+    );
+};
+export default Lyrics;

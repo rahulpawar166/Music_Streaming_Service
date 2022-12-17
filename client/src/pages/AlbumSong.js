@@ -1,9 +1,12 @@
 import React, { useEffect, useState,useContext } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { Card, CardHeader, Grid, makeStyles, CardMedia, Button } from "@material-ui/core";
+import { Link } from "react-router-dom";
+import { Card, CardHeader, Grid, makeStyles, Button } from "@material-ui/core";
+// import { Default } from "react-toastify/dist/utils";
 import DefaultImage from "../img/DefaultImage.jpeg";
 import { AuthProvider, AuthContext } from "../firebase/Auth";
+// import { playlist } from "../../../server/config/mongoCollections";
 
 const useStyles = makeStyles({
   card: {
@@ -16,8 +19,8 @@ const useStyles = makeStyles({
     boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
   },
   titleHead: {
-    borderBottom: "1px solid #1e8678",
-    fontWeight: "bold",
+    // borderBottom: "1px solid #1e8678",
+    // fontWeight: "bold",
   },
   grid: {
     flexGrow: 1,
@@ -45,7 +48,7 @@ const AlbumSong = () => {
   const [trackAlbums, setTrackAlbums] = useState();
   const [loading, setLoading] = useState(true);
   const [found, setFound] = useState(false);
-
+  const [lyricsData, setLyrics] = useState()
 
   const addToPlaylist = async (trackId) => {
     
@@ -62,18 +65,7 @@ const AlbumSong = () => {
     }
   };
 
-  // const getPlayList=async()=>{
-  
-  //   try {
-  //     const { data } = await axios.get(
-  //       `http://localhost:3008/playlist/playListData`
-  //     );
-  //     console.log(data)
-  //     setPlayListId(data[0]._id)
-  //   } catch (error) {
-  //     console.log("error", error);
-  //   }
-  //  }
+ 
 
 
   const getAlbums = async () => {
@@ -91,8 +83,10 @@ const AlbumSong = () => {
       );
 
       console.log("we get response");
-      console.log("data=", response.data);
+      // console.log("data=", response.data.artists[0].name);
 
+      console.log("data=", response.data);
+        
       setLoading(false);
       setFound(true);
       setTrackAlbums(response.data);
@@ -108,17 +102,21 @@ const AlbumSong = () => {
     getAlbums();
   }, [AlbumId]);
 
-  const buildCard = (track) => {
+  const buildCard = (artist,track) => {
     return (
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.id}>
         <Card className={classes.card} variant="outlined">
-          {/* <CardHeader className={classes.titleHead} title={track?.id} /> */}
+          <CardHeader className={classes.titleHead} title={track?.id} />
           <CardHeader className={classes.titleHead} title={track?.name} />
           <br />
           <Button onClick={() => addToPlaylist(track?.id)}>
             Add To PlayList
           </Button>
           <Button>Play</Button>
+         
+          <Link to={`/Lyrics/${artist}/${track?.name}`}>Lyrics</Link>
+          {/* <Button onClick={()=>showLyrics(artist,track?.name)}>Lyrics</Button> */}
+         
         </Card>
       </Grid>
     );
@@ -136,7 +134,18 @@ const AlbumSong = () => {
   } else
     return (
       <div>
-        <h1>{trackAlbums?.name}</h1>
+        <h1>{" tracks"}</h1>
+
+        {/* <CardMedia
+                className={classes.media}
+                component="img"
+                image={
+                    trackAlbums?.images[0]?.url
+                    ? trackAlbums?.images[0]?.url
+                    : DefaultImage
+                }
+                title="Album"
+              />  */}
 
         <img
           className="Album"
@@ -147,10 +156,10 @@ const AlbumSong = () => {
           }}
           alt="Album"
         />
-        <br />
+<Button>{trackAlbums?.artists[0]?.name}</Button>
         <br />
         <Grid container className={classes.grid} spacing={5}>
-          {trackAlbums?.tracks?.items.map((track) => buildCard(track))}
+          {trackAlbums?.tracks?.items.map((track) => buildCard(trackAlbums?.artists[0]?.name, track))}
         </Grid>
       </div>
     );

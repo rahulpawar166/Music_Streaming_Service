@@ -67,15 +67,18 @@ const Search = () => {
     };
     
   try{ 
-        setSearchTerm("christmas"); 
+        setSearchTerm("justin bieber"); 
         console.log(`in fetch searchTerm: ${searchTerm}`);
         const query = encodeURIComponent(`${searchTerm}`) //encoding URL component does for query string
         // console.log(query)
         const response = await axios.get(
-            `${process.env.REACT_APP_SEARCH_SONG}`+ `?q=${query}&type=album`,
+            `${process.env.REACT_APP_SEARCH_SONG}`+ `?q=${query}&type=track,artist,album`,
             requestInit
         );
+        console.log(response.data);
         setSearchData(response.data.albums.items);
+        // setSearchData(response.data.artists.items);
+        // setSearchData(response.data.tracks.items);
         setLoading(false);
         setFound(true);
         setMusicAlbums(response.data.albums.items);

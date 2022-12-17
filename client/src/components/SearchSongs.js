@@ -19,10 +19,8 @@ const SearchSongs = (props) => {
         <input
           autoComplete='off'
           type='text'
-          placeholder='Enter..'
           name='searchTerm'
           onChange={handleChange}
-          aria-label="input song"
         />
       </label>
       <br/>

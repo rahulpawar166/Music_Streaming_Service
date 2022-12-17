@@ -13,17 +13,17 @@ import {
 
 const useStyles = makeStyles({
   card: {
-    maxWidth: 250,
-    height: "auto",
+    maxWidth: "200px",
+    height: "200px",
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 5,
-    border: "1px solid #1e8678",
-    boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
+    // border: "1px solid #1e8678",
+    // boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
   },
   titleHead: {
-    borderBottom: "1px solid #1e8678",
-    fontWeight: "bold",
+    // borderBottom: "1px solid #1e8678",
+    // fontWeight: "bold",
   },
   grid: {
     flexGrow: 1,
@@ -32,14 +32,16 @@ const useStyles = makeStyles({
   media: {
     height: "200px",
     width: "200px",
-    maxHeight: "200px",
-    maxWidth: "200px",
+    marginLeft:"8%",
+    // maxHeight: "200px",
+    // maxWidth: "200px",
   },
   button: {
     // color: "#1e8678",
     fontWeight: "bold",
     fontSize: 12,
   },
+
 });
 
 const Home = () => {
@@ -47,7 +49,7 @@ const Home = () => {
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
   const [found, setFound] = useState(false);
-  const {id} = useParams();
+
   // const albumsid = process.env.REACT_APP_ALBUMS_ID;
   // const albumsURL = process.env.REACT_APP_ALBUMS_URL;
 
@@ -61,33 +63,29 @@ const Home = () => {
       headers: {
         Authorization: `Bearer ${window.localStorage.getItem("token")}`,
         "Content-Type": "application/json",
-        "Accept": "application/json"
       },
     };
 
     try {
-      const country= 'US';
-      const offset=0;
-      const limit=20;
       const response = await axios.get(
-        `https://api.spotify.com/v1/browse/categories?country=${country}&offset=${offset}&limit=${limit}`,
-        requestInit,
+        `${process.env.REACT_APP_ALBUMS_URL}?ids=${process.env.REACT_APP_ALBUMS_ID}`,
+        requestInit
       );
-      console.log(response)
-      console.log(response.data.categories.items);
+      console.log("we get response");
+      console.log(response);
       setLoading(false);
       setFound(true);
-      setMusicAlbums(response.data.categories.items);
+      setMusicAlbums(response.data.albums);
+      // console.log(musicAlbums);
     } catch (error) {
       setFound(false);
       setLoading(false);
-      console.error(error);
+      console.log(error);
     }
   };
 
   useEffect(() => {
     getAlbums();
-    // getPlayList()
   }, []);
 
   const buildCard = (album) => {
@@ -95,7 +93,7 @@ const Home = () => {
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={album?.id}>
         <Card className={classes.card} variant="outlined">
           <CardActions>
-            <Link to={`/Categories/${album?.id}`}>
+            <Link to={`/${album?.id}`}>
               <CardHeader className={classes.titleHead} title={album?.name} />
 
               <CardMedia
