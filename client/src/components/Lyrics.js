@@ -84,7 +84,7 @@ const Lyrics = () => {
     return (
       <div>
         <h1> Lyrics</h1>
-        <p>{lyricsData.lyrics}</p>
+        <p>{lyricsData}</p>
 
  
 
