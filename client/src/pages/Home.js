@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import logo from '../icons/incognitomode2.png';
 import {
   Card,
   CardActions,
@@ -13,30 +14,26 @@ import {
 const useStyles = makeStyles({
   card: {
     maxWidth: 250,
-    height: "300px",
+    height: "auto",
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 5,
     border: "1px solid #1e8678",
     boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
   },
-  CardHeader :{
-    fontSize:"17px",
-  },
   titleHead: {
-    // borderBottom: "1px solid #1e8678",
-    color:"#1e8678",
-    // fontWeight: "bold",
+    borderBottom: "1px solid #1e8678",
+    fontWeight: "bold",
   },
   grid: {
     flexGrow: 1,
     flexDirection: "row",
   },
   media: {
-    height: "150px",
+    height: "200px",
     width: "200px",
-    marginLeft:"8%",
-    marginBottom:"4%"
+    maxHeight: "200px",
+    maxWidth: "200px",
   },
   button: {
     // color: "#1e8678",
@@ -58,42 +55,29 @@ const Home = () => {
       headers: {
         Authorization: `Bearer ${window.localStorage.getItem("token")}`,
         "Content-Type": "application/json",
+        "Accept": "application/json"
       },
     };
 
     try {
+      const country= 'US';
+      const offset=0;
+      const limit=20;
       const response = await axios.get(
-        `${process.env.REACT_APP_ALBUMS_URL}?ids=${process.env.REACT_APP_ALBUMS_ID}`,
+        `https://api.spotify.com/v1/browse/categories?country=${country}&offset=${offset}&limit=${limit}`,
         requestInit,
       );
+      console.log(response)
+      console.log(response.data.categories.items);
       setLoading(false);
       setFound(true);
-      setMusicAlbums(response.data.albums);
+      setMusicAlbums(response.data.categories.items);
     } catch (error) {
       setFound(false);
       setLoading(false);
       console.error(error);
     }
   };
-
-  // const getPlayList =async()=>{
-  //   const requestInit = {
-  //     headers: {
-  //       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-  //       "Content-Type": "application/json",
-  //     },
-  //   };
-
-  //   try {
-  //     const response = await axios.get(
-  //       `https://api.spotify.com/v1/me/playlists`,
-  //       requestInit,
-  //     );
-  //    console.log(response)
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
 
   useEffect(() => {
     getAlbums();
@@ -102,16 +86,15 @@ const Home = () => {
 
   const buildCard = (album) => {
     return (
-      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={album?.id}>
+      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={album?.name}>
         <Card className={classes.card} variant="outlined">
           <CardActions>
-            <Link to={`/AlbumSong/${album?.id}`}>
+            <Link to={`/Categories/${album?.id}`}>
               <CardHeader className={classes.titleHead} title={album?.name} />
-
               <CardMedia
                 className={classes.media}
                 component="img"
-                image={album?.images[0]?.url}
+                image={album?.icons[0].url}
                 title="character image"
               />
             </Link>
@@ -133,8 +116,10 @@ const Home = () => {
     return <h1>404: not enough data for this page</h1>;
   } else
     return (
-      <div>
-        <h1>{" Albums"}</h1>
+      <div className="fancy-border">
+        <img className="logo" src={logo} alt="logo" width={100} height={100}/>
+        <h1>incognito.</h1>
+        <h2>Browse Categories</h2>
         <br />
         <Grid container className={classes.grid} spacing={5}>
           {musicAlbums?.map((album) => buildCard(album))}
