@@ -101,7 +101,7 @@ const searchValue = async (value) => {
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={album?.id}>
         <Card className={classes.card} variant="outlined">
           <CardActions>
-            <Link to={`/AlbumSong/${album?.id}`}>
+            <Link to={`/${album?.id}`}>
               <CardHeader className={classes.titleHead} title={album?.name} />
               <CardMedia
                 className={classes.media}

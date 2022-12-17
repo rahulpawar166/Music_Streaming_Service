@@ -106,9 +106,7 @@ const Home = () => {
         <Card className={classes.card} variant="outlined">
           <CardActions>
             <Link to={`/AlbumSong/${album?.id}`}>
-              <CardHeader 
-              titleTypographyProps={{variant:'subtitle2' }}
-              className={classes.titleHead} title={album?.name}/>
+              <CardHeader className={classes.titleHead} title={album?.name} />
 
               <CardMedia
                 className={classes.media}
