@@ -112,7 +112,6 @@ const NewReleases = () => {
                 title="character image"
               />
             </Link>
-            
           </CardActions>
           {/* <Button
             className={classes.button}

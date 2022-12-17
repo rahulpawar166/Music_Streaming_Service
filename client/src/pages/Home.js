@@ -14,30 +14,26 @@ import {
 const useStyles = makeStyles({
   card: {
     maxWidth: 250,
-    height: "300px",
+    height: "auto",
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 5,
     border: "1px solid #1e8678",
     boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
   },
-  CardHeader :{
-    fontSize:"17px",
-  },
   titleHead: {
-    // borderBottom: "1px solid #1e8678",
-    color:"#1e8678",
-    // fontWeight: "bold",
+    borderBottom: "1px solid #1e8678",
+    fontWeight: "bold",
   },
   grid: {
     flexGrow: 1,
     flexDirection: "row",
   },
   media: {
-    height: "150px",
+    height: "200px",
     width: "200px",
-    marginLeft:"8%",
-    marginBottom:"4%"
+    maxHeight: "200px",
+    maxWidth: "200px",
   },
   button: {
     // color: "#1e8678",
@@ -93,11 +89,8 @@ const Home = () => {
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={album?.name}>
         <Card className={classes.card} variant="outlined">
           <CardActions>
-            <Link to={`/AlbumSong/${album?.id}`}>
-              <CardHeader 
-              titleTypographyProps={{variant:'subtitle2' }}
-              className={classes.titleHead} title={album?.name}/>
-
+            <Link to={`/Categories/${album?.id}`}>
+              <CardHeader className={classes.titleHead} title={album?.name} />
               <CardMedia
                 className={classes.media}
                 component="img"

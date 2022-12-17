@@ -1,9 +1,7 @@
 import React, { useEffect, useState,useContext } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { Card, CardHeader, Grid, makeStyles, Button } from "@material-ui/core";
-// import { Default } from "react-toastify/dist/utils";
+import { Link, Card, CardHeader, Grid, makeStyles, CardMedia, Button } from "@material-ui/core";
 import DefaultImage from "../img/DefaultImage.jpeg";
 import { AuthProvider, AuthContext } from "../firebase/Auth";
 
@@ -18,8 +16,8 @@ const useStyles = makeStyles({
     boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
   },
   titleHead: {
-    // borderBottom: "1px solid #1e8678",
-    // fontWeight: "bold",
+    borderBottom: "1px solid #1e8678",
+    fontWeight: "bold",
   },
   grid: {
     flexGrow: 1,
@@ -47,7 +45,7 @@ const AlbumSong = () => {
   const [trackAlbums, setTrackAlbums] = useState();
   const [loading, setLoading] = useState(true);
   const [found, setFound] = useState(false);
-  const [lyricsData, setLyrics] = useState()
+
 
   const addToPlaylist = async (trackId) => {
     
@@ -64,7 +62,18 @@ const AlbumSong = () => {
     }
   };
 
- 
+  // const getPlayList=async()=>{
+  
+  //   try {
+  //     const { data } = await axios.get(
+  //       `http://localhost:3008/playlist/playListData`
+  //     );
+  //     console.log(data)
+  //     setPlayListId(data[0]._id)
+  //   } catch (error) {
+  //     console.log("error", error);
+  //   }
+  //  }
 
 
   const getAlbums = async () => {
@@ -82,10 +91,8 @@ const AlbumSong = () => {
       );
 
       console.log("we get response");
-      // console.log("data=", response.data.artists[0].name);
-
       console.log("data=", response.data);
-        
+
       setLoading(false);
       setFound(true);
       setTrackAlbums(response.data);
@@ -112,10 +119,7 @@ const AlbumSong = () => {
             Add To PlayList
           </Button>
           <Button>Play</Button>
-         
           <Link to={`/Lyrics/${artist}/${track?.name}`}>Lyrics</Link>
-          {/* <Button onClick={()=>showLyrics(artist,track?.name)}>Lyrics</Button> */}
-         
         </Card>
       </Grid>
     );
@@ -144,10 +148,9 @@ const AlbumSong = () => {
           }}
           alt="Album"
         />
-
         <br />
         <Grid container className={classes.grid} spacing={5}>
-          {trackAlbums?.tracks?.items.map((track) => buildCard(trackAlbums?.artists[0]?.name, track))}
+          {trackAlbums?.tracks?.items.map((track) => buildCard(track))}
         </Grid>
       </div>
     );

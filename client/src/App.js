@@ -14,7 +14,6 @@ import Search from "./components/Search";
 import { playlist } from "../../server/config/mongoCollections";
 import Playlist from './pages/PlayList';
 
-
 // import PrivateRoute from "./components/PrivateRoute";
 
 console.log(process.env.REACT_APP_ALBUMS_URL);
