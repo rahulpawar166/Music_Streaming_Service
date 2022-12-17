@@ -20,6 +20,7 @@ import Album from "@material-ui/icons/Album";
 import axios from "axios";
 import PlayList from "../pages/PlayList";
 import Search from "./Search";
+import Lyrics from "./Lyrics"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -81,6 +82,8 @@ function App() {
                 <Route path="/forgotpassword" element={<ForgotPassword />} />
                 <Route path="/new-releases" element={<NewReleases />} />
                 <Route path="/AlbumSong/:AlbumId" element={<AlbumSong />} />
+                <Route path="/Lyrics/:artist/:trackName" element={<Lyrics />} />
+
                 <Route path="/search" element={<Search />} />
                 <Route path="/playlists" element={<PlayList/>} />
 

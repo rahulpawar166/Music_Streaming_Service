@@ -10,6 +10,7 @@ router.get("/:artist/:track", async (req, res) => {
     try{
   
     const lyrics = (await lyricsFinder(req.params.artist, req.params.track)) || "No Lyrics Found"
+    console.log(lyrics)
     return res.status(200).json({ lyrics })
 
     }

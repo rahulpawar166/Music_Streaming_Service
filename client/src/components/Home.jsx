@@ -13,17 +13,17 @@ import {
 
 const useStyles = makeStyles({
   card: {
-    maxWidth: 250,
-    height: "auto",
+    maxWidth: "200px",
+    height: "200px",
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 5,
-    border: "1px solid #1e8678",
-    boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
+    // border: "1px solid #1e8678",
+    // boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
   },
   titleHead: {
-    borderBottom: "1px solid #1e8678",
-    fontWeight: "bold",
+    // borderBottom: "1px solid #1e8678",
+    // fontWeight: "bold",
   },
   grid: {
     flexGrow: 1,
@@ -32,14 +32,16 @@ const useStyles = makeStyles({
   media: {
     height: "200px",
     width: "200px",
-    maxHeight: "200px",
-    maxWidth: "200px",
+    marginLeft:"8%",
+    // maxHeight: "200px",
+    // maxWidth: "200px",
   },
   button: {
     // color: "#1e8678",
     fontWeight: "bold",
     fontSize: 12,
   },
+
 });
 
 const Home = () => {

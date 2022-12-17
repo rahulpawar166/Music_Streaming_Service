@@ -13,6 +13,7 @@ import ForgotPassword from "./pages/UserAuth/ForgotPassword";
 import Search from "./components/Search";
 
 
+
 // import PrivateRoute from "./components/PrivateRoute";
 
 console.log(process.env.REACT_APP_ALBUMS_URL);
