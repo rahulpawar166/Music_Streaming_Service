@@ -149,7 +149,6 @@ const AlbumSong = () => {
           alt="Album"
         />
         <br />
-        <br />
         <Grid container className={classes.grid} spacing={5}>
           {trackAlbums?.tracks?.items.map((track) => buildCard(track))}
         </Grid>
