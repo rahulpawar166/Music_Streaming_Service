@@ -41,6 +41,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/userauth" element={<UserAuth />} />
 
+
         <Route path="/new-release" element={<NewRelease />} />
         <Route path="/search" element={<Search />} />
         <Route path="/forgotpassword" element={<ForgotPassword />}></Route>
