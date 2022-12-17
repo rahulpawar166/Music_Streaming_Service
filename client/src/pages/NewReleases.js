@@ -112,7 +112,6 @@ const NewReleases = () => {
                 title="character image"
               />
             </Link>
-            
           </CardActions>
           {/* <Button
             className={classes.button}
@@ -121,13 +120,13 @@ const NewReleases = () => {
             Add
           </Button> */}
           <br />
-          <Button>
-            {album?.tracks?.itmes[0]?.external_urls.spotify}
+          {/* <Button> */}
+            {/* {album?.tracks?.items[0]?.external_urls.spotify} */}
             {/* {album?.disc_number} */}
             {/* {album?.artists[0]?.map((i) => {
               return i.external_urls;
             })} */}
-          </Button>
+          {/* </Button> */}
         </Card>
       </Grid>
     );
@@ -145,7 +144,7 @@ const NewReleases = () => {
   } else
     return (
       <div>
-        <h1>{"New Released Albums"}</h1>
+        <h1>New Released Albums</h1>
         <br />
         <Grid container className={classes.grid} spacing={5}>
           {musicAlbums?.map((album) => buildCard(album))}

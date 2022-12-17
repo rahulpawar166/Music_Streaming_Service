@@ -1,9 +1,8 @@
 main {
   text-align: center;
 }
-
-h1{
-  color: #0f0f29;
+.logo {
+  margin-bottom: -2em;
 }
 h1{ 
   font-size: 30pt;
@@ -11,7 +10,6 @@ h1{
 }
 h2{
   color: #9494df;
-
 }
 .active {
   font-weight: bold;
@@ -27,8 +25,6 @@ input{
   width: 200px;
 }
 span{
-
-  color: #202042;
   font-size: 12pt;
   font-weight: bold;
   color: #9c9cfc;
@@ -65,7 +61,7 @@ span{
   /* height: 150px; */
   text-align:center;
   border-top: 10px solid;
-  border-image:   linear-gradient(to right, #2d2a45 25%, #6F5262 30%, #644938 60%,#998db7 75%, #6A6083 100%, #4c4b6a 100%) 10;
+  border-image:   linear-gradient(to right, #653496 25%, #7B52Ae 30%, #74B652 60%,#94c773 75%, #20ba91 100%) 10;
   overflow-x: hidden;
   overflow-y: hidden;  
 }
