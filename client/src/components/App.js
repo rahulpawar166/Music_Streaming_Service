@@ -16,6 +16,7 @@ import theme from "../styles/MuiTheme";
 import { makeStyles } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/core/styles";
 import AlbumSong from "../pages/AlbumSong";
+import Categories from '../pages/Categories'
 import Album from "@material-ui/icons/Album";
 import axios from "axios";
 import PlayList from "../pages/PlayList";
@@ -34,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const {currentUser} = useContext(AuthContext);
   const [playListId, setPlayListId] = useState();
-  
 
   const classes = useStyles();
   async function getToken() {
@@ -86,6 +86,7 @@ function App() {
 
                 <Route path="/search" element={<Search />} />
                 <Route path="/playlists" element={<PlayList/>} />
+                <Route path="/Categories/:Id" element={<Categories />} />
 
               </Routes>
             </main>
