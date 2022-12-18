@@ -1,7 +1,14 @@
 main {
   text-align: center;
 }
-h1{
+.logo {
+  margin-bottom: -2em;
+}
+h1 {
+  font-size: 30pt;
+  color: #9494df;
+}
+h2 {
   color: #9494df;
 }
 .active {
@@ -13,7 +20,13 @@ h1{
   font-weight: bold;
   color: red !important;
 }
-span{
+input {
+  height: 20px;
+  width: 200px;
+}
+span {
+  font-size: 12pt;
+  font-weight: bold;
   color: #9c9cfc;
 }
 .forgotPassword {
@@ -43,7 +56,23 @@ span{
   animation: move 25s infinite alternate;
   transition: 1s cubic-bezier(0.07, 0.8, 0.16, 1);
 }
-
+.fancy-border {
+  /* width: 150px; */
+  /* height: 150px; */
+  text-align: center;
+  border-top: 10px solid;
+  border-image: linear-gradient(
+      to right,
+      #653496 25%,
+      #7b52ae 30%,
+      #74b652 60%,
+      #94c773 75%,
+      #20ba91 100%
+    )
+    10;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
 .blob:hover {
   width: 520px;
   height: 520px;

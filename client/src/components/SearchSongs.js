@@ -1,5 +1,4 @@
-    
-import React from 'react';
+import React from "react";
 
 const SearchSongs = (props) => {
   const handleChange = (e) => {
@@ -7,26 +6,27 @@ const SearchSongs = (props) => {
   };
   return (
     <form
-      method='POST '
+      method="POST "
       onSubmit={(e) => {
         e.preventDefault();
       }}
-      name='formName'
-      className='center'
+      name="formName"
+      className="center"
     >
       <label>
         <span>Search: </span>
         <input
-          autoComplete='off'
-          type='text'
-          name='searchTerm'
+          autoComplete="off"
+          type="text"
+          placeholder="Enter.."
+          name="searchTerm"
           onChange={handleChange}
+          aria-label="input song"
         />
       </label>
-      <br/>
-      <br/>
+      <br />
+      <br />
     </form>
-    
   );
 };
 

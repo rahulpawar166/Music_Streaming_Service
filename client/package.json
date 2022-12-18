@@ -16,6 +16,7 @@
     "@mui/styles": "^5.10.16",
     "@mui/system": "^5.10.16",
     "axios": "^1.2.1",
+    "bootstrap": "^5.2.3",
     "dotenv": "^16.0.3",
     "firebase": "^9.15.0",
     "firebaseui": "^6.0.2",
@@ -35,6 +36,7 @@
     "react-icons": "^4.6.0",
     "react-router-dom": "^6.4.5",
     "react-scripts": "4.0.3",
+    "react-spotify-web-playback": "^0.10.0",
     "react-toastify": "^8.0.0",
     "uuid": "^9.0.0",
     "web-vitals": "^2.1.4",
@@ -65,6 +67,7 @@
     ]
   },
   "devDependencies": {
-    "dotenv-webpack": "^8.0.1"
+    "dotenv-webpack": "^8.0.1",
+    "react-error-overlay": "^6.0.9"
   }
 }
