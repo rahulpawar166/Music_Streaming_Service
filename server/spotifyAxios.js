@@ -9,9 +9,9 @@ const refreshAccessToken = async (uid) => {
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
       Authorization: `Basic ${new Buffer(
-        process.env.REACT_APP_SPOTIFY_CLIENT_ID +
+        process.env.EXPRESS_APP_SPOTIFY_CLIENT_ID +
           ":" +
-          process.env.REACT_APP_SPOTIFY_CLIENT_SECRET,
+          process.env.EXPRESS_APP_SPOTIFY_CLIENT_SECRET,
       ).toString("base64")}`,
     },
     data: qs.stringify({

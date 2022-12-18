@@ -24,15 +24,15 @@ router.post("/spotify_access_token", auth, async (req, res) => {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Authorization: `Basic ${new Buffer(
-          process.env.REACT_APP_SPOTIFY_CLIENT_ID +
+          process.env.EXPRESS_APP_SPOTIFY_CLIENT_ID +
             ":" +
-            process.env.REACT_APP_SPOTIFY_CLIENT_SECRET,
+            process.env.EXPRESS_APP_SPOTIFY_CLIENT_SECRET,
         ).toString("base64")}`,
       },
       data: qs.stringify({
         grant_type: "authorization_code",
         code: code,
-        redirect_uri: process.env.REACT_APP_SPOTIFY_REDIRECT_URI,
+        redirect_uri: process.env.EXPRESS_APP_SPOTIFY_REDIRECT_URI,
       }),
     });
     if (!data)
