@@ -21,6 +21,7 @@ import Album from "@material-ui/icons/Album";
 import axios from "axios";
 import PlayList from "../pages/PlayList";
 import Search from "./Search";
+import IndPlayList from "../pages/IndPlayList"
 
 import Lyrics from "./Lyrics"
 
@@ -36,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const {currentUser} = useContext(AuthContext);
   const [playListId, setPlayListId] = useState();
+  const [flag,setFlag]=useState();
 
   const classes = useStyles();
   async function getToken() {
@@ -62,10 +64,32 @@ function App() {
     if (currentUser) {
     console.log("I am=",currentUser)
     window.localStorage.setItem("currentUser", (currentUser.uid));
+    window.localStorage.setItem("currentPlaylist","myDefault")
     console.log("from app local storage",window.localStorage.getItem("currentUser"))
     createPlaylist();
+
     }
   }, [currentUser]);
+  
+  useEffect(async()=>{
+    if(currentUser){
+      try {
+        console.log("frontend to add playlist ")
+        window.localStorage.setItem("currentPlaylist","mydefault")
+        console.log("this is",window.localStorage.getItem("currentUser"))
+        const { data } = await axios.post(
+          `http://localhost:3008/playlist/addPlaylist`,{uid:window.localStorage.getItem("currentUser"),name:"mydefault" }
+        );
+        console.log(data)
+        
+        // setPlayListData(data.albums)
+      } catch (error) {
+       
+        console.log("error", error);
+      }
+    }
+    
+  },[currentUser])
 
   return (
       <ThemeProvider theme={theme}>
@@ -83,10 +107,12 @@ function App() {
                 <Route path="/forgotpassword" element={<ForgotPassword />} />
                 <Route path="/new-releases" element={<NewReleases />} />
                 <Route path="/Lyrics/:artist/:trackName" element={<Lyrics />} />
+
                 <Route path="/AlbumSong/:AlbumId" element={<AlbumSong />} />
                 <Route path="/search" element={<Search />} />
                 <Route path="/Categories/:Id" element={<Categories />} />
                 <Route path="/playlists" element={<PlayList/>} />
+                {/* <Route path="/IndPlayList/:PlaylistName" element={<IndPlayList/>}/> */}
                
 
               </Routes>
