@@ -59,7 +59,7 @@ let exportedMethods = {
 //this function will add playlist in current user
 async addPlayList(uid,name){
 
-  console.log("inside data")
+  console.log("inside data",name,uid)
   if(!uid || uid.trim() === "") throw "please provide uid"
   uid=uid.trim()
 
@@ -73,7 +73,14 @@ async addPlayList(uid,name){
   if (fetch_data === null) throw "No user with this id";
 
   //chekc already playlist exist with this name or not
-  
+  playlist_arr=fetch_data.albums
+  let check_exist=false
+  playlist_arr.forEach((element)=>{
+    if(element.name===name){
+      check_exist=true
+    }
+    
+  })
 
   if (check_exist) throw "playlist already exists with this name";
   
@@ -162,6 +169,19 @@ async addPlayList(uid,name){
       console.log(fetch_data)
       if (fetch_data === null) throw "No user with this id";
 
+       //chekc already playlist exist with this name or not
+  playlist_arr=fetch_data.albums
+  let check_exist=false
+  playlist_arr.forEach((element)=>{
+    console.log(element.name,name,element.name===name)
+    if(element.name===name){
+      check_exist=true
+    }
+  })
+
+  console.log(check_exist)
+  if (!check_exist) throw "playlist does not exists with this name";
+
       let updateSweets = await playlistCollection.updateOne(
         { _id: uid },
         { $pull: { albums: { name: name } } }
@@ -183,34 +203,51 @@ async addPlayList(uid,name){
 
 
     //this function delete song inside playlist
-    async deleteAlbum(playlistId, albumId){
+    async deleteAlbum(uid, albumId,name){
 
         console.log("inside data")
-        console.log("inside data add album",playlistId,albumId)
+        console.log("inside data add album",uid,albumId,name)
 
-        if(!playlistId || playlistId.trim() === "") throw "please provide playlistId"
-        playlistId=playlistId.trim()
+        if(!uid || uid.trim() === "") throw "please provide uid"
+        uid=uid.trim()
 
         if(!albumId || albumId.trim() === "") throw "please provide albumId"
         albumId=albumId.trim()
 
+        string_Check(name, "name");
+        name=name.toLowerCase().trim()
+
         const playlistCollection = await playlist();
-        const fetch_data = await playlistCollection.findOne({ _id: playlistId });
+        const fetch_data = await playlistCollection.findOne({ _id: uid });
         console.log(fetch_data)
         if (fetch_data === null) throw "No playlist with this playlist id";
 
+        let playlist_arr=fetch_data.albums
+        let playlist_check=false
+        playlist_arr.forEach((element)=>{
+          if(
+            element.name===name
+          ){
+            playlist_check=true
+          }
+          
+        })
+
+        if(!playlist_check) throw `no playlist with this name`
+        
+        console.log("we reached here")
+
         let updateAlbum = await playlistCollection.updateOne(
-          { _id: playlistId },
-          { $pull: { albums: albumId } }
+          { _id: uid,"albums.name":name},
+          { $pull: { "albums.$.tracks": albumId } }
         );
-          console.log(updateAlbum)
+    
         if (!updateAlbum.matchedCount && !updateAlbum.modifiedCount) {
-          throw "Not deleted";
+          throw "Replay not created";
         }
     
-        const output = await playlistCollection.findOne({ _id: playlistId });
+        const output = await playlistCollection.findOne({ _id: uid });
         return output;
-
     },
 
     ///this function add song to playlist
@@ -237,8 +274,12 @@ async addPlayList(uid,name){
         let playlist_arr=fetch_data.albums
         let playlist_check=false
         playlist_arr.forEach((element)=>{
-          element.name===name
-          playlist_check=true
+          if(
+            element.name===name
+          ){
+            playlist_check=true
+          }
+          
         })
 
         if(!playlist_check) throw `no playlist with this name`
@@ -246,8 +287,8 @@ async addPlayList(uid,name){
         console.log("we reached here")
 
         let updateAlbum = await playlistCollection.updateOne(
-          { _id: uid },
-          { $push: { albums: {tracks:albumId} } }
+          { _id: uid,"albums.name":name},
+          { $push: { "albums.$.tracks": albumId } }
         );
     
         if (!updateAlbum.matchedCount && !updateAlbum.modifiedCount) {

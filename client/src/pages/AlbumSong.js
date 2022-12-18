@@ -53,9 +53,9 @@ const AlbumSong = () => {
     try {
       const { data } = await axios.post(
         `http://localhost:3008/playlist/addTrack`,{
-          playlistId:window.localStorage.getItem("currentUser"),  
-          albumId:trackId
-          
+          uid:window.localStorage.getItem("currentUser"),  
+          albumId:trackId,
+          name:window.localStorage.getItem("currentPlaylist")
         }
       );
     } catch (error) {

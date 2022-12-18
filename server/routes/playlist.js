@@ -4,7 +4,6 @@ const router = express.Router()
 const playlistData = data.playlistData
 const axios=require("axios")
 const xss = require("xss");
-
 const flat = require("flat");
 const unflatten = flat.unflatten;
 const redis = require("redis");
@@ -81,6 +80,8 @@ router.post("/addPlaylist", async(req,res)=>{
   let name=xss(req.body.name)
   let uid=xss(req.body.uid)
 
+  console.log("route",name,uid)
+
   if (!name ||name.trim() === "" ) {
     res.status(400).json({ errors: "name is not valid " });
     return;
@@ -151,24 +152,31 @@ router.post("/deleteTrack",async(req,res)=>{
   console.log("delete albums routes")
 
   const albumId = xss(req.body.albumId)
-  const playlistId = xss(req.body.playlistId)
- 
-  console.log(playlistId,albumId)
+  const uid = xss(req.body.uid)
+ const name=xss(req.body.name)
+
+  console.log(uid,albumId)
   if (!albumId || albumId.trim() === "" ) {
     res.status(400).json({ errors: "albumId is not valid " });
     return;
   }
-  if (!playlistId || playlistId.trim() === "" ) {
-    res.status(400).json({ errors: "playlistId is not valid " });
+  if (!uid || uid.trim() === "" ) {
+    res.status(400).json({ errors: "uid is not valid " });
     return;
   }
   
-  console.log(playlistId,albumId)
+  if (!name || name.trim() === "" ) {
+    res.status(400).json({ errors: "name is not valid " });
+    return;
+  }
+
+  console.log(uid,albumId,name)
 
   try {
       const fetch_data = await playlistData.deleteAlbum(
-        playlistId,
-        albumId
+        uid,
+        albumId,
+        name
       );
       
       res.status(200).json(fetch_data);
