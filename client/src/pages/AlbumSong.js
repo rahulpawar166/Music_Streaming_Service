@@ -123,8 +123,7 @@ const AlbumSong = () => {
           <Button>Play</Button>
           <br/>
           <br/>
-          <Link to={`/Lyrics/${artist}/${track?.name}`}>Lyrics</Link>
-         
+          <Button href={`/Lyrics/${artist}/${track?.name}`}>Lyrics</Button>
         </Card>
       </Grid>
     );

@@ -6,10 +6,10 @@ main {
 }
 h1{ 
   font-size: 30pt;
-  color: #9494df;
+  color: #5c5cb7;
 }
 h2{
-  color: #9494df;
+  color: #5c5cb7;
 }
 .active {
   font-weight: bold;
@@ -27,7 +27,7 @@ input{
 span{
   font-size: 12pt;
   font-weight: bold;
-  color: #9c9cfc;
+  color: #8989f3;
 }
 .forgotPassword {
   background: none !important;
@@ -37,6 +37,11 @@ span{
   color: #069;
 }
 
+.lyrics{
+  color: #5c5cb7;
+  font-weight: 600;
+  white-space: pre-line;
+}
 .forgotPassword:hover {
   text-decoration: none;
   color: red;
