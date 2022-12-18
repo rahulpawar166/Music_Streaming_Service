@@ -1,5 +1,6 @@
 import React, { useEffect, useState,useContext } from "react";
 import axios from "axios";
+import Player from "./Player"
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Card, CardHeader, Grid, makeStyles, Button } from "@material-ui/core";
@@ -44,6 +45,7 @@ const Lyrics = () => {
   const [found, setFound] = useState(false);
   const [loading, setLoading] = useState(true);
   const [lyricsData, setLyrics] = useState()
+  const [playingTrack, setPlayingTrack] = useState()
 
 
   const showLyrics=async(artist,trackName)=>{
@@ -86,7 +88,7 @@ const Lyrics = () => {
         <h1> Lyrics</h1>
         <p>{lyricsData}</p>
 
- 
+        {/* <div><Player/></div> */}
 
         
       </div>
