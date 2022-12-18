@@ -83,9 +83,7 @@ function App() {
                 <Route path="/forgotpassword" element={<ForgotPassword />} />
                 <Route path="/new-releases" element={<NewReleases />} />
                 <Route path="/Lyrics/:artist/:trackName" element={<Lyrics />} />
-                
                 <Route path="/AlbumSong/:AlbumId" element={<AlbumSong />} />
-                
                 <Route path="/search" element={<Search />} />
                 <Route path="/Categories/:Id" element={<Categories />} />
                 <Route path="/playlists" element={<PlayList/>} />

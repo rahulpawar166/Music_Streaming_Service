@@ -46,19 +46,32 @@ const useStyles = makeStyles({
   },
 });
 
-
 const PlayList = () => {
 
   const classes = useStyles();
-
-  const [trackData, setTrackData]=useState();
-  const [playlistData, setPlayListData]=useState();
+  const [trackData, setTrackData]=useState([]);
+  const [playlistData, setPlayListData]=useState([]);
   const [loading, setLoading] = useState(true);
   const [found, setFound] = useState(false);
 
 
-  const getData = async () => {
+  const getPlayList = async()=>{
 
+    try {
+      console.log("frontend getplaylist function")
+      const { data } = await axios.post(
+        `http://localhost:3008/playlist/playListData`,{uid:window.localStorage.getItem("currentUser")}
+      );
+      console.log(data)
+      //SET LIST OF ALBBUMS INSIDE PLAYLISTDATA
+      setPlayListData(data.albums)
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+
+  const getData = async () => {
+    // debugger;
     console.log("inside playlist get data")
       const requestInit = {
         headers: {
@@ -68,6 +81,7 @@ const PlayList = () => {
       };
   
       let trackId=playlistData
+      console.log("trackId", trackId)
       trackId=trackId.join(",")
       console.log(trackId)
   
@@ -89,43 +103,42 @@ const PlayList = () => {
       }
     };
 
-  const getPlayList = async()=>{
+const deleteFromPlaylist = async (trackId) => {
+      console.log("button clicked")
+      
+      try {
+        
+        const { data } = await axios.post(
+          `http://localhost:3008/playlist/deleteTrack`,{
+            playlistId:window.localStorage.getItem("currentUser"),  
+            albumId:trackId
+            
+          }
+        );
+       setPlayListData(data.albums)
+        
+      } catch (error) {
+        console.log("error", error);
+       
+      }
+      
+};
 
-    try {
-      console.log("frontend getplaylist function")
-      const { data } = await axios.post(
-        `http://localhost:3008/playlist/playListData`,{uid:window.localStorage.getItem("currentUser")}
-      );
-      console.log(data)
-      //SET LIST OF ALBBUMS INSIDE PLAYLISTDATA
-      setPlayListData(data.albums)
-    } catch (error) {
-      console.log("error", error);
-    }
-  }
+  
 
   useEffect(() => {
     getPlayList();
   }, []);
   
   useEffect(()=>{
-    getData();
+    if(playlistData.length>0){
+      getData();
+    }else{
+      setFound(false);
+      setLoading(false);
+    }    
   },[playlistData])
 
-  // const deleteFromPlaylist = async (trackId) => {
-  //   console.log("button clicked")
-  //   try {
-  //     const { data } = await axios.post(
-  //       `http://localhost:3008/playlist/deleteTrack`,{
-  //         playlistId:window.localStorage.getItem("currentUser"),  
-  //         albumId:trackId
-          
-  //       }
-  //     );
-  //   } catch (error) {
-  //     console.log("error", error);
-  //   }
-  // };
 
   const buildCard = (track) => {
     return (
@@ -136,7 +149,7 @@ const PlayList = () => {
              <CardHeader className={classes.titleHead} title={track?.id} />
             <CardHeader className={classes.titleHead} title={track?.name} />
         
-          {/* <Button  onClick={() => deleteFromPlaylist(track?.id)}>delete From PlayList</Button> */}
+          <Button  onClick={() => deleteFromPlaylist(track?.id)}>delete From PlayList</Button>
           <br/>
         </Card>
       </Grid>
