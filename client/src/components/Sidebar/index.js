@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { makeStyles } from "@material-ui/core";
-import { useTheme } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Drawer from "@material-ui/core/Drawer";
 import Divider from "@material-ui/core/Divider";

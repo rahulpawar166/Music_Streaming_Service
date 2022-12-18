@@ -4,12 +4,15 @@ import "./styles/index.css";
 import App from "./components/App";
 import reportWebVitals from "./reportWebVitals";
 import { AuthProvider } from "./firebase/Auth";
+import { CookiesProvider } from "react-cookie";
 
 require("dotenv").config();
 // console.log(process.env);
 ReactDOM.render(
   <AuthProvider>
-    <App />
+    <CookiesProvider>
+      <App />
+    </CookiesProvider>
   </AuthProvider>,
   document.getElementById("root"),
 );

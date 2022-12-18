@@ -1,40 +1,52 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../firebase/Auth";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
-import axios from "axios";
+import { doSignOut } from "../firebase/FirebaseFunctions";
+import { useNavigate } from "react-router-dom";
 
 const Account = () => {
+  const navigate = useNavigate();
   const { currentUser } = useContext(AuthContext);
+  const [spotifyConnected, setSpotifyConnected] = useState(false);
 
-  const spotifyAuthorizationFlow = () => {
-    const rand = Math.random().toString().substring(2, 18);
+  const handleSignOut = () => {
+    doSignOut();
+    navigate("/signin");
+  };
 
-    const config = {
-      headers: {
-        Authorization: `Basic ${new Buffer(
-          process.env.REACT_APP_CLIENT_ID +
-            ":" +
-            process.env.REACT_APP_CLIENT_SECRET,
-        ).toString("base64")}`,
-      },
-      form: {
-        grant_type: "client_credentials",
-      },
-      json: true,
-    };
-    const url = "https://accounts.spotify.com/api/token";
-    const response = axios.get("https://accounts.spotify.com/api/token");
+  const generateSpotifyToken = () => {
+    const cookieState = Math.random().toString().substring(2, 18);
+    const queryString = new URLSearchParams();
+    Object.entries({
+      response_type: "code",
+      client_id: process.env.REACT_APP_SPOTIFY_CLIENT_ID,
+      scope:
+        "user-read-private user-read-email streaming user-library-modify user-library-read",
+      redirect_uri: process.env.REACT_APP_SPOTIFY_REDIRECT_URI,
+      state: cookieState,
+    }).map(([key, value]) => queryString.set(key, value));
+    window.location.href =
+      "https://accounts.spotify.com/authorize?" + queryString.toString();
   };
 
   return (
     <Box>
+      <h1>
+        {currentUser
+          ? `Logged In As: ${currentUser.displayName}`
+          : "Not logged in!"}
+      </h1>
       <Button
-        variant="contained"
-        color="primary"
-        onClick={spotifyAuthorizationFlow}
+        variant={spotifyConnected ? "disabled" : "contained"}
+        onClick={generateSpotifyToken}
       >
-        Connect your Spotify
+        {spotifyConnected ? "Spotify Connected!" : "Connect your Spotify"}
+      </Button>
+      <br />
+      <br />
+      <Button variant="contained" color="secondary" onClick={handleSignOut}>
+        Sign Out
       </Button>
     </Box>
   );

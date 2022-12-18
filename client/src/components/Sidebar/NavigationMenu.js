@@ -1,8 +1,6 @@
 import { useContext } from "react";
 import { AuthContext } from "../../firebase/Auth";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { doSignOut } from "../../firebase/FirebaseFunctions";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -12,20 +10,10 @@ import SearchIcon from "@material-ui/icons/Search";
 import AlbumIcon from "@material-ui/icons/Album";
 import LibraryMusicIcon from "@material-ui/icons/LibraryMusic";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 const NavigationMenu = () => {
   const navigate = useNavigate();
   const { currentUser } = useContext(AuthContext);
-
-  const handleSignOut = () => {
-    doSignOut();
-    toast.info("Logged Out");
-    navigate("/");
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
-  };
 
   const buildNavItem = (text, key, link, icon) => {
     return {
@@ -37,9 +25,9 @@ const NavigationMenu = () => {
   };
 
   const NavItems = [
-    buildNavItem("Home", "home", "/", <HomeIcon />),
     buildNavItem("Search", "search", "/search", <SearchIcon />),
     buildNavItem("New Releases", "newreleases", "/new-releases", <AlbumIcon />),
+    buildNavItem("Home", "home", "/", <HomeIcon />),
     buildNavItem("Library", "playlists", "/playlists", <LibraryMusicIcon />),
   ];
 
@@ -53,21 +41,16 @@ const NavigationMenu = () => {
           </ListItem>
         );
       })}
-      {currentUser ? (
-        <ListItem button onClick={handleSignOut} key="signout">
-          <ListItemIcon>
-            <ExitToAppIcon />
-          </ListItemIcon>
-          <ListItemText primary="Sign Out" />
-        </ListItem>
-      ) : (
-        <ListItem button onClick={() => navigate("/signin")} key="signin">
-          <ListItemIcon>
-            <AccountCircleIcon />
-          </ListItemIcon>
-          <ListItemText primary="Sign In" />
-        </ListItem>
-      )}
+      <ListItem
+        button
+        onClick={() => navigate(currentUser ? "/account" : "/signin")}
+        key={currentUser ? "account" : "signin"}
+      >
+        <ListItemIcon>
+          <AccountCircleIcon />
+        </ListItemIcon>
+        <ListItemText primary={currentUser ? "Profile" : "Sign In"} />
+      </ListItem>
     </List>
   );
 };

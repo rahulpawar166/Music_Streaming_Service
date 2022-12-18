@@ -1,11 +1,9 @@
-import React, { useEffect, useState,useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Card, CardHeader, Grid, makeStyles, Button } from "@material-ui/core";
-// import { Default } from "react-toastify/dist/utils";
 import DefaultImage from "../img/DefaultImage.jpeg";
-import { AuthProvider, AuthContext } from "../firebase/Auth";
-// import { playlist } from "../../../server/config/mongoCollections";
+import { AuthContext } from "../firebase/Auth";
 
 const useStyles = makeStyles({
   card: {
@@ -40,24 +38,22 @@ const useStyles = makeStyles({
 
 const AlbumSong = () => {
   const classes = useStyles();
-  const {currentUser} = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
   //to get data of particular albums
-  const {AlbumId}=useParams();
+  const { id } = useParams();
   const [playListId, setPlayListId] = useState();
   const [trackAlbums, setTrackAlbums] = useState();
   const [loading, setLoading] = useState(true);
   const [found, setFound] = useState(false);
 
-
   const addToPlaylist = async (trackId) => {
-    
     try {
       const { data } = await axios.post(
-        `http://localhost:3008/playlist/addTrack`,{
-          playlistId:currentUser.uid,  
-          albumId:trackId
-          
-        }
+        `http://localhost:3008/playlist/addTrack`,
+        {
+          playlistId: currentUser.uid,
+          albumId: trackId,
+        },
       );
     } catch (error) {
       console.log("error", error);
@@ -65,7 +61,7 @@ const AlbumSong = () => {
   };
 
   // const getPlayList=async()=>{
-  
+
   //   try {
   //     const { data } = await axios.get(
   //       `http://localhost:3008/playlist/playListData`
@@ -77,7 +73,6 @@ const AlbumSong = () => {
   //   }
   //  }
 
-
   const getAlbums = async () => {
     const requestInit = {
       headers: {
@@ -88,7 +83,7 @@ const AlbumSong = () => {
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_URL_ALBUMS_ID_TRACKS}/${AlbumId}`,
+        `${process.env.REACT_APP_URL_ALBUMS_ID_TRACKS}/${id}`,
         requestInit,
       );
 
@@ -106,9 +101,9 @@ const AlbumSong = () => {
   };
 
   useEffect(() => {
-    console.log("inside album song ",currentUser)
+    console.log("inside album song ", currentUser);
     getAlbums();
-  }, [currentUser,AlbumId]);
+  }, [currentUser, id]);
 
   const buildCard = (track) => {
     return (
