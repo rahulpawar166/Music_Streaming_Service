@@ -21,6 +21,7 @@ import Album from "@material-ui/icons/Album";
 import axios from "axios";
 import PlayList from "../pages/PlayList";
 import Search from "./Search";
+import IndPlayList from "../pages/IndPlayList"
 
 import Lyrics from "./Lyrics"
 
@@ -111,6 +112,7 @@ function App() {
                 <Route path="/search" element={<Search />} />
                 <Route path="/Categories/:Id" element={<Categories />} />
                 <Route path="/playlists" element={<PlayList/>} />
+                {/* <Route path="/IndPlayList/:PlaylistName" element={<IndPlayList/>}/> */}
                
 
               </Routes>

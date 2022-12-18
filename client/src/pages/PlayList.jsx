@@ -38,7 +38,7 @@ const useStyles = makeStyles({
     maxWidth: "200px",
   },
   button: {
-    // color: "#1e8678",
+    background: "#1e8678",
     fontWeight: "bold",
     fontSize: 12,
   },
@@ -79,11 +79,24 @@ const PlayList = () => {
     
     event.preventDefault();
     // alert(`The name you entered was: ${formData}`);
-debugger;
+// debugger;
     if (!formData || formData.trim().length === 0) {
-      alert("Please provide proper name for Trainer");
+      alert("Please provide proper name for playlist");
       return;
     }
+    console.log("all",allPlaylist)
+    let check_exists=false
+    let name_of_playlist=formData
+    name_of_playlist=name_of_playlist.toLowerCase().trim()
+    allPlaylist.forEach((element)=>{
+      if(element.name===name_of_playlist){
+        check_exists=true
+      }
+    })
+    if(check_exists) alert(`playlist exists with this name`)
+    
+     
+    
 
     try {
       console.log("frontend to add playlist ")
@@ -123,6 +136,7 @@ debugger;
       const { data } = await axios.post(
         `http://localhost:3008/playlist/deletePlaylist`,{uid:window.localStorage.getItem("currentUser"),name:name_of_playlist }
       );
+      setAllPlaylist(data.albums)
       console.log(data)
       
       // setPlayListData(data.albums)
@@ -136,20 +150,27 @@ debugger;
       
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={ind?.name}>
         <Card className={classes.card} variant="outlined">
-          
+        {/* <Link to={`/IndPlayList/${ind?.name}`}></Link> */}
              <CardHeader className={classes.titleHead} title={ind?.name} />
+             
              {/* { ind?.name!=="mydefault"?
              <Button  onClick={()=>deletePlaylist(ind?.name) }> delete</Button>:<></>
     }  */}
              {( currentPlaylist===ind?.name)?
           <h1>ACTIVE</h1>
-             :<Button  onClick={()=>changeCurrent(ind?.name) }> make current</Button>
+             :<Button className={classes.button} onClick={()=>changeCurrent(ind?.name) }> make current</Button>
     }
 
+{( ind?.name==="mydefault")?
+        (<></>)
+             :<Button className={classes.button} onClick={()=>deletePlaylist(ind?.name) }>DELETE</Button>
+    }
+
+
     <CardContent>
-    {ind?.tracks?.map((ind_track) => {
+    {/* {ind?.tracks?.map((ind_track) => {
             return <p>{ind_track}</p>;
-          })}
+          })} */}
     </CardContent>
 
     

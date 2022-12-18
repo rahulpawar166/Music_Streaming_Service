@@ -203,6 +203,7 @@ router.post("/addTrack",async(req,res)=>{
   const albumId = xss(req.body.albumId)
   const uid = xss(req.body.uid)
   const name=xss(req.body.name)
+  const trackname=xss(req.body.trackname)
 
   if (!albumId || albumId.trim() === "" ) {
     res.status(400).json({ errors: "albumId is not valid " });
@@ -216,6 +217,11 @@ router.post("/addTrack",async(req,res)=>{
     res.status(400).json({ errors: "name is not valid " });
     return;
   }
+
+  if (!trackname || trackname.trim() === "" ) {
+    res.status(400).json({ errors: "trackname is not valid " });
+    return;
+  }
   
   
 
@@ -225,7 +231,8 @@ router.post("/addTrack",async(req,res)=>{
       const fetch_data = await playlistData.addAlbum(
         uid,
         albumId,
-        name
+        name,
+        trackname
       );
       
       res.status(200).json(fetch_data);

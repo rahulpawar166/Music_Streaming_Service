@@ -239,7 +239,7 @@ async addPlayList(uid,name){
 
         let updateAlbum = await playlistCollection.updateOne(
           { _id: uid,"albums.name":name},
-          { $pull: { "albums.$.tracks": albumId } }
+          { $pull: { "albums.$.tracks": {trackId:albumId} } }
         );
     
         if (!updateAlbum.matchedCount && !updateAlbum.modifiedCount) {
@@ -251,7 +251,7 @@ async addPlayList(uid,name){
     },
 
     ///this function add song to playlist
-    async addAlbum(uid,albumId,name) {
+    async addAlbum(uid,albumId,name,trackname) {
         
         console.log("inside data")
 
@@ -263,6 +263,9 @@ async addPlayList(uid,name){
 
         string_Check(name, "name");
         name=name.toLowerCase().trim()
+
+        string_Check(trackname, "trackname");
+        trackname=trackname.toLowerCase().trim()
 
         console.log("inside data add album",uid,albumId,name)
 
@@ -286,9 +289,15 @@ async addPlayList(uid,name){
         
         console.log("we reached here")
 
+        const newReply = {
+          trackId:albumId,
+          name:trackname 
+        };
+
+
         let updateAlbum = await playlistCollection.updateOne(
           { _id: uid,"albums.name":name},
-          { $push: { "albums.$.tracks": albumId } }
+          { $push: { "albums.$.tracks": newReply } }
         );
     
         if (!updateAlbum.matchedCount && !updateAlbum.modifiedCount) {

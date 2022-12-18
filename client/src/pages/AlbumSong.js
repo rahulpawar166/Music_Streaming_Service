@@ -48,14 +48,15 @@ const AlbumSong = () => {
   const [found, setFound] = useState(false);
 
 
-  const addToPlaylist = async (trackId) => {
+  const addToPlaylist = async (trackId,trackname) => {
     
     try {
       const { data } = await axios.post(
         `http://localhost:3008/playlist/addTrack`,{
           uid:window.localStorage.getItem("currentUser"),  
           albumId:trackId,
-          name:window.localStorage.getItem("currentPlaylist")
+          name:window.localStorage.getItem("currentPlaylist"),
+          trackname:trackname
         }
       );
     } catch (error) {
@@ -116,7 +117,7 @@ const AlbumSong = () => {
           {/* <CardHeader className={classes.titleHead} title={track?.id} /> */}
           <CardHeader className={classes.titleHead} title={track?.name} />
           <br />
-          <Button onClick={() => addToPlaylist(track?.id)}>
+          <Button onClick={() => addToPlaylist(track?.id,track?.name)}>
             Add To PlayList
           </Button>
           <Button>Play</Button>
