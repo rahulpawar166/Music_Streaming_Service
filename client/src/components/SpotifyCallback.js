@@ -1,11 +1,14 @@
 import { useSearchParams, Navigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import Error from "./Error";
+import Loading from "./Loading";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../firebase/Auth";
 import axios from "axios";
 
 const SpotifyCallback = (props) => {
   const { currentUser } = useContext(AuthContext);
+  const [cookies, setCookie, removeCookie] = useCookies(["spotify_connected"]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
 
@@ -23,15 +26,18 @@ const SpotifyCallback = (props) => {
           },
         },
       );
-      if (data.success) setLoading(false);
+      if (data.success) {
+        setCookie("spotify_connected", "true");
+        setLoading(false);
+      }
     };
     if (searchParams.has("code") && currentUser) generateToken();
   }, [searchParams, currentUser]);
 
   if (searchParams.has("error"))
-    return <h1>Error: {searchParams.get("error")}</h1>;
-  if (!searchParams.has("code")) return <h1>Error: No code</h1>;
-  if (loading) return <h1>Loading...</h1>;
+    return <Error message={searchParams.get("error")} />;
+  if (!searchParams.has("code")) return <Error message="No code" />;
+  if (loading) return <Loading />;
   return <Navigate to="/" replace={true} />;
 };
 
