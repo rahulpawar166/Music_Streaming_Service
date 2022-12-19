@@ -4,11 +4,11 @@ main {
 .logo {
   margin-bottom: -2em;
 }
-h1{ 
+h1 {
   font-size: 30pt;
   color: #5c5cb7;
 }
-h2{
+h2 {
   color: #5c5cb7;
 }
 .active {
@@ -20,11 +20,11 @@ h2{
   font-weight: bold;
   color: red !important;
 }
-input{
-  height:20px;
+input {
+  height: 20px;
   width: 200px;
 }
-span{
+span {
   font-size: 12pt;
   font-weight: bold;
   color: #8989f3;
@@ -37,7 +37,7 @@ span{
   color: #069;
 }
 
-.lyrics{
+.lyrics {
   color: #5c5cb7;
   font-weight: 600;
   white-space: pre-line;
@@ -64,11 +64,19 @@ span{
 .fancy-border {
   /* width: 150px; */
   /* height: 150px; */
-  text-align:center;
+  text-align: center;
   border-top: 10px solid;
-  border-image:   linear-gradient(to right, #653496 25%, #7B52Ae 30%, #74B652 60%,#94c773 75%, #20ba91 100%) 10;
+  border-image: linear-gradient(
+      to right,
+      #653496 25%,
+      #7b52ae 30%,
+      #74b652 60%,
+      #94c773 75%,
+      #20ba91 100%
+    )
+    10;
   overflow-x: hidden;
-  overflow-y: hidden;  
+  overflow-y: hidden;
 }
 .blob:hover {
   width: 520px;

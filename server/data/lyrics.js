@@ -1,4 +1,3 @@
-
 // const lyricsFinder = require("lyrics-finder");
 
 // let exportedMethods = {
@@ -10,7 +9,7 @@
 //             name:name,
 //             albums:[],
 //         }
-        
+
 //         const playlistCollection = await playlist()
 //         const exist_playlist = await playlistCollection.findOne({ name:name });
 //         if (exist_playlist) throw `already playlist with this names`;
@@ -20,7 +19,6 @@
 //           } else {
 //             return { insertedPlaylist: true };
 //           }
-
 
 //     }
 
