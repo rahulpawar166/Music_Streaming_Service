@@ -1,17 +1,13 @@
-import "../styles/App.css";
-import React, { useContext, useEffect, useState } from "react";
-import { Helmet } from "react-helmet";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import generateToken from "../generateToken";
-import { AuthProvider, AuthContext } from "../firebase/Auth";
+import { Helmet } from "react-helmet";
 import SignUp from "../pages/SignUp";
 import SignIn from "../pages/SignIn";
 import ForgotPassword from "../pages/ForgotPassword";
-// import PrivateRoute from "./components/PrivateRoute";
+import Account from "../pages/Account";
 import Home from "../pages/Home";
 import NewReleases from "../pages/NewReleases";
 import Sidebar from "./Sidebar";
-import Player from "./Player";
+// import Player from "./Player";
 import theme from "../styles/MuiTheme";
 import { makeStyles } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/core/styles";
@@ -20,13 +16,14 @@ import Categories from '../pages/Categories'
 import Album from "@material-ui/icons/Album";
 import axios from "axios";
 import PlayList from "../pages/PlayList";
-import CategoryPlaylist from "../pages/CategoryPlaylist";
-
 import Search from "./Search";
-import IndPlayList from "../pages/IndPlayList"
+import SpotifyCallback from "./SpotifyCallback";
+import PrivateRoute from "./PrivateRoute";
+import SpotifyPrivateRoute from "./SpotifyPrivateRoute";
+import Lyrics from "./Lyrics";
+import IndPlayList from "../pages/IndPlayList";
 
 import Lyrics from "./Lyrics"
-import Recommendations from "./Recommendations";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,93 +35,47 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
-  const {currentUser} = useContext(AuthContext);
-  const [playListId, setPlayListId] = useState();
-  const [flag,setFlag]=useState();
-
   const classes = useStyles();
-  async function getToken() {
-    let token = "";
-    token = await generateToken();
-    window.localStorage.setItem("token", token);
-  }
-  // Hook to generate token for Spotify's API and cache in localStorage
-  useEffect(() => {
-    getToken();
-  }, []);
-
-  const createPlaylist = async () => {
-    try {
-      const { data } = await axios.post(
-        `http://localhost:3008/playlist/create`,{uid:window.localStorage.getItem("currentUser")}
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    if (currentUser) {
-    console.log("I am=",currentUser)
-    window.localStorage.setItem("currentUser", (currentUser.uid));
-    window.localStorage.setItem("currentPlaylist","myDefault")
-    console.log("from app local storage",window.localStorage.getItem("currentUser"))
-    createPlaylist();
-
-    }
-  }, [currentUser]);
-  
-  useEffect(async()=>{
-    if(currentUser){
-      try {
-        console.log("frontend to add playlist ")
-        window.localStorage.setItem("currentPlaylist","mydefault")
-        console.log("this is",window.localStorage.getItem("currentUser"))
-        const { data } = await axios.post(
-          `http://localhost:3008/playlist/addPlaylist`,{uid:window.localStorage.getItem("currentUser"),name:"mydefault" }
-        );
-        console.log(data)
-        
-        // setPlayListData(data.albums)
-      } catch (error) {
-       
-        console.log("error", error);
-      }
-    }
-    
-  },[currentUser])
 
   return (
-      <ThemeProvider theme={theme}>
-        <Helmet>
-          <meta name="viewport" content="initial-scale=1, width=device-width" />
-        </Helmet>
-        <div className={classes.root}>
-          <Router>
-            <Sidebar />
-            <main className={classes.content}>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/signup" element={<SignUp />} />
-                <Route path="/signin" element={<SignIn />} />
-                <Route path="/forgotpassword" element={<ForgotPassword />} />
-                <Route path="/new-releases" element={<NewReleases />} />
-                <Route path="/Lyrics/:artist/:trackName" element={<Lyrics />} />
-
-                <Route path="/AlbumSong/:AlbumId" element={<AlbumSong />} />
+    <div className={classes.root}>
+      <Helmet>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+      </Helmet>
+      <Router>
+        <Sidebar />
+        <main className={classes.content}>
+          <Routes>
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/forgotpassword" element={<ForgotPassword />} />
+            <Route element={<PrivateRoute />}>
+              <Route path="/account" element={<Account />} />
+              <Route path="/spotifycallback" element={<SpotifyCallback />} />
+              <Route element={<SpotifyPrivateRoute />}>
                 <Route path="/search" element={<Search />} />
-                <Route path="/Categories/:Id" element={<Categories />} />
-                <Route path="/playlist/:playlistId" element={<CategoryPlaylist />} />
-                <Route path="/playlists" element={<PlayList/>} />
-                <Route path="/Recommendations" element={<Recommendations />} />
-               
-
-              </Routes>
-            </main>
-            {/* <Player /> */}
-          </Router>
-        </div>
-      </ThemeProvider>
+                <Route path="/new-releases" element={<NewReleases />} />
+                <Route path="/categories" element={<Categories />} />
+                <Route path="/category/:id" element={<Category />} />
+                <Route path="/album/:id" element={<AlbumDetails />} />
+                <Route path="/" element={<Home />} />
+                <Route path="/library" element={<Library />} />
+                <Route path="/playlist/:id" element={<Playlist />} />
+                <Route path="/lyrics/:artist/:trackName" element={<Lyrics />} />
+              </Route>
+              <Route
+                path="/IndPlayList/:PlaylistName"
+                element={<IndPlayList />}
+              />
+            </Route>
+            <Route
+              path="*"
+              element={<Error message="Error 404: That page does not exist!" />}
+            />
+          </Routes>
+        </main>
+      </Router>
+    </div>
   );
 }
 

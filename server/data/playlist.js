@@ -55,6 +55,37 @@ let exportedMethods = {
     
     },
 
+    //this function will return ind playlist data
+    async getIndPlayListData(uid,name){
+
+      console.log("inside data",name,uid)
+      if(!uid || uid.trim() === "") throw "please provide uid"
+      uid=uid.trim()
+    
+      string_Check(name, "name");
+      name=name.toLowerCase().trim()
+    
+      //check user exists or not
+      const playlistCollection = await playlist()
+
+      // { _id: uid,},
+      //     { $push: { "albums.$.tracks": newReply } }
+      const fetch_data = await playlistCollection.findOne({ _id: uid,"albums.name":name });
+      console.log(fetch_data)
+      if (fetch_data === null) throw "No user with this id";
+    
+      //check already playlist exist with this name or not
+      // playlist_arr=fetch_data.albums
+      // let check_exist=false
+      // playlist_arr.forEach((element)=>{
+      //   if(element.name===name){
+      //     check_exist=true
+      //   } 
+      // })
+
+
+
+    },
 
 //this function will add playlist in current user
 async addPlayList(uid,name){
@@ -104,54 +135,7 @@ async addPlayList(uid,name){
 
 },
 
-    // //this function will add playlist in current user
-    // async addPlayList(uid,name){
-
-    //   console.log("inside data")
-    //   if(!uid || uid.trim() === "") throw "please provide uid"
-    //   uid=uid.trim()
-
-    //   string_Check(name, "name");
-    //   name=name.toLowerCase().trim()
-
-    //   //check user exists or not
-    //   const playlistCollection = await playlist()
-    //   const fetch_data = await playlistCollection.findOne({ _id: uid });
-    //   console.log(fetch_data)
-    //   if (fetch_data === null) throw "No user with this id";
-
-    //   //chekc already playlist exist with this name or not
-    //   const playList_arr=fetch_data.albums
-    //   console.log((playList_arr))
-
-    //   let check_exist=false
-    //   playList_arr.forEach(element => {
-    //     if (element.name===name){
-    //       check_exist=true
-    //     }
-    //   });
-
-    //   if (check_exist) throw "playlist already exists with this name";
-      
-    //   const newReply = {
-    //     name:name,
-    //     tracks:[]
-    //   };
-  
-
-    //   let updateSweets = await playlistCollection.updateOne(
-    //     { _id: uid },
-    //     { $push: { albums: newReply } }
-    //   );
-  
-    //   if (!updateSweets.matchedCount && !updateSweets.modifiedCount) {
-    //     throw " not created";
-    //   }
-  
-    //   const output = await playlistCollection.findOne({ _id: uid });
-    //   return output;
-
-    // },
+    
 
     //this function will add playlist in current user
     async deletePlaylist(uid,name){
@@ -203,7 +187,7 @@ async addPlayList(uid,name){
 
 
     //this function delete song inside playlist
-    async deleteAlbum(uid, albumId,name){
+    async deleteAlbum(uid, name,albumId){
 
         console.log("inside data")
         console.log("inside data add album",uid,albumId,name)
@@ -251,7 +235,7 @@ async addPlayList(uid,name){
     },
 
     ///this function add song to playlist
-    async addAlbum(uid,albumId,name,trackname) {
+    async addAlbum(uid,albumId,name,trackname,img_url) {
         
         console.log("inside data")
 
@@ -291,7 +275,8 @@ async addPlayList(uid,name){
 
         const newReply = {
           trackId:albumId,
-          name:trackname 
+          name:trackname,
+          img_url:img_url
         };
 
 
@@ -354,31 +339,10 @@ async addPlayList(uid,name){
         return getPlaylist;
       },
       
-    //   async deletePlaylist(playlistId){
-    //     const playlistCollection = await playlist();
-    //     const playlist = await get(playlistId);
-    //     if (!playlistId) {
-    //         throw "ERROR: ID MUST BE PROVIDED!";
-    //     }
-    //     if (typeof playlistId !== 'string') {
-    //         throw "ERROR: ID MUST BE A STRING";
-    //     }
-    //     if (playlistId.trim().length === 0) {
-    //         throw "ERROR: ID CAN'T BE EMPTY STRING";
-    //     }
-    //     playlistId=playlistId.trim();
-    //     if (!ObjectId.isValid(playlistId)) {
-    //         throw "ERROR: NOT A VALID ID - DOESN'T EXIST!";
-    //     }
-    //     const deleteId = await playlistCollection.deleteOne({_id: ObjectId(playlistId)});
-    //     if (deleteId.deletedCount === 0) { // if band can't be removed
-    //         throw `ERROR: CAN'T DELETE PLAYLIST WITH ID OF ${playlistId}`;
-    //     }
     
-    //     return playlist.name + " has been successfully deleted!";
-
-
-    // }
 }
 
 module.exports=exportedMethods;
+
+
+

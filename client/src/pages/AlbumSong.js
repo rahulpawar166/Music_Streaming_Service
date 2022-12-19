@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 import {  Card, CardHeader, Grid, makeStyles, CardMedia, Button } from "@material-ui/core";
 import DefaultImage from "../img/DefaultImage.jpeg";
 import { AuthProvider, AuthContext } from "../firebase/Auth";
+// import PlaylistAdd from '@mui/icons-material/PlaylistAdd';
+import PlaylistAdd from "@material-ui/icons/PlaylistAdd";
 
 const useStyles = makeStyles({
   card: {
@@ -48,7 +50,7 @@ const AlbumSong = () => {
   const [found, setFound] = useState(false);
 
 
-  const addToPlaylist = async (trackId,trackname) => {
+  const addToPlaylist = async (trackId,trackname,img_url) => {
     
     try {
       const { data } = await axios.post(
@@ -56,7 +58,8 @@ const AlbumSong = () => {
           uid:window.localStorage.getItem("currentUser"),  
           albumId:trackId,
           name:window.localStorage.getItem("currentPlaylist"),
-          trackname:trackname
+          trackname:trackname,
+          img_url:img_url
         }
       );
     } catch (error) {
@@ -110,15 +113,15 @@ const AlbumSong = () => {
     getAlbums();
   }, [AlbumId]);
 
-  const buildCard = (artist,track) => {
+  const buildCard = (artist,track,img_url) => {
     return (
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.id}>
         <Card className={classes.card} variant="outlined">
           {/* <CardHeader className={classes.titleHead} title={track?.id} /> */}
           <CardHeader className={classes.titleHead} title={track?.name} />
           <br />
-          <Button onClick={() => addToPlaylist(track?.id,track?.name)}>
-            Add To PlayList
+          <Button onClick={() => addToPlaylist(track?.id,track?.name,img_url)}>
+            <PlaylistAdd fontSize="large"/>
           </Button>
           <Button>Play</Button>
           <br/>
@@ -155,7 +158,7 @@ const AlbumSong = () => {
         <br />
         {/* <Button>{trackAlbums?.artists[0]?.name}</Button> */}
         <Grid container className={classes.grid} spacing={5}>
-          {trackAlbums?.tracks?.items.map((track) => buildCard(trackAlbums?.artists[0]?.name,track))}
+          {trackAlbums?.tracks?.items.map((track) => buildCard(trackAlbums?.artists[0]?.name,track,trackAlbums?.images[0]?.url))}
         </Grid>
       </div>
     );

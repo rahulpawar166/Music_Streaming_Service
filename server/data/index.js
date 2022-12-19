@@ -1,4 +1,4 @@
-const playlist=require("./playlist")
-module.exports={
-    playlistData:playlist
-}
+module.exports = {
+  playlistData: require("./playlists"),
+  usersData: require("./users"),
+};

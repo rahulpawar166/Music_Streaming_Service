@@ -3,11 +3,19 @@ import ReactDOM from "react-dom";
 import "./styles/index.css";
 import App from "./components/App";
 import reportWebVitals from "./reportWebVitals";
-import { AuthProvider} from "./firebase/Auth";
+import { AuthProvider } from "./firebase/Auth";
+import { CookiesProvider } from "react-cookie";
 
 require("dotenv").config();
 // console.log(process.env);
-ReactDOM.render(<AuthProvider><App /></AuthProvider>, document.getElementById("root"));
+ReactDOM.render(
+  <AuthProvider>
+    <CookiesProvider>
+      <App />
+    </CookiesProvider>
+  </AuthProvider>,
+  document.getElementById("root"),
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

@@ -6,7 +6,6 @@
 
 // //   useEffect(() => setPlay(true), [trackUri])
 
-
 // //   return (
 // //     <SpotifyPlayer
 // //       token="BQAnKex5Bq2G-Df2IPID0B4fk_srsj496nadU3enUBQO4SXmlRTPZ-ey9fLoGPVQfHIyIc85dl15enPtNPVjxFDPyADCiTP_2oabKFIE8wMe7Ix2XAOjvAENpGgEcvngjz1lTOpjkn5_5edQiMSwGhbviP9gPxRjE_g8gxMb8NRiKVFakUqiPIXjHZ9a2Lk0nvc"
@@ -21,7 +20,7 @@
 // // }
 
 // const NewRelease = () => {
-  
+
 //   const [musicAlbums, setMusicAlbums] = useState([]);
 //   const classes = useStyles();
 //   const [loading, setLoading] = useState(true);
@@ -100,7 +99,7 @@
 //       <Grid container className={classes.grid} spacing={5}>
 //         {musicAlbums?.map((album) => buildCard(album))}
 //       </Grid>
-     
+
 //     </div>
 //   );
 // };

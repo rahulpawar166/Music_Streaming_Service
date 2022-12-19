@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import Loading from "../components/Loading";
+import { AuthContext } from "../firebase/Auth";
 import { Link } from "react-router-dom";
-import logo from '../icons/incognitomode2.png';
+import logo from "../icons/incognitomode2.png";
 import {
   Button,
   Card,
@@ -9,6 +11,7 @@ import {
   CardHeader,
   CardMedia,
   Grid,
+  Box,
   makeStyles,
 } from "@material-ui/core";
 
@@ -37,7 +40,6 @@ const useStyles = makeStyles({
     maxWidth: "200px",
   },
   button: {
-    // color: "#1e8678",
     fontWeight: "bold",
     fontSize: 12,
   },
@@ -45,88 +47,121 @@ const useStyles = makeStyles({
 
 const Home = () => {
   const classes = useStyles();
-  const [musicAlbums, setMusicAlbums] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [found, setFound] = useState(false);
-
-  console.log("accessToken from Home: ", window.localStorage.getItem("token"));
-
-  const getAlbums = async () => {
-    const requestInit = {
-      headers: {
-        Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-    };
-
-    try {
-      const country= 'US';
-      const offset=0;
-      const limit=20;
-      const response = await axios.get(
-        `https://api.spotify.com/v1/browse/categories?country=${country}&offset=${offset}&limit=${limit}`,
-        requestInit,
-      );
-      console.log(response)
-      console.log(response.data.categories.items);
-      setLoading(false);
-      setFound(true);
-      setMusicAlbums(response.data.categories.items);
-    } catch (error) {
-      setFound(false);
-      setLoading(false);
-      console.error(error);
-    }
-  };
+  const { currentUser } = useContext(AuthContext);
+  const [newReleasesData, setNewReleasesData] = useState(null);
+  const [newReleasesLoading, setNewReleasesLoading] = useState(true);
+  const [usersTop, setUsersTop] = useState(null);
+  const [usersTopLoading, setUsersTopLoading] = useState(true);
 
   useEffect(() => {
-    getAlbums();
-    // getPlayList()
-  }, []);
+    const fetchData = async () => {
+      try {
+        const userToken = await currentUser.getIdToken();
+        const { data: albumData } = await axios.get(
+          "http://localhost:3008/albums/new",
+          {
+            headers: {
+              FirebaseIdToken: userToken,
+            },
+          },
+        );
+        setNewReleasesData(albumData.slice(0, 6));
+        setNewReleasesLoading(false);
+        const { data: topData } = await axios.get(
+          "http://localhost:3008/me/top/tracks",
+          {
+            headers: {
+              FirebaseIdToken: userToken,
+            },
+          },
+        );
+        setUsersTop(topData);
+        setUsersTopLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (currentUser) fetchData();
+  }, [currentUser]);
 
-  const buildCard = (album) => {
+  const buildAlbumCard = (album) => {
     return (
-      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={album?.name}>
-        <Card className={classes.card} variant="outlined">
-          <CardActions>
-            <Link to={`/Categories/${album?.id}`}>
-              <CardHeader className={classes.titleHead} title={album?.name} />
-              <CardMedia
-                className={classes.media}
-                component="img"
-                image={album?.icons[0].url}
-                title="character image"
-              />
-            </Link>
-          </CardActions>
-          {/* <Button className={classes.button}>Explore</Button> */}
-        </Card>
-      </Grid>
+      album && (
+        <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={album.id}>
+          <Card className={classes.card} variant="outlined">
+            <CardActions>
+              <Link to={`/album/${album.id}`}>
+                <CardHeader
+                  className={classes.titleHead}
+                  title={
+                    album.name.length > 32
+                      ? album.name.substring(0, 29) + "..."
+                      : album.name.substring(0, 32)
+                  }
+                />
+                <CardMedia
+                  className={classes.media}
+                  component="img"
+                  image={album.images[0].url}
+                  alt={album.name}
+                />
+              </Link>
+            </CardActions>
+          </Card>
+        </Grid>
+      )
     );
   };
 
-  if (loading) {
+  const buildTrackCard = (track) => {
     return (
-      <div>
-        <h2> {"Loading please wait for few second"}</h2>
-        <h2> {"................................."}</h2>
-      </div>
+      track && (
+        <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track.id}>
+          <Card className={classes.card} variant="outlined">
+            <CardActions>
+              <Link to={`/track/${track.id}`}>
+                <CardHeader
+                  className={classes.titleHead}
+                  title={
+                    track.name.length > 32
+                      ? track.name.substring(0, 29) + "..."
+                      : track.name.substring(0, 32)
+                  }
+                />
+                <CardMedia
+                  className={classes.media}
+                  component="img"
+                  image={track.album.images[0].url}
+                  alt={track.name}
+                />
+              </Link>
+            </CardActions>
+          </Card>
+        </Grid>
+      )
     );
-  } else if (!found) {
-    return <h1>404: not enough data for this page</h1>;
-  } else
+  };
+
+  if (newReleasesLoading || usersTopLoading) return <Loading />;
+  else
     return (
       <div className="fancy-border">
-        <img className="logo" src={logo} alt="logo" width={100} height={100}/>
-        <h1>incognito.</h1>
-        <h2>Browse Categories</h2>
-        <Button className='Recommendations' href={`/Recommendations`}>Recommendations?</Button>
-        <br />
-
-        <br />
-        <Grid container className={classes.grid} spacing={5}>
-          {musicAlbums?.map((album) => buildCard(album))}
+        <img className="logo" src={logo} alt="logo" width={100} height={100} />
+        <h1>Home</h1>
+        <Grid container xs={12}>
+          <Grid item className={classes.grid}>
+            <h2>New Releases</h2>
+            <Grid container className={classes.grid} spacing={5}>
+              {newReleasesData &&
+                newReleasesData.map((album) => buildAlbumCard(album))}
+            </Grid>
+          </Grid>
+          <Grid item className={classes.grid}>
+            <h2>Recommended</h2>
+            <Grid container className={classes.grid} spacing={5}>
+              {usersTop && usersTop.map((track) => buildTrackCard(track))}
+            </Grid>
+          </Grid>
         </Grid>
       </div>
     );
