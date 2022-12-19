@@ -27,7 +27,7 @@ input{
 span{
   font-size: 12pt;
   font-weight: bold;
-  color: #8989f3;
+  color: #4e4eb2;
 }
 .forgotPassword {
   background: none !important;
@@ -38,7 +38,7 @@ span{
 }
 
 .lyrics{
-  color: #5c5cb7;
+  color: #4e4eb2;
   font-weight: 600;
   white-space: pre-line;
 }
@@ -61,11 +61,13 @@ span{
   animation: move 25s infinite alternate;
   transition: 1s cubic-bezier(0.07, 0.8, 0.16, 1);
 }
+
 .fancy-border {
+  
   /* width: 150px; */
   /* height: 150px; */
   text-align:center;
-  border-top: 10px solid;
+  border-top: 12px solid;
   border-image:   linear-gradient(to right, #653496 25%, #7B52Ae 30%, #74B652 60%,#94c773 75%, #20ba91 100%) 10;
   overflow-x: hidden;
   overflow-y: hidden;  

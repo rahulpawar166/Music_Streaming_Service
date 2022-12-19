@@ -11,7 +11,7 @@ import ForgotPassword from "../pages/ForgotPassword";
 import Home from "../pages/Home";
 import NewReleases from "../pages/NewReleases";
 import Sidebar from "./Sidebar";
-// import Player from "./Player";
+import Player from "./Player";
 import theme from "../styles/MuiTheme";
 import { makeStyles } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/core/styles";
@@ -20,9 +20,12 @@ import Categories from '../pages/Categories'
 import Album from "@material-ui/icons/Album";
 import axios from "axios";
 import PlayList from "../pages/PlayList";
+import CategoryPlaylist from "../pages/CategoryPlaylist";
+
 import Search from "./Search";
 
 import Lyrics from "./Lyrics"
+import Recommendations from "./Recommendations";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -86,7 +89,9 @@ function App() {
                 <Route path="/AlbumSong/:AlbumId" element={<AlbumSong />} />
                 <Route path="/search" element={<Search />} />
                 <Route path="/Categories/:Id" element={<Categories />} />
+                <Route path="/playlist/:playlistId" element={<CategoryPlaylist />} />
                 <Route path="/playlists" element={<PlayList/>} />
+                <Route path="/Recommendations" element={<Recommendations />} />
                
 
               </Routes>

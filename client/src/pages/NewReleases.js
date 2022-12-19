@@ -113,20 +113,7 @@ const NewReleases = () => {
               />
             </Link>
           </CardActions>
-          {/* <Button
-            className={classes.button}
-            onClick={() => addToPlaylist(album.id)}
-          >
-            Add
-          </Button> */}
-          <br />
-          {/* <Button> */}
-            {/* {album?.tracks?.items[0]?.external_urls.spotify} */}
-            {/* {album?.disc_number} */}
-            {/* {album?.artists[0]?.map((i) => {
-              return i.external_urls;
-            })} */}
-          {/* </Button> */}
+          <br />          
         </Card>
       </Grid>
     );
@@ -149,11 +136,6 @@ const NewReleases = () => {
         <Grid container className={classes.grid} spacing={5}>
           {musicAlbums?.map((album) => buildCard(album))}
         </Grid>
-        {/* <ul>
-          {musicAlbums?.map((album) => (
-            <li key={album.id}>{album.name}</li>
-          ))} 
-        </ul>*/}
       </div>
     );
 };

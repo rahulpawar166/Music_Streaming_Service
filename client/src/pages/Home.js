@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import logo from '../icons/incognitomode2.png';
 import {
+  Button,
   Card,
   CardActions,
   CardHeader,
@@ -120,6 +121,9 @@ const Home = () => {
         <img className="logo" src={logo} alt="logo" width={100} height={100}/>
         <h1>incognito.</h1>
         <h2>Browse Categories</h2>
+        <Button className='Recommendations' href={`/Recommendations`}>Recommendations?</Button>
+        <br />
+
         <br />
         <Grid container className={classes.grid} spacing={5}>
           {musicAlbums?.map((album) => buildCard(album))}

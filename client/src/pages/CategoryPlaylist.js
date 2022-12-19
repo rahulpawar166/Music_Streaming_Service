@@ -1,11 +1,10 @@
 import React, { useEffect, useState,useContext } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { Link, Card, CardHeader, Grid, makeStyles, CardMedia, Button } from "@material-ui/core";
-// import { Default } from "react-toastify/dist/utils";
+import {  Card, CardHeader, Grid, makeStyles, CardMedia, Button } from "@material-ui/core";
 import DefaultImage from "../img/DefaultImage.jpeg";
 import { AuthProvider, AuthContext } from "../firebase/Auth";
-// import { playlist } from "../../../server/config/mongoCollections";
 
 const useStyles = makeStyles({
   card: {
@@ -38,19 +37,31 @@ const useStyles = makeStyles({
   },
 });
 
-const AlbumSong = () => {
+const CategoryPlaylist = () => {
   const classes = useStyles();
-  const {currentUser} = useContext(AuthContext);
+  // const {currentUser} = useContext(AuthContext);
   //to get data of particular albums
-  const {Id}=useParams();
-  const {playlist_id} = useParams();
-  const [playListId, setPlayListId] = useState();
+  const {playlistId}=useParams();
+  // const [playListId, setPlayListId] = useState();
   const [trackAlbums, setTrackAlbums] = useState();
   const [loading, setLoading] = useState(true);
   const [found, setFound] = useState(false);
 
-
-  const getCategories = async () => {
+  const addToPlaylist = async (trackId) => {
+    
+    try {
+      const { data } = await axios.post(
+        `http://localhost:3008/playlist/addTrack`,{
+          playlistId:window.localStorage.getItem("currentUser"),  
+          albumId:trackId
+          
+        }
+      );
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  const getCategoriesPlaylist = async () => {
     const requestInit = {
       headers: {
         Authorization: `Bearer ${window.localStorage.getItem("token")}`,
@@ -60,7 +71,7 @@ const AlbumSong = () => {
 
     try {
       const response = await axios.get(
-        `https://api.spotify.com/v1/browse/categories/${Id}/playlists`,
+        `https://api.spotify.com/v1/playlists/${playlistId}`,
         requestInit,
       );
 
@@ -78,25 +89,24 @@ const AlbumSong = () => {
   };
   useEffect(() => {
     console.log("inside categories song")
-    getCategories();
-  }, [Id]);
+    getCategoriesPlaylist();
+  }, [playlistId]);
+  
 
   const buildCard = (track) => {
     return (
-      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.id}>
+      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.track.id}>
         <Card className={classes.card} variant="outlined">
-          <CardHeader className={classes.titleHead} title={track?.name} />
-          <span>{track?.description}</span> 
-          <CardMedia
-                className={classes.media}
-                component="img"
-                image={track?.images[0]?.url}
-                title="categories image"
-           />
-          <Button href={`/playlist/${track?.id}`}>
-            Select
-          </Button>
+          {/* <CardHeader className={classes.titleHead} title={track?.id} /> */}
+          <CardHeader className={classes.titleHead} title={track?.track.name} />
           <br />
+          <span>{track?.track?.artists[0]?.name}</span>
+          <br/>
+          <br/>
+          <Button onClick={() => addToPlaylist(track?.id)}>
+            Add To PlayList
+          </Button>
+          <Button>Play</Button>
         </Card>
       </Grid>
     );
@@ -114,12 +124,25 @@ const AlbumSong = () => {
   } else
     return (
       <div>
+        <h1>{trackAlbums?.name}</h1>
+        <img
+        width={400}
+        height={400}
+          className="Album"
+          src={trackAlbums?.images[0]?.url}
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = DefaultImage;
+          }}
+          alt="Album"
+        />
         <br />
         <br />
+
         <Grid container className={classes.grid} spacing={5}>
-          {trackAlbums?.playlists.items.map((track) => buildCard(track))}
+          {trackAlbums?.tracks?.items.map((track) => buildCard(track))}
         </Grid>
       </div>
     );
 };
-export default AlbumSong;
+export default CategoryPlaylist;

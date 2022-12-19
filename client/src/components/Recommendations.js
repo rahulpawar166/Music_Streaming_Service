@@ -1,12 +1,10 @@
 import React, { useEffect, useState,useContext } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
-import { Link, Card, CardHeader, Grid, makeStyles, CardMedia, Button } from "@material-ui/core";
+import { Link, useParams } from "react-router-dom";
+import { Card, CardActions, CardHeader, Grid, makeStyles, CardMedia, Button } from "@material-ui/core";
 // import { Default } from "react-toastify/dist/utils";
-import DefaultImage from "../img/DefaultImage.jpeg";
 import { AuthProvider, AuthContext } from "../firebase/Auth";
 // import { playlist } from "../../../server/config/mongoCollections";
-
 const useStyles = makeStyles({
   card: {
     maxWidth: 250,
@@ -38,19 +36,17 @@ const useStyles = makeStyles({
   },
 });
 
-const AlbumSong = () => {
+const Recommendations = () => {
   const classes = useStyles();
-  const {currentUser} = useContext(AuthContext);
-  //to get data of particular albums
-  const {Id}=useParams();
-  const {playlist_id} = useParams();
-  const [playListId, setPlayListId] = useState();
   const [trackAlbums, setTrackAlbums] = useState();
+
   const [loading, setLoading] = useState(true);
   const [found, setFound] = useState(false);
 
-
-  const getCategories = async () => {
+  const getGenreSeeds = async () => {
+    let seed_artists="4NHQUGzhtTLFvgF5SZesLK"
+    let seed_tracks= "0c6xIDDpzE81m2q797ordA"
+    let seed_genres = encodeURIComponent("rock,hip-hop,pop")
     const requestInit = {
       headers: {
         Authorization: `Bearer ${window.localStorage.getItem("token")}`,
@@ -59,46 +55,47 @@ const AlbumSong = () => {
     };
 
     try {
-      const response = await axios.get(
-        `https://api.spotify.com/v1/browse/categories/${Id}/playlists`,
-        requestInit,
-      );
+    const response = await axios.get(
+        `${process.env.REACT_APP_GET_RECOMMENDATIONS}`+ `?seed_artists=${seed_artists}&seed_genres=${seed_genres}&seed_tracks=${seed_tracks}` ,
+        requestInit
+        )
+    
 
       console.log("we get response");
-      console.log("data=", response.data);
+      console.log("data=", response.data.tracks);
 
       setLoading(false);
       setFound(true);
-      setTrackAlbums(response.data);
+      setTrackAlbums(response.data.tracks);
     } catch (error) {
       setFound(false);
       setLoading(false);
       console.log(error);
     }
   };
+
   useEffect(() => {
-    console.log("inside categories song")
-    getCategories();
-  }, [Id]);
+    console.log("inside recommendations")
+    getGenreSeeds();
+  }, []);
 
   const buildCard = (track) => {
     return (
-      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.id}>
+      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.album.id}>
         <Card className={classes.card} variant="outlined">
+        <CardActions>
+        <Link to={`/AlbumSong/${track?.album.id}`}>
+          
           <CardHeader className={classes.titleHead} title={track?.name} />
-          <span>{track?.description}</span> 
-          <CardMedia
-                className={classes.media}
-                component="img"
-                image={track?.images[0]?.url}
-                title="categories image"
-           />
-          <Button href={`/playlist/${track?.id}`}>
-            Select
-          </Button>
-          <br />
+          <img src={track?.album.images[0].url} width={200} height={200}/>
+          <br/>
+          <span>{track?.album.artists[0].name}</span>
+          </Link>
+          </CardActions>
+          
         </Card>
       </Grid>
+      
     );
   };
 
@@ -115,11 +112,13 @@ const AlbumSong = () => {
     return (
       <div>
         <br />
+        <h1>Recommendations</h1>
         <br />
         <Grid container className={classes.grid} spacing={5}>
-          {trackAlbums?.playlists.items.map((track) => buildCard(track))}
+          {trackAlbums?.map((track) => buildCard(track))}
+          {/* <span>{trackAlbums?.artists.map((artist) => buildCard(artist))}</span> */}
         </Grid>
       </div>
     );
 };
-export default AlbumSong;
+export default Recommendations;
