@@ -1,17 +1,22 @@
-// const { use } = require("./playlist");
-const playlistRoutes = require("./playlist");
-const lyricsRoutes = require("./lyrics")
+const playlistRoutes = require("./playlists");
+const spotifyAuthRoutes = require("./auth");
+const meRoutes = require("./me");
+const albumRoutes = require("./albums");
+const lyricsRoutes = require("./lyrics");
+const categoriesRoutes = require("./categories");
+const searchRoutes = require("./search");
 
 const constructorMethod = (app) => {
-  console.log("inside index of routes")
-  app.use("/playlist", playlistRoutes);
-  app.use("/lyrics", lyricsRoutes)
+  app.use("/playlists", playlistRoutes);
+  app.use("/lyrics", lyricsRoutes);
+  app.use("/auth", spotifyAuthRoutes);
+  app.use("/albums", albumRoutes);
+  app.use("/me", meRoutes);
+  app.use("/categories", categoriesRoutes);
+  app.use("/search", searchRoutes);
 
-  app.use("*", (request, response) => {
-    response.status(404).json({
-      error: "Not found",
-    });
-  });
+  // Respond with 404 on undefined routes
+  app.use("*", (req, res) => res.status(404).json({ error: "Not found" }));
 };
 
 module.exports = constructorMethod;

@@ -27,5 +27,3 @@ module.exports = {
     _connection.close();
   },
 };
-
-   

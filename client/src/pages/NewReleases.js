@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
-
+import Loading from "../components/Loading";
+import { AuthContext } from "../firebase/Auth";
 import {
   Card,
   CardActions,
@@ -8,8 +9,8 @@ import {
   CardMedia,
   Grid,
   makeStyles,
-  Button,
 } from "@material-ui/core";
+import logo from "../icons/incognitomode2.png";
 import { Link } from "react-router-dom";
 
 const useStyles = makeStyles({
@@ -44,116 +45,71 @@ const useStyles = makeStyles({
 });
 
 const NewReleases = () => {
-  const [musicAlbums, setMusicAlbums] = useState([]);
+  const { currentUser } = useContext(AuthContext);
+  const [newReleasesData, setNewReleasesData] = useState(null);
+  const [newReleasesLoading, setNewReleasesLoading] = useState(true);
   const classes = useStyles();
-  const [loading, setLoading] = useState(true);
-  const [found, setFound] = useState(false);
-  const [playlistData, setPlayListData] = useState({});
-
-  console.log(
-    "accessstoken from new release=",
-    window.localStorage.getItem("token"),
-  );
-
-  const addToPlaylist = async (albumId) => {
-    try {
-      const { data } = await axios.get(
-        `http://localhost:3008/playlist/6393c998ba7131648ed117dc/${albumId}`,
-      );
-      setPlayListData(data);
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
-  const getNewMusicAlbumReleases = async () => {
-    const requestInit = {
-      headers: {
-        Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    };
-
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_NEW_RELEASE}`,
-        requestInit,
-      );
-      console.log("we get response");
-      console.log(response);
-      setLoading(false);
-      setFound(true);
-      setMusicAlbums(response.data.albums.items);
-      console.log("THIS IS URL DATA", response);
-      // console.log(musicAlbums);
-    } catch (error) {
-      setFound(false);
-      setLoading(false);
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
-    getNewMusicAlbumReleases();
-  }, []);
+    const fetchData = async () => {
+      try {
+        const userToken = await currentUser.getIdToken();
+        const { data: albumData } = await axios.get(
+          "http://localhost:3008/albums/new",
+          {
+            headers: {
+              FirebaseIdToken: userToken,
+            },
+          },
+        );
+        setNewReleasesData(albumData);
+        setNewReleasesLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (currentUser) fetchData();
+  }, [currentUser]);
 
-  const buildCard = (album) => {
+  const buildAlbumCard = (album) => {
     return (
-      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={album?.id}>
+      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={album.id}>
         <Card className={classes.card} variant="outlined">
           <CardActions>
-            <Link to={`/AlbumSong/${album?.id}`}>
-              <CardHeader className={classes.titleHead} title={album?.name} />
-
+            <Link to={`/album/${album.id}`}>
+              <CardHeader
+                className={classes.titleHead}
+                title={
+                  album.name.length > 32
+                    ? album.name.substring(0, 29) + "..."
+                    : album.name.substring(0, 32)
+                }
+              />
               <CardMedia
                 className={classes.media}
                 component="img"
-                image={album?.images[0]?.url}
-                title="character image"
+                image={album.images[0].url}
+                alt={album.name}
               />
             </Link>
           </CardActions>
-          {/* <Button
-            className={classes.button}
-            onClick={() => addToPlaylist(album.id)}
-          >
-            Add
-          </Button> */}
-          <br />
-          {/* <Button> */}
-            {/* {album?.tracks?.items[0]?.external_urls.spotify} */}
-            {/* {album?.disc_number} */}
-            {/* {album?.artists[0]?.map((i) => {
-              return i.external_urls;
-            })} */}
-          {/* </Button> */}
         </Card>
       </Grid>
     );
   };
 
-  if (loading) {
+  if (newReleasesLoading) return <Loading />;
+  else
     return (
-      <div>
-        <h2> {"Loading please wait for few second"}</h2>
-        <h2> {"................................."}</h2>
-      </div>
-    );
-  } else if (!found) {
-    return <h1>404: not enough data for this page</h1>;
-  } else
-    return (
-      <div>
-        <h1>New Released Albums</h1>
+      <div className="fancy-border">
+        <img className="logo" src={logo} alt="logo" width={100} height={100} />
+        <h1>New Releases</h1>
         <br />
         <Grid container className={classes.grid} spacing={5}>
-          {musicAlbums?.map((album) => buildCard(album))}
+          {newReleasesData
+            ? newReleasesData.map((album) => buildAlbumCard(album))
+            : ""}
         </Grid>
-        {/* <ul>
-          {musicAlbums?.map((album) => (
-            <li key={album.id}>{album.name}</li>
-          ))} 
-        </ul>*/}
       </div>
     );
 };
