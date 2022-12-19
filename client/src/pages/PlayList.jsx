@@ -11,7 +11,7 @@ import {
   makeStyles,
   Button,
 } from "@material-ui/core";
-
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles({
   card: {
@@ -147,34 +147,21 @@ const PlayList = () => {
 
     const buildCard = (ind) => {
     return (
-      
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={ind?.name}>
         <Card className={classes.card} variant="outlined">
-        {/* <Link to={`/IndPlayList/${ind?.name}`}></Link> */}
-             <CardHeader className={classes.titleHead} title={ind?.name} />
-             
-             {/* { ind?.name!=="mydefault"?
-             <Button  onClick={()=>deletePlaylist(ind?.name) }> delete</Button>:<></>
-    }  */}
-             {( currentPlaylist===ind?.name)?
-          <h1>ACTIVE</h1>
-             :<Button className={classes.button} onClick={()=>changeCurrent(ind?.name) }> make current</Button>
-    }
+          <Link to={`/IndPlayList/${ind?.name}`}>
+            <CardHeader className={classes.titleHead} title={ind?.name} ></CardHeader>
+          </Link>
+         
+          {( currentPlaylist===ind?.name)
+            ? <h1>ACTIVE</h1>
+            : <Button className={classes.button} onClick={()=>changeCurrent(ind?.name) }> Make Active</Button>
+          }
 
-{( ind?.name==="mydefault")?
-        (<></>)
-             :<Button className={classes.button} onClick={()=>deletePlaylist(ind?.name) }>DELETE</Button>
-    }
-
-
-    <CardContent>
-    {/* {ind?.tracks?.map((ind_track) => {
-            return <p>{ind_track}</p>;
-          })} */}
-    </CardContent>
-
-    
-    
+          {( ind?.name==="mydefault")
+            ? null
+            :<Button  onClick={()=>deletePlaylist(ind?.name) }> <DeleteIcon /></Button>
+          }
           <br/>
         </Card>
       </Grid>

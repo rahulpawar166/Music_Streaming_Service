@@ -1,11 +1,18 @@
-import React, { useEffect, useState,useContext } from "react";
+import {
+  Card,
+  CardActions,
+  Button,
+  CardHeader,
+  CardMedia,
+  Grid,
+  makeStyles,
+} from "@material-ui/core";
+import { Link } from "react-router-dom";
 import axios from "axios";
-import { useParams } from "react-router-dom";
-import { Link, Card, CardHeader, Grid, makeStyles, CardMedia, Button } from "@material-ui/core";
-// import { Default } from "react-toastify/dist/utils";
-import DefaultImage from "../img/DefaultImage.jpeg";
-import { AuthProvider, AuthContext } from "../firebase/Auth";
-// import { playlist } from "../../../server/config/mongoCollections";
+import React, { useContext, useEffect, useState } from "react";
+import Error from "../components/Error";
+import Loading from "../components/Loading";
+import { AuthContext } from "../firebase/Auth";
 
 const useStyles = makeStyles({
   card: {
@@ -38,116 +45,76 @@ const useStyles = makeStyles({
   },
 });
 
-const AlbumSong = () => {
+const Categories = () => {
   const classes = useStyles();
-  const {currentUser} = useContext(AuthContext);
-  //to get data of particular albums
-  const {Id}=useParams();
-  const [playListId, setPlayListId] = useState();
-  const [trackAlbums, setTrackAlbums] = useState();
+  const { currentUser } = useContext(AuthContext);
+  const [categoriesData, setCategoriesData] = useState();
   const [loading, setLoading] = useState(true);
-  const [found, setFound] = useState(false);
-
-
-//   const addToPlaylist = async (trackId) => {
-    
-//     try {
-//       const { data } = await axios.post(
-//         `http://localhost:3008/playlist/addTrack`,{
-//           playlistId:currentUser.uid,  
-//           albumId:trackId
-          
-//         }
-//       );
-//     } catch (error) {
-//       console.log("error", error);
-//     }
-//   };
-
-  // const getPlayList=async()=>{
-  
-  //   try {
-  //     const { data } = await axios.get(
-  //       `http://localhost:3008/playlist/playListData`
-  //     );
-  //     console.log(data)
-  //     setPlayListId(data[0]._id)
-  //   } catch (error) {
-  //     console.log("error", error);
-  //   }
-  //  }
-
-
-  const getCategories = async () => {
-    const requestInit = {
-      headers: {
-        Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    };
-
-    try {
-      const response = await axios.get(
-        `https://api.spotify.com/v1/browse/categories/${Id}/playlists`,
-        requestInit,
-      );
-
-      console.log("we get response");
-      console.log("data=", response.data);
-
-      setLoading(false);
-      setFound(true);
-      setTrackAlbums(response.data);
-    } catch (error) {
-      setFound(false);
-      setLoading(false);
-      console.log(error);
-    }
-  };
+  const [error, setError] = useState({
+    exists: false,
+    message: "",
+  });
 
   useEffect(() => {
-    console.log("inside categories song")
-    getCategories();
-  }, [Id]);
+    const fetchData = async () => {
+      try {
+        const userToken = await currentUser.getIdToken();
+        const { data } = await axios.get(`http://localhost:3008/categories`, {
+          headers: { FirebaseIdToken: userToken },
+        });
+        if (!data) throw "Failed to fetch categories data!";
+        setCategoriesData(data);
+        setLoading(false);
+        setError({
+          exists: false,
+          message: "",
+        });
+      } catch (e) {
+        setLoading(true);
+        setError({
+          exists: true,
+          message: e.message,
+        });
+      }
+    };
+    if (currentUser) fetchData();
+  }, [currentUser]);
 
-  const buildCard = (track) => {
+  const buildCard = (category) => {
     return (
-      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.id}>
+      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={category?.id}>
         <Card className={classes.card} variant="outlined">
-          <CardHeader className={classes.titleHead} title={track?.name} />
-          {/* <Link to={`${track?.id}`} /> */}
-          <span>{track?.description}</span> 
-          <CardMedia
+          <CardActions>
+            <Link to={`/category/${category?.id}`}>
+              <CardHeader
+                className={classes.titleHead}
+                title={category?.name}
+              />
+              <CardMedia
                 className={classes.media}
                 component="img"
-                image={track?.images[0]?.url}
-                title="categories image"
+                image={category?.icons[0]?.url}
+                title="character image"
               />
-          {/* <img src={track?.images[0].url} width={100} height={100}/> */}
-          <br />
+            </Link>
+          </CardActions>
         </Card>
       </Grid>
     );
   };
 
-  if (loading) {
+  if (error.exists) return <Error message={error.message} />;
+  else if (loading) return <Loading />;
+  else
     return (
       <div>
-        <h2> {"Loading please wait for few second"}</h2>
-        <h2> {"................................."}</h2>
-      </div>
-    );
-  } else if (!found) {
-    return <h1>404: not enough data for this page</h1>;
-  } else
-    return (
-      <div>
-        <br />
-        <br />
+        <h1>Categories</h1>
         <Grid container className={classes.grid} spacing={5}>
-          {trackAlbums?.playlists.items.map((track) => buildCard(track))}
+          {categoriesData &&
+            categoriesData.map((category) => buildCard(category))}
         </Grid>
       </div>
     );
 };
-export default AlbumSong;
+
+export default Categories;

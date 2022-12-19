@@ -44,6 +44,43 @@ router.post("/playListData",async(req,res)=>{
 
 })
 
+//return particular playlist data
+router.post("/indPlaylist",async(req,res)=>{
+
+  console.log("inside fetch route of individual post")
+  //we use uid to create playlist for each user
+  let uid=xss(req.body.uid)
+  let name=xss(req.body.name)
+
+  console.log("uid=",uid)
+
+  if (!uid ||uid.trim() === "" ) {
+    res.status(400).json({ errors: "uid is not valid " });
+    return;
+  }
+
+  if (!name ||name.trim() === "" ) {
+    res.status(400).json({ errors: "name is not valid " });
+    return;
+  }
+
+  try{
+    const fetch_data = await playlistData.getIndPlayListData(uid,name);
+    return res.status(200).json(fetch_data);
+    
+  }catch(e){
+    if (e) {
+      res.status(404).json({ errors: e });
+      return;
+    } else {
+      res.status(500).json({
+        error: "Internal Server Error",
+      });
+      return;
+    }
+  }
+})
+
 router.post("/create", async(req,res)=>{
     console.log("inside create route")
     //we use uid to create playlist for each user
@@ -151,11 +188,13 @@ router.post("/deleteTrack",async(req,res)=>{
 
   console.log("delete albums routes")
 
-  const albumId = xss(req.body.albumId)
+ 
   const uid = xss(req.body.uid)
  const name=xss(req.body.name)
+ const albumId = xss(req.body.albumId)
 
-  console.log(uid,albumId)
+  console.log(uid,name,albumId)
+
   if (!albumId || albumId.trim() === "" ) {
     res.status(400).json({ errors: "albumId is not valid " });
     return;
@@ -174,9 +213,7 @@ router.post("/deleteTrack",async(req,res)=>{
 
   try {
       const fetch_data = await playlistData.deleteAlbum(
-        uid,
-        albumId,
-        name
+       uid, name,albumId
       );
       
       res.status(200).json(fetch_data);
@@ -194,8 +231,6 @@ router.post("/deleteTrack",async(req,res)=>{
     }
 })
 
-
-
 router.post("/addTrack",async(req,res)=>{
 
   //uid refer to user id
@@ -204,6 +239,7 @@ router.post("/addTrack",async(req,res)=>{
   const uid = xss(req.body.uid)
   const name=xss(req.body.name)
   const trackname=xss(req.body.trackname)
+  const img_url=xss(req.body.img_url)
 
   if (!albumId || albumId.trim() === "" ) {
     res.status(400).json({ errors: "albumId is not valid " });
@@ -232,7 +268,8 @@ router.post("/addTrack",async(req,res)=>{
         uid,
         albumId,
         name,
-        trackname
+        trackname,
+        img_url
       );
       
       res.status(200).json(fetch_data);

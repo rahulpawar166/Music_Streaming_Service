@@ -43,7 +43,6 @@ const useStyles = makeStyles({
 });
 
 const NewRelease = () => {
-  
   const [musicAlbums, setMusicAlbums] = useState([]);
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
@@ -51,7 +50,7 @@ const NewRelease = () => {
 
   console.log(
     "accessstoken from new release=",
-    window.localStorage.getItem("token")
+    window.localStorage.getItem("token"),
   );
 
   const getNewMusicAlbumReleases = async () => {
@@ -65,7 +64,7 @@ const NewRelease = () => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_NEW_RELEASE}`,
-        requestInit
+        requestInit,
       );
       console.log("we get response");
       console.log(response);
@@ -123,7 +122,6 @@ const NewRelease = () => {
         <Grid container className={classes.grid} spacing={5}>
           {musicAlbums?.map((album) => buildCard(album))}
         </Grid>
-       
       </div>
     );
 };

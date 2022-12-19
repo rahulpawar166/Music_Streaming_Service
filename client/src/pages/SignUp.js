@@ -7,10 +7,10 @@ import { Container } from "@mui/system";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { doSignUp } from "../firebase/FirebaseFunctions";
-import * as Yup from 'yup';
-import { useFormik, Form, FormikProvider } from 'formik';
-import Iconify from '../components/Iconify';
-import SocialSignIn from '../components/SocialSignIn'
+import * as Yup from "yup";
+import { useFormik, Form, FormikProvider } from "formik";
+import Iconify from "../components/Iconify";
+import SocialSignIn from "../components/SocialSignIn";
 
 const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -54,58 +54,66 @@ const SignUp = (props) => {
 
   const RegisterSchema = Yup.object().shape({
     username: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
+      .min(2, "Too Short!")
+      .max(50, "Too Long!")
       .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ")
-      .required('First name required'),
-    
+      .required("First name required"),
+
     email: Yup.string()
-      .email('Email must be a valid email address')
-      .required('Email is required'),
-    password: Yup.string().required('Password is required')
-      .min(5, 'Should contain more than 5 characters')
-      .max(20, 'should be less than 20 characters'),
-    repeatPassword: Yup.string().required('Password is required')
-    .min(5, 'Should contain more than 5 characters')
-    .max(20, 'should be less than 20 characters')
+      .email("Email must be a valid email address")
+      .required("Email is required"),
+    password: Yup.string()
+      .required("Password is required")
+      .min(5, "Should contain more than 5 characters")
+      .max(20, "should be less than 20 characters"),
+    repeatPassword: Yup.string()
+      .required("Password is required")
+      .min(5, "Should contain more than 5 characters")
+      .max(20, "should be less than 20 characters")
       .when("password", {
-        is: val => (val && val.length > 0 ? true : false),
+        is: (val) => (val && val.length > 0 ? true : false),
         then: Yup.string().oneOf(
           [Yup.ref("password")],
-          "Both password need to be the same"
-        )
-      })
+          "Both password need to be the same",
+        ),
+      }),
   });
 
   const formik = useFormik({
     initialValues: {
-      username: '',
-      email: '',
-      password: '',
-      repeatPassword: '',
+      username: "",
+      email: "",
+      password: "",
+      repeatPassword: "",
     },
     validationSchema: RegisterSchema,
   });
 
-  const { errors, touched, isSubmitting, getFieldProps, handleChange, values } = formik;
+  const { errors, touched, isSubmitting, getFieldProps, handleChange, values } =
+    formik;
 
   const handleSubmit = async () => {
-    console.log("Submitting")
-    console.log("Username is: ", values.username)
-    console.log("Email is: ", values.email)
-    console.log("Password is: ", values.password)
-    console.log("Repeat password is: ", values.repeatPassword)
-    if (!values.email || !values.password || !values.username || !values.repeatPassword)
+    console.log("Submitting");
+    console.log("Username is: ", values.username);
+    console.log("Email is: ", values.email);
+    console.log("Password is: ", values.password);
+    console.log("Repeat password is: ", values.repeatPassword);
+    if (
+      !values.email ||
+      !values.password ||
+      !values.username ||
+      !values.repeatPassword
+    )
       notifyPopup("Please fill in every field!", "error");
     else if (values.password !== values.repeatPassword)
       notifyPopup("Your passwords do not match!", "error");
     else {
-      console.log("Submitting_1")
+      console.log("Submitting_1");
       try {
-        await doSignUp( values.email, values.password, values.username );
+        await doSignUp(values.email, values.password, values.username);
         navigate("/");
       } catch (error) {
-        console.log(error)
+        console.log(error);
         notifyPopup(error || "Couldn't sign up!", "error");
       }
     }
@@ -128,13 +136,13 @@ const SignUp = (props) => {
       </Snackbar>
       <div className="card">
         <h1>Sign Up</h1>
-        <br/>
-        <br/>
+        <br />
+        <br />
         <SocialSignIn />
-        <br/>
-        <br/>
+        <br />
+        <br />
         <Container maxWidth="sm">
-        <FormikProvider value={formik}>
+          <FormikProvider value={formik}>
             <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
               <p className="login-text">Username</p>
               <TextField
@@ -142,8 +150,8 @@ const SignUp = (props) => {
                 variant="outlined"
                 className="text-field"
                 onChange={(e) => setUsername(e.target.value)}
-                {...getFieldProps('username')}
-                id='username'
+                {...getFieldProps("username")}
+                id="username"
                 value={values.username}
                 error={Boolean(touched.username && errors.username)}
                 helperText={touched.username && errors.username}
@@ -154,10 +162,10 @@ const SignUp = (props) => {
                 variant="outlined"
                 className="text-field"
                 onChange={(e) => setEmail(e.target.value)}
-                {...getFieldProps('email')}
-                id='email'
-                type='email'
-                 value={values.email}
+                {...getFieldProps("email")}
+                id="email"
+                type="email"
+                value={values.email}
                 error={Boolean(touched.email && errors.email)}
                 helperText={touched.email && errors.email}
               />
@@ -168,23 +176,31 @@ const SignUp = (props) => {
                 variant="outlined"
                 className="text-field"
                 onChange={(e) => setPassword(e.target.value)}
-                {...getFieldProps('password')}
-                  id='password'
-                  type={showPassword ? 'text' : 'password'}
-                  value={values.password}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <label htmlFor='see-password'>
-                        <IconButton id='see-password' edge="end" onClick={() => setShowPassword((prev) => !prev)}>
-                          <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                {...getFieldProps("password")}
+                id="password"
+                type={showPassword ? "text" : "password"}
+                value={values.password}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <label htmlFor="see-password">
+                        <IconButton
+                          id="see-password"
+                          edge="end"
+                          onClick={() => setShowPassword((prev) => !prev)}
+                        >
+                          <Iconify
+                            icon={
+                              showPassword ? "eva:eye-fill" : "eva:eye-off-fill"
+                            }
+                          />
                         </IconButton>
-                        </label>
-                      </InputAdornment>
-                    )
-                  }}
-                  error={Boolean(touched.password && errors.password)}
-                  helperText={touched.password && errors.password}
+                      </label>
+                    </InputAdornment>
+                  ),
+                }}
+                error={Boolean(touched.password && errors.password)}
+                helperText={touched.password && errors.password}
               />
               <p className="login-text">Confirm Password</p>
               <TextField
@@ -192,31 +208,50 @@ const SignUp = (props) => {
                 variant="outlined"
                 className="text-field"
                 onChange={(e) => setRepeatPassword(e.target.value)}
-                id='confirmPassword'
-                {...getFieldProps('repeatPassword')}
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  value={values.repeatPassword}
-                  InputProps={{
-                    endAdornment: (
-                      <label htmlFor="see-confirmPassword">
+                id="confirmPassword"
+                {...getFieldProps("repeatPassword")}
+                type={showConfirmPassword ? "text" : "password"}
+                value={values.repeatPassword}
+                InputProps={{
+                  endAdornment: (
+                    <label htmlFor="see-confirmPassword">
                       <InputAdornment position="end">
-                        <IconButton  id='see-confirmPassword' edge="end" onClick={() => setShowConfirmPassword((prev) => !prev)}>
-                          <Iconify icon={showConfirmPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                        <IconButton
+                          id="see-confirmPassword"
+                          edge="end"
+                          onClick={() =>
+                            setShowConfirmPassword((prev) => !prev)
+                          }
+                        >
+                          <Iconify
+                            icon={
+                              showConfirmPassword
+                                ? "eva:eye-fill"
+                                : "eva:eye-off-fill"
+                            }
+                          />
                         </IconButton>
                       </InputAdornment>
-                      </label>
-                    )
-                  }}
-                  error={Boolean(touched.repeatPassword && errors.repeatPassword)}
-                  helperText={touched.repeatPassword && errors.repeatPassword}
+                    </label>
+                  ),
+                }}
+                error={Boolean(touched.repeatPassword && errors.repeatPassword)}
+                helperText={touched.repeatPassword && errors.repeatPassword}
               />
               <br />
-              <Button variant="contained" className="btn" onClick={handleSubmit}>
+              <Button
+                variant="contained"
+                className="btn"
+                onClick={handleSubmit}
+              >
                 Sign Up
               </Button>
               <p>
                 Already have an account?{" "}
-                <Button className="smallBtn" onClick={() => navigate("/signin")}>
+                <Button
+                  className="smallBtn"
+                  onClick={() => navigate("/signin")}
+                >
                   Login
                 </Button>
               </p>
