@@ -112,7 +112,7 @@ function App() {
                 <Route path="/search" element={<Search />} />
                 <Route path="/Categories/:Id" element={<Categories />} />
                 <Route path="/playlists" element={<PlayList/>} />
-                {/* <Route path="/IndPlayList/:PlaylistName" element={<IndPlayList/>}/> */}
+                <Route path="/IndPlayList/:PlaylistName" element={<IndPlayList/>}/>
                
 
               </Routes>
