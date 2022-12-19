@@ -23,8 +23,8 @@ import Sidebar from "./Sidebar";
 import SpotifyCallback from "./SpotifyCallback";
 import SpotifyPrivateRoute from "./SpotifyPrivateRoute";
 
-import Lyrics from "./Lyrics";
-import IndPlayList from "../pages/IndPlayList";
+// import Lyrics from "./Lyrics";
+// import IndPlayList from "../pages/IndPlayList";
 import Recommendations from "./Recommendations";
 // import Lyrics from "./Lyrics"
 
