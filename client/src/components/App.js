@@ -16,6 +16,7 @@ import Library from "../pages/Library";
 import Search from "./Search";
 import SpotifyCallback from "./SpotifyCallback";
 import PrivateRoute from "./PrivateRoute";
+import SpotifyPrivateRoute from "./SpotifyPrivateRoute";
 import Lyrics from "./Lyrics";
 import IndPlayList from "../pages/IndPlayList";
 
@@ -46,17 +47,19 @@ function App() {
             <Route path="/signin" element={<SignIn />} />
             <Route path="/forgotpassword" element={<ForgotPassword />} />
             <Route element={<PrivateRoute />}>
-              <Route path="/search" element={<Search />} />
-              <Route path="/new-releases" element={<NewReleases />} />
-              <Route path="/categories" element={<Categories />} />
-              <Route path="/category/:id" element={<Category />} />
-              <Route path="/album/:id" element={<AlbumDetails />} />
-              <Route path="/" element={<Home />} />
-              <Route path="/library" element={<Library />} />
-              <Route path="/playlist/:id" element={<Playlist />} />
-              <Route path="/lyrics/:artist/:trackName" element={<Lyrics />} />
               <Route path="/account" element={<Account />} />
               <Route path="/spotifycallback" element={<SpotifyCallback />} />
+              <Route element={<SpotifyPrivateRoute />}>
+                <Route path="/search" element={<Search />} />
+                <Route path="/new-releases" element={<NewReleases />} />
+                <Route path="/categories" element={<Categories />} />
+                <Route path="/category/:id" element={<Category />} />
+                <Route path="/album/:id" element={<AlbumDetails />} />
+                <Route path="/" element={<Home />} />
+                <Route path="/library" element={<Library />} />
+                <Route path="/playlist/:id" element={<Playlist />} />
+                <Route path="/lyrics/:artist/:trackName" element={<Lyrics />} />
+              </Route>
               <Route
                 path="/IndPlayList/:PlaylistName"
                 element={<IndPlayList />}
