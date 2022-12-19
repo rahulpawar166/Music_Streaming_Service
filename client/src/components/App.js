@@ -10,16 +10,24 @@ import Home from "../pages/Home";
 import IndPlayList from "../pages/IndPlayList";
 import Library from "../pages/Library";
 import NewReleases from "../pages/NewReleases";
+
 import Playlist from "../pages/Playlist";
 import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
 import Error from "./Error";
 import Lyrics from "./Lyrics";
 import PrivateRoute from "./PrivateRoute";
+
 import Search from "./Search";
 import Sidebar from "./Sidebar";
 import SpotifyCallback from "./SpotifyCallback";
 import SpotifyPrivateRoute from "./SpotifyPrivateRoute";
+
+import Lyrics from "./Lyrics";
+import IndPlayList from "../pages/IndPlayList";
+import Recommendations from "./Recommendations";
+// import Lyrics from "./Lyrics"
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -58,6 +66,8 @@ function App() {
                 <Route path="/library" element={<Library />} />
                 <Route path="/playlist/:id" element={<Playlist />} />
                 <Route path="/lyrics/:artist/:trackName" element={<Lyrics />} />
+                <Route path="/Recommendations" element={<Recommendations />} /> App.js
+
               </Route>
               <Route
                 path="/IndPlayList/:PlaylistName"

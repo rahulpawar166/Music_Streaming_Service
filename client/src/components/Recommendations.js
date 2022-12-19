@@ -51,12 +51,13 @@ const Recommendations = () => {
       headers: {
         Authorization: `Bearer ${window.localStorage.getItem("token")}`,
         "Content-Type": "application/json",
+        "Accept": "application/json"
       },
     };
 
     try {
     const response = await axios.get(
-        `${process.env.REACT_APP_GET_RECOMMENDATIONS}`+ `?seed_artists=${seed_artists}&seed_genres=${seed_genres}&seed_tracks=${seed_tracks}` ,
+        `https://api.spotify.com/v1/recommendations?seed_artists=${seed_artists}&seed_genres=${seed_genres}&seed_tracks=${seed_tracks}` ,
         requestInit
         )
     

@@ -150,6 +150,8 @@ const Home = () => {
         <h1>Home</h1>
         <Grid container xs={12}>
           <Grid item className={classes.grid}>
+            <Button className='Recommendations' href={`/Recommendations`}>Want New Music?</Button>
+
             <h2>New Releases</h2>
             <Grid container className={classes.grid} spacing={5}>
               {newReleasesData &&
@@ -157,7 +159,7 @@ const Home = () => {
             </Grid>
           </Grid>
           <Grid item className={classes.grid}>
-            <h2>Recommended</h2>
+            <h2>My Music</h2>
             <Grid container className={classes.grid} spacing={5}>
               {usersTop && usersTop.map((track) => buildTrackCard(track))}
             </Grid>
