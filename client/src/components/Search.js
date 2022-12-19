@@ -8,9 +8,11 @@ import {
   CardHeader,
   CardMedia,
   Grid,
+  Box,
   makeStyles,
   Button,
 } from "@material-ui/core";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import SearchSongs from "./SearchSongs";
 import Error from "./Error";
 import Loading from "./Loading";
@@ -49,6 +51,7 @@ const useStyles = makeStyles({
 
 const Search = () => {
   const classes = useStyles();
+  const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState({
     exists: false,
@@ -60,39 +63,40 @@ const Search = () => {
   const [found, setFound] = useState(false);
   const [musicAlbums, setMusicAlbums] = useState([]);
 
-  let card = null;
-  console.log(
-    "accessstoken from new release=",
-    window.localStorage.getItem("token"),
-  );
-
-  const getSearchSongs = async () => {
-    const requestInit = {
-      headers: {
-        Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    };
-
+  const handleFileUpload = async (e) => {
     try {
-      setSearchTerm("christmas");
-      console.log(`in fetch searchTerm: ${searchTerm}`);
-      const query = encodeURIComponent(`${searchTerm}`); //encoding URL component does for query string
-      // console.log(query)
-      const response = await axios.get(
-        `https://api.spotify.com/v1/search?q=${query}&type=album`,
-        requestInit,
+      if (!e.target.files) return;
+      const file = e.target.files[0];
+      setSelectedFile(file);
+      const formData = new FormData();
+      formData.append("mp3File", file);
+      const userToken = await currentUser.getIdToken();
+      setLoading(true);
+      const { data } = await axios.post(
+        "http://localhost:3008/search/bymp3",
+        formData,
+        {
+          headers: {
+            FirebaseIdToken: userToken,
+          },
+        },
       );
-      setSearchData(response.data.albums.items);
+      console.log(data);
+      setSearchData(data);
       setLoading(false);
-      setFound(true);
-      setMusicAlbums(response.data.albums.items);
+      setError({
+        exists: false,
+        message: "",
+      });
     } catch (e) {
-      console.log(e);
+      console.error(e);
+      setLoading(false);
+      setError({
+        exists: true,
+        message: e.message,
+      });
     }
   };
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -116,6 +120,7 @@ const Search = () => {
         });
       } catch (e) {
         console.log(e);
+        setLoading(false);
         setError({
           exists: true,
           message: e.message,
@@ -126,6 +131,8 @@ const Search = () => {
   }, [currentUser, searchTerm]);
 
   const searchValue = async (value) => {
+    setLoading(true);
+    setSelectedFile(null);
     setSearchTerm(value);
   };
 
@@ -190,40 +197,65 @@ const Search = () => {
   };
 
   if (error.exists) return <Error message={error.message} />;
-  else if (loading) return <Loading />;
   else {
     return (
       <div className="fancy-border">
         <img className="logo" src={logo} alt="logo" width={100} height={100} />
         <h1>{"Search"}</h1>
         <SearchSongs searchValue={searchValue} />
-        <Grid container xs={12}>
+        <Box>
+          <Button
+            component="label"
+            variant="outlined"
+            startIcon={<CloudUploadIcon />}
+            sx={{ marginRight: "1rem" }}
+          >
+            Search by MP3
+            <input
+              type="file"
+              accept=".mp3"
+              hidden
+              onChange={(e) => handleFileUpload(e)}
+            />
+          </Button>
+          {selectedFile && `Selected: ${selectedFile.name}`}
+        </Box>
+        {loading ? (
+          <Loading />
+        ) : (
           <Grid container className={classes.grid} spacing={5}>
-            <Grid item className={classes.grid}>
-              <h2>Tracks</h2>
-              <Grid container className={classes.grid} spacing={5}>
-                {searchData.tracks.items &&
-                  searchData.tracks.items.map((track) => buildTrackCard(track))}
+            {searchData.tracks && searchData.tracks.items && (
+              <Grid item className={classes.grid}>
+                <h2>Tracks</h2>
+                <Grid container className={classes.grid} spacing={5}>
+                  {searchData.tracks.items.map((track) =>
+                    buildTrackCard(track),
+                  )}
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid item className={classes.grid}>
-              <h2>Albums</h2>
-              <Grid container className={classes.grid} spacing={5}>
-                {searchData.albums.items &&
-                  searchData.albums.items.map((album) => buildAlbumCard(album))}
+            )}
+            {searchData.albums && searchData.albums.items && (
+              <Grid item className={classes.grid}>
+                <h2>Albums</h2>
+                <Grid container className={classes.grid} spacing={5}>
+                  {searchData.albums.items.map((album) =>
+                    buildAlbumCard(album),
+                  )}
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid item className={classes.grid}>
-              <h2>Artists</h2>
-              <Grid container className={classes.grid} spacing={5}>
-                {searchData.artists.items &&
-                  searchData.artists.items.map((artist) =>
+            )}
+            {searchData.artists && searchData.artists.items && (
+              <Grid item className={classes.grid}>
+                <h2>Artists</h2>
+                <Grid container className={classes.grid} spacing={5}>
+                  {searchData.artists.items.map((artist) =>
                     buildArtistCard(artist),
                   )}
+                </Grid>
               </Grid>
-            </Grid>
+            )}
           </Grid>
-        </Grid>
+        )}
       </div>
     );
   }
