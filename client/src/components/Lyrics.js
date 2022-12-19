@@ -80,7 +80,7 @@ const Lyrics = () => {
     return (
       <div>
         <h1> Lyrics</h1>
-        <p>{lyricsData}</p>
+        <p className="lyrics">{lyricsData}</p>
 
         {/* <div><Player/></div> */}
       </div>

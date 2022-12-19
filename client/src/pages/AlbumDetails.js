@@ -45,6 +45,10 @@ const AlbumDetails = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const handleAddToPlaylist = async (trackId) => {
+    return;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -72,8 +76,10 @@ const AlbumDetails = () => {
           {/* <CardHeader className={classes.titleHead} title={track?.id} /> */}
           <CardHeader className={classes.titleHead} title={track?.name} />
           <br />
+          <Button onClick={() => handleAddToPlaylist(track?.id)}>
+            Add To PlayList
+          </Button>
           <Button>Play</Button>
-          <br />
           <br />
           <Link to={`/Lyrics/${artist}/${track?.name}`}>Lyrics</Link>
         </Card>

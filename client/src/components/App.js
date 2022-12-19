@@ -8,7 +8,6 @@ import Home from "../pages/Home";
 import NewReleases from "../pages/NewReleases";
 import Sidebar from "./Sidebar";
 import Categories from "../pages/Categories";
-import Player from "./Player";
 import { makeStyles } from "@material-ui/core/styles";
 import AlbumDetails from "../pages/AlbumDetails";
 import Playlist from "../pages/Playlist";
@@ -57,7 +56,6 @@ function App() {
             </Route>
           </Routes>
         </main>
-        {/* <Player /> */}
       </Router>
     </div>
   );
