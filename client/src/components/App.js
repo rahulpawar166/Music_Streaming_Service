@@ -17,6 +17,7 @@ import Search from "./Search";
 import SpotifyCallback from "./SpotifyCallback";
 import PrivateRoute from "./PrivateRoute";
 import Lyrics from "./Lyrics";
+import IndPlayList from "../pages/IndPlayList";
 
 import "../styles/App.css";
 import Error from "./Error";
