@@ -4,7 +4,6 @@ const router = express.Router()
 const playlistData = data.playlistData
 const axios=require("axios")
 const xss = require("xss");
-
 const flat = require("flat");
 const unflatten = flat.unflatten;
 const redis = require("redis");
@@ -74,29 +73,110 @@ router.post("/create", async(req,res)=>{
       }
 })
 
+router.post("/addPlaylist", async(req,res)=>{
+
+  console.log("inside create playlist route")
+  //we use name to create playlist for each user
+  let name=xss(req.body.name)
+  let uid=xss(req.body.uid)
+
+  console.log("route",name,uid)
+
+  if (!name ||name.trim() === "" ) {
+    res.status(400).json({ errors: "name is not valid " });
+    return;
+  }
+
+  if (!uid ||uid.trim() === "" ) {
+    res.status(400).json({ errors: "uid is not valid " });
+    return;
+  }
+
+  try {
+      
+      const fetch_data = await playlistData.addPlayList(uid,name);
+      return res.status(200).json(fetch_data);
+
+    } catch (e) {
+      if (e) {
+        console.log(e)
+        res.status(404).json({ errors: e });
+        return;
+      } else {
+        res.status(500).json({
+          error: "Internal Server Error",
+        });
+        return;
+      }
+    }
+})
+
+router.post("/deletePlaylist", async(req,res)=>{
+
+  console.log("inside delete playlist route")
+  //we use name to create playlist for each user
+  let name=xss(req.body.name)
+  let uid=xss(req.body.uid)
+
+  if (!name ||name.trim() === "" ) {
+    res.status(400).json({ errors: "name is not valid " });
+    return;
+  }
+
+  if (!uid ||uid.trim() === "" ) {
+    res.status(400).json({ errors: "uid is not valid " });
+    return;
+  }
+
+  try {
+      
+      const fetch_data = await playlistData.deletePlaylist(uid,name);
+      return res.status(200).json(fetch_data);
+
+    } catch (e) {
+      if (e) {
+        console.log(e)
+        res.status(404).json({ errors: e });
+        return;
+      } else {
+        res.status(500).json({
+          error: "Internal Server Error",
+        });
+        return;
+      }
+    }
+})
+
 router.post("/deleteTrack",async(req,res)=>{
 
   console.log("delete albums routes")
 
   const albumId = xss(req.body.albumId)
-  const playlistId = xss(req.body.playlistId)
- 
-  console.log(playlistId,albumId)
+  const uid = xss(req.body.uid)
+ const name=xss(req.body.name)
+
+  console.log(uid,albumId)
   if (!albumId || albumId.trim() === "" ) {
     res.status(400).json({ errors: "albumId is not valid " });
     return;
   }
-  if (!playlistId || playlistId.trim() === "" ) {
-    res.status(400).json({ errors: "playlistId is not valid " });
+  if (!uid || uid.trim() === "" ) {
+    res.status(400).json({ errors: "uid is not valid " });
     return;
   }
   
-  console.log(playlistId,albumId)
+  if (!name || name.trim() === "" ) {
+    res.status(400).json({ errors: "name is not valid " });
+    return;
+  }
+
+  console.log(uid,albumId,name)
 
   try {
       const fetch_data = await playlistData.deleteAlbum(
-        playlistId,
-        albumId
+        uid,
+        albumId,
+        name
       );
       
       res.status(200).json(fetch_data);
@@ -114,27 +194,45 @@ router.post("/deleteTrack",async(req,res)=>{
     }
 })
 
+
+
 router.post("/addTrack",async(req,res)=>{
 
+  //uid refer to user id
   console.log("add albums routes")
   const albumId = xss(req.body.albumId)
-  const playlistId = xss(req.body.playlistId)
+  const uid = xss(req.body.uid)
+  const name=xss(req.body.name)
+  const trackname=xss(req.body.trackname)
 
   if (!albumId || albumId.trim() === "" ) {
     res.status(400).json({ errors: "albumId is not valid " });
     return;
   }
-  if (!playlistId || playlistId.trim() === "" ) {
-    res.status(400).json({ errors: "playlistId is not valid " });
+  if (!uid || uid.trim() === "" ) {
+    res.status(400).json({ errors: "uid is not valid " });
+    return;
+  }
+  if (!name || name.trim() === "" ) {
+    res.status(400).json({ errors: "name is not valid " });
+    return;
+  }
+
+  if (!trackname || trackname.trim() === "" ) {
+    res.status(400).json({ errors: "trackname is not valid " });
     return;
   }
   
-  console.log(playlistId,albumId)
+  
+
+  console.log(uid,albumId,name)
 
   try {
       const fetch_data = await playlistData.addAlbum(
-        playlistId,
-        albumId
+        uid,
+        albumId,
+        name,
+        trackname
       );
       
       res.status(200).json(fetch_data);
