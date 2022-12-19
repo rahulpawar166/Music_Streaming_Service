@@ -1,8 +1,9 @@
 import { makeStyles } from "@material-ui/core/styles";
+import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Account from "../pages/Account";
 import PlayerContext from "../components/PlayerContext";
+import Account from "../pages/Account";
 import AlbumDetails from "../pages/AlbumDetails";
 import Categories from "../pages/Categories";
 import Category from "../pages/Category";
@@ -11,37 +12,32 @@ import Home from "../pages/Home";
 import IndPlayList from "../pages/IndPlayList";
 import Library from "../pages/Library";
 import NewReleases from "../pages/NewReleases";
-
 import Playlist from "../pages/Playlist";
 import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
 import Error from "./Error";
 import Lyrics from "./Lyrics";
+import Player from "./Player";
 import PrivateRoute from "./PrivateRoute";
-
+import Recommendations from "./Recommendations";
 import Search from "./Search";
 import Sidebar from "./Sidebar";
 import SpotifyCallback from "./SpotifyCallback";
 import SpotifyPrivateRoute from "./SpotifyPrivateRoute";
 
-// import Lyrics from "./Lyrics";
-// import IndPlayList from "../pages/IndPlayList";
-import Recommendations from "./Recommendations";
-import Player from "./Player";
-import { useState } from "react";
-// import Lyrics from "./Lyrics"
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
+    textAlign: "center",
   },
   content: {
     flexGrow: 1,
   },
-  stickyFooter: {
+  footer: {
     width: "100%",
     position: "fixed",
     bottom: 0,
+    zIndex: theme.zIndex.drawer + 1,
   },
 }));
 
@@ -81,8 +77,7 @@ function App() {
                   <Route
                     path="/Recommendations"
                     element={<Recommendations />}
-                  />{" "}
-                  App.js
+                  />
                 </Route>
                 <Route
                   path="/IndPlayList/:PlaylistName"
@@ -97,11 +92,10 @@ function App() {
               />
             </Routes>
           </main>
-          {playingTrack && (
-            <footer className={classes.stickyFooter}>
+          {playingTrack && window.localStorage.getItem("accessToken") && (
+            <footer className={classes.footer}>
               <Player
                 accessToken={window.localStorage.getItem("accessToken")}
-                trackUri={playingTrack?.uri}
               />
             </footer>
           )}

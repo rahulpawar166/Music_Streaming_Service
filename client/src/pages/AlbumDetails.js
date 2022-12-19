@@ -53,7 +53,6 @@ const AlbumDetails = () => {
 
   const handlePlayingTrack = (track) => {
     setPlayingTrack(track);
-    console.log("Track is: ", track);
   };
 
   useEffect(() => {
