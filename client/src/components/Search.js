@@ -57,42 +57,6 @@ const Search = () => {
   const { currentUser } = useContext(AuthContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState(undefined);
-  const [found, setFound] = useState(false);
-  const [musicAlbums, setMusicAlbums] = useState([]);
-
-  let card = null;
-  console.log(
-    "accessstoken from new release=",
-    window.localStorage.getItem("token"),
-  );
-
-  const getSearchSongs = async () => {
-    const requestInit = {
-      headers: {
-        Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    };
-
-    try {
-      setSearchTerm("christmas");
-      console.log(`in fetch searchTerm: ${searchTerm}`);
-      const query = encodeURIComponent(`${searchTerm}`); //encoding URL component does for query string
-      // console.log(query)
-      const response = await axios.get(
-        `https://api.spotify.com/v1/search?q=${query}&type=album`,
-        requestInit,
-      );
-      setSearchData(response.data.albums.items);
-      setLoading(false);
-      setFound(true);
-      setMusicAlbums(response.data.albums.items);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
 
   useEffect(() => {
     const fetchData = async () => {
