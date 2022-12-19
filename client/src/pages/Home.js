@@ -5,6 +5,7 @@ import { AuthContext } from "../firebase/Auth";
 import { Link } from "react-router-dom";
 import logo from "../icons/incognitomode2.png";
 import {
+  Button,
   Card,
   CardActions,
   CardHeader,

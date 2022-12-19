@@ -7,12 +7,15 @@ import Account from "../pages/Account";
 import Home from "../pages/Home";
 import NewReleases from "../pages/NewReleases";
 import Sidebar from "./Sidebar";
-import Categories from "../pages/Categories";
-import Category from "../pages/Category";
+// import Player from "./Player";
+import theme from "../styles/MuiTheme";
 import { makeStyles } from "@material-ui/core/styles";
-import AlbumDetails from "../pages/AlbumDetails";
-import Playlist from "../pages/Playlist";
-import Library from "../pages/Library";
+import { ThemeProvider } from "@material-ui/core/styles";
+import AlbumSong from "../pages/AlbumSong";
+import Categories from '../pages/Categories'
+import Album from "@material-ui/icons/Album";
+import axios from "axios";
+import PlayList from "../pages/PlayList";
 import Search from "./Search";
 import SpotifyCallback from "./SpotifyCallback";
 import PrivateRoute from "./PrivateRoute";
@@ -20,8 +23,8 @@ import SpotifyPrivateRoute from "./SpotifyPrivateRoute";
 import Lyrics from "./Lyrics";
 import IndPlayList from "../pages/IndPlayList";
 
-import "../styles/App.css";
-import Error from "./Error";
+import Lyrics from "./Lyrics"
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
