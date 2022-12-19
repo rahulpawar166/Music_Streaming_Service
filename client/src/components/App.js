@@ -12,18 +12,23 @@ import theme from "../styles/MuiTheme";
 import { makeStyles } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/core/styles";
 import AlbumSong from "../pages/AlbumSong";
+import AlbumDetails from "../pages/AlbumDetails";
+import Library from "../pages/Library"
+import Error from "./Error";
 import Categories from '../pages/Categories'
+import Category from '../pages/Category'
+
 import Album from "@material-ui/icons/Album";
 import axios from "axios";
-import PlayList from "../pages/PlayList";
+import Playlist from "../pages/Playlist";
 import Search from "./Search";
 import SpotifyCallback from "./SpotifyCallback";
 import PrivateRoute from "./PrivateRoute";
 import SpotifyPrivateRoute from "./SpotifyPrivateRoute";
 import Lyrics from "./Lyrics";
 import IndPlayList from "../pages/IndPlayList";
-
-import Lyrics from "./Lyrics"
+import Recommendations from "./Recommendations";
+// import Lyrics from "./Lyrics"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,6 +67,8 @@ function App() {
                 <Route path="/library" element={<Library />} />
                 <Route path="/playlist/:id" element={<Playlist />} />
                 <Route path="/lyrics/:artist/:trackName" element={<Lyrics />} />
+                <Route path="/Recommendations" element={<Recommendations />} /> App.js
+
               </Route>
               <Route
                 path="/IndPlayList/:PlaylistName"

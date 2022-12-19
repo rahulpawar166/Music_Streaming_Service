@@ -71,7 +71,7 @@ const Search = () => {
       const query = encodeURIComponent(`${searchTerm}`); //encoding URL component does for query string
       // console.log(query)
       const response = await axios.get(
-        `${process.env.REACT_APP_SEARCH_SONG}` + `?q=${query}&type=album`,
+        `https://api.spotify.com/v1/search?q=${query}&type=album`,
         requestInit,
       );
       setSearchData(response.data.albums.items);

@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import {  Card, CardHeader, Grid, makeStyles, CardMedia, Button } from "@material-ui/core";
-import DefaultImage from "../img/DefaultImage.jpeg";
+import DefaultImage from "../img/DefaultImage.jpg";
 import { AuthProvider, AuthContext } from "../firebase/Auth";
 // import PlaylistAdd from '@mui/icons-material/PlaylistAdd';
 import PlaylistAdd from "@material-ui/icons/PlaylistAdd";
