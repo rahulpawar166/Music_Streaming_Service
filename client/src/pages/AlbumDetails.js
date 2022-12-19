@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Card, CardHeader, Grid, makeStyles, Button } from "@material-ui/core";
 import { AuthContext } from "../firebase/Auth";
+import PlayerContext from "../components/PlayerContext";
 
 const useStyles = makeStyles({
   card: {
@@ -44,9 +45,14 @@ const AlbumDetails = () => {
   const [albumDetails, setAlbumDetails] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [playingTrack, setPlayingTrack] = useContext(PlayerContext);
 
   const handleAddToPlaylist = async (trackId) => {
     return;
+  };
+
+  const handlePlayingTrack = (track) => {
+    setPlayingTrack(track);
   };
 
   useEffect(() => {
@@ -79,7 +85,7 @@ const AlbumDetails = () => {
           <Button onClick={() => handleAddToPlaylist(track?.id)}>
             Add To PlayList
           </Button>
-          <Button>Play</Button>
+          <Button onClick={() => handlePlayingTrack(track)}>Play</Button>
           <br />
           <Link to={`/Lyrics/${artist}/${track?.name}`}>Lyrics</Link>
         </Card>

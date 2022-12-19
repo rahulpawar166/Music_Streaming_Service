@@ -27,6 +27,10 @@ const Account = () => {
     navigate("/signin");
   };
 
+  const disconnectSpotify = () => {
+    removeCookie("spotify_connected");
+  };
+
   const generateSpotifyToken = () => {
     const cookieState = Math.random().toString().substring(2, 18);
     const queryString = new URLSearchParams();
@@ -34,7 +38,7 @@ const Account = () => {
       response_type: "code",
       client_id: process.env.REACT_APP_SPOTIFY_CLIENT_ID,
       scope:
-        "user-read-email user-read-private user-read-recently-played user-read-playback-position user-top-read user-library-modify user-library-read streaming app-remote-control ugc-image-upload",
+        "user-read-email user-read-private user-read-recently-played user-read-playback-position user-top-read user-library-modify user-library-read streaming app-remote-control ugc-image-upload user-read-playback-state user-modify-playback-state",
       redirect_uri: process.env.REACT_APP_SPOTIFY_REDIRECT_URI,
       state: cookieState,
     }).map(([key, value]) => queryString.set(key, value));
@@ -57,10 +61,10 @@ const Account = () => {
       )}
       <br />
       <Button
-        variant={connected ? "disabled" : "contained"}
-        onClick={generateSpotifyToken}
+        variant={connected ? "contained" : "contained"}
+        onClick={connected ? disconnectSpotify : generateSpotifyToken}
       >
-        {connected ? "Spotify Connected!" : "Connect your Spotify"}
+        {connected ? "Disconnect Spotify" : "Connect your Spotify"}
       </Button>
       <br />
       <br />
