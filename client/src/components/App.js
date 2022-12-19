@@ -1,29 +1,25 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Helmet } from "react-helmet";
-import SignUp from "../pages/SignUp";
-import SignIn from "../pages/SignIn";
-import ForgotPassword from "../pages/ForgotPassword";
-import Account from "../pages/Account";
-import Home from "../pages/Home";
-import NewReleases from "../pages/NewReleases";
-import Sidebar from "./Sidebar";
-// import Player from "./Player";
-import theme from "../styles/MuiTheme";
 import { makeStyles } from "@material-ui/core/styles";
-import { ThemeProvider } from "@material-ui/core/styles";
-import AlbumSong from "../pages/AlbumSong";
-import Categories from '../pages/Categories'
-import Album from "@material-ui/icons/Album";
-import axios from "axios";
-import PlayList from "../pages/PlayList";
-import Search from "./Search";
-import SpotifyCallback from "./SpotifyCallback";
-import PrivateRoute from "./PrivateRoute";
-import SpotifyPrivateRoute from "./SpotifyPrivateRoute";
-import Lyrics from "./Lyrics";
+import { Helmet } from "react-helmet";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Account from "../pages/Account";
+import AlbumDetails from "../pages/AlbumDetails";
+import Categories from "../pages/Categories";
+import Category from "../pages/Category";
+import ForgotPassword from "../pages/ForgotPassword";
+import Home from "../pages/Home";
 import IndPlayList from "../pages/IndPlayList";
-
-import Lyrics from "./Lyrics"
+import Library from "../pages/Library";
+import NewReleases from "../pages/NewReleases";
+import Playlist from "../pages/Playlist";
+import SignIn from "../pages/SignIn";
+import SignUp from "../pages/SignUp";
+import Error from "./Error";
+import Lyrics from "./Lyrics";
+import PrivateRoute from "./PrivateRoute";
+import Search from "./Search";
+import Sidebar from "./Sidebar";
+import SpotifyCallback from "./SpotifyCallback";
+import SpotifyPrivateRoute from "./SpotifyPrivateRoute";
 
 const useStyles = makeStyles((theme) => ({
   root: {
