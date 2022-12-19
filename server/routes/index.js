@@ -4,6 +4,7 @@ const meRoutes = require("./me");
 const albumRoutes = require("./albums");
 const lyricsRoutes = require("./lyrics");
 const categoriesRoutes = require("./categories");
+const searchRoutes = require("./search");
 
 const constructorMethod = (app) => {
   app.use("/playlists", playlistRoutes);
@@ -12,6 +13,7 @@ const constructorMethod = (app) => {
   app.use("/albums", albumRoutes);
   app.use("/me", meRoutes);
   app.use("/categories", categoriesRoutes);
+  app.use("/search", searchRoutes);
 
   // Respond with 404 on undefined routes
   app.use("*", (req, res) => res.status(404).json({ error: "Not found" }));

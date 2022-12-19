@@ -37,14 +37,4 @@ router.get("/top/tracks", auth, async (req, res) => {
   }
 });
 
-// router.get("/:id", async (req, res) => {
-//   try {
-//     let id = req.params.id;
-//     let exists = await client.hExists("albumdetails", id);
-//   } catch (e) {
-//     console.error(e);
-//     res.status(500).json({ error: e });
-//   }
-// });
-
 module.exports = router;
