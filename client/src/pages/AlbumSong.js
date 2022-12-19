@@ -5,8 +5,14 @@ import { useParams } from "react-router-dom";
 import {  Card, CardHeader, Grid, makeStyles, CardMedia, Button } from "@material-ui/core";
 import DefaultImage from "../img/DefaultImage.jpg";
 import { AuthProvider, AuthContext } from "../firebase/Auth";
-// import PlaylistAdd from '@mui/icons-material/PlaylistAdd';
-import PlaylistAdd from "@material-ui/icons/PlaylistAdd";
+// import { DataGrid } from '@mui/x-data-grid';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
 const useStyles = makeStyles({
   card: {
@@ -113,24 +119,54 @@ const AlbumSong = () => {
     getAlbums();
   }, [AlbumId]);
 
-  const buildCard = (artist,track,img_url) => {
+  
+// function createData(name, artist, track) {
+//   return { name, artist,track };
+// }
+
+  const buildCard = (artist,track) => {
     return (
-      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.id}>
-        <Card className={classes.card} variant="outlined">
-          {/* <CardHeader className={classes.titleHead} title={track?.id} /> */}
-          <CardHeader className={classes.titleHead} title={track?.name} />
-          <br />
-          <Button onClick={() => addToPlaylist(track?.id,track?.name,img_url)}>
-            <PlaylistAdd fontSize="large"/>
-          </Button>
-          <Button>Play</Button>
-          <br/>
-          <br/>
-          <Button href={`/Lyrics/${artist}/${track?.name}`}>Lyrics</Button>
-        </Card>
-      </Grid>
+        <Table className="TrackTable" sx={{ maxWidth: 700 }} aria-label="simple table">
+        <TableHead title={track?.id}>
+          <TableRow>
+            <TableCell >Track:</TableCell>
+            <TableCell component="th" scope="row">{track?.name}</TableCell>
+            <Button onClick={() => addToPlaylist(track?.id,track?.name)}>
+             Add To PlayList
+           </Button>
+           <Button>Play</Button>
+           <Button href={`/Lyrics/${artist}/${track?.name}`}>Lyrics</Button>         
+           </TableRow>
+        </TableHead>
+        <TableBody>
+          
+              
+              {/* <TableCell align="right">{row.tracks?.items.artist}</TableCell>
+              <TableCell align="right">{row.tracks?.items.track}</TableCell> */}
+            {/* </TableRow> */}
+          {/* )) */}
+        </TableBody>
+      </Table>
     );
   };
+  // const buildCard = (artist,track) => {
+  //   return (
+  //     <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.id}>
+  //       <Card className={classes.card} variant="outlined">
+  //         {/* <CardHeader className={classes.titleHead} title={track?.id} /> */}
+  //         <CardHeader className={classes.titleHead} title={track?.name} />
+  //         <br />
+  //         <Button onClick={() => addToPlaylist(track?.id,track?.name)}>
+  //           Add To PlayList
+  //         </Button>
+  //         <Button>Play</Button>
+  //         <br/>
+  //         <br/>
+  //         <Button href={`/Lyrics/${artist}/${track?.name}`}>Lyrics</Button>
+  //       </Card>
+  //     </Grid>
+  //   );
+  // };
 
   if (loading) {
     return (
@@ -157,9 +193,9 @@ const AlbumSong = () => {
         />
         <br />
         {/* <Button>{trackAlbums?.artists[0]?.name}</Button> */}
-        <Grid container className={classes.grid} spacing={5}>
-          {trackAlbums?.tracks?.items.map((track) => buildCard(trackAlbums?.artists[0]?.name,track,trackAlbums?.images[0]?.url))}
-        </Grid>
+        <TableContainer container className={classes.grid} spacing={5}>
+          {trackAlbums?.tracks?.items.map((track) => buildCard(trackAlbums?.artists[0]?.name,track))}
+        </TableContainer>
       </div>
     );
 };
