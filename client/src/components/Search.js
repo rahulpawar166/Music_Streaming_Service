@@ -106,7 +106,7 @@ const Search = () => {
               />
             </Link>
           </CardActions>
-          <Button className={classes.button}>Add</Button>
+          
         </Card>
       </Grid>
     );

@@ -56,6 +56,10 @@ function App() {
               <Route path="/lyrics/:artist/:trackName" element={<Lyrics />} />
               <Route path="/account" element={<Account />} />
               <Route path="/spotifycallback" element={<SpotifyCallback />} />
+              <Route
+                path="/IndPlayList/:PlaylistName"
+                element={<IndPlayList />}
+              />
             </Route>
             <Route
               path="*"
