@@ -8,6 +8,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import HomeIcon from "@material-ui/icons/Home";
 import SearchIcon from "@material-ui/icons/Search";
 import AlbumIcon from "@material-ui/icons/Album";
+import CategoryIcon from "@material-ui/icons/Category";
 import LibraryMusicIcon from "@material-ui/icons/LibraryMusic";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
@@ -29,6 +30,7 @@ const NavigationMenu = () => {
     buildNavItem("Search", "search", "/search", <SearchIcon />),
     buildNavItem("New Releases", "newreleases", "/new-releases", <AlbumIcon />),
     buildNavItem("Library", "library", "/library", <LibraryMusicIcon />),
+    buildNavItem("Categories", "categories", "/categories", <CategoryIcon />),
   ];
 
   return (
