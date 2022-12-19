@@ -17,7 +17,7 @@ import SignUp from "../pages/SignUp";
 import Error from "./Error";
 import Lyrics from "./Lyrics";
 import PrivateRoute from "./PrivateRoute";
-
+import TrackDetails from "../pages/TrackDetails";
 import Search from "./Search";
 import Sidebar from "./Sidebar";
 import SpotifyCallback from "./SpotifyCallback";
@@ -66,7 +66,9 @@ function App() {
                 <Route path="/library" element={<Library />} />
                 <Route path="/playlist/:id" element={<Playlist />} />
                 <Route path="/lyrics/:artist/:trackName" element={<Lyrics />} />
-                <Route path="/Recommendations" element={<Recommendations />} /> App.js
+                <Route path="/Recommendations" element={<Recommendations />} />
+                <Route path="/track/:id" element={<TrackDetails />} />
+
 
               </Route>
               <Route

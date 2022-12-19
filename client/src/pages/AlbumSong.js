@@ -126,25 +126,19 @@ const AlbumSong = () => {
 
   const buildCard = (artist,track) => {
     return (
-        <Table className="TrackTable" sx={{ maxWidth: 700 }} aria-label="simple table">
-        <TableHead title={track?.id}>
-          <TableRow>
-            <TableCell >Track:</TableCell>
-            <TableCell component="th" scope="row">{track?.name}</TableCell>
-            <Button onClick={() => addToPlaylist(track?.id,track?.name)}>
-             Add To PlayList
-           </Button>
-           <Button>Play</Button>
-           <Button href={`/Lyrics/${artist}/${track?.name}`}>Lyrics</Button>         
-           </TableRow>
-        </TableHead>
-        <TableBody>
-          
-              
-              {/* <TableCell align="right">{row.tracks?.items.artist}</TableCell>
-              <TableCell align="right">{row.tracks?.items.track}</TableCell> */}
-            {/* </TableRow> */}
-          {/* )) */}
+      <Table className="TrackTable" sx={{ maxWidth: 700 }} aria-label="simple table">
+      <TableHead title={track?.id}>
+        <TableRow>
+          <TableCell >Track:</TableCell>
+          <TableCell component="th" scope="row">{track?.name}</TableCell>
+          <Button onClick={() => addToPlaylist(track?.id,track?.name)}>
+           Add To PlayList
+         </Button>
+         <Button>Play</Button>
+         <Button href={`/Lyrics/${artist}/${track?.name}`}>Lyrics</Button>         
+         </TableRow>
+      </TableHead>
+      <TableBody>
         </TableBody>
       </Table>
     );
