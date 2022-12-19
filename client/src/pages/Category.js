@@ -9,7 +9,8 @@ import {
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import Error from "../components/Error";
 import Loading from "../components/Loading";
 import { AuthContext } from "../firebase/Auth";
@@ -45,10 +46,11 @@ const useStyles = makeStyles({
   },
 });
 
-const Categories = () => {
+const Category = () => {
   const classes = useStyles();
+  const { id } = useParams();
   const { currentUser } = useContext(AuthContext);
-  const [categoriesData, setCategoriesData] = useState();
+  const [categoryData, setCategoryData] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState({
     exists: false,
@@ -59,11 +61,14 @@ const Categories = () => {
     const fetchData = async () => {
       try {
         const userToken = await currentUser.getIdToken();
-        const { data } = await axios.get(`http://localhost:3008/categories`, {
-          headers: { FirebaseIdToken: userToken },
-        });
+        const { data } = await axios.get(
+          `http://localhost:3008/categories/${id}`,
+          {
+            headers: { FirebaseIdToken: userToken },
+          },
+        );
         if (!data) throw "Failed to fetch categories data!";
-        setCategoriesData(data);
+        setCategoryData(data);
         setLoading(false);
         setError({
           exists: false,
@@ -80,21 +85,21 @@ const Categories = () => {
     if (currentUser) fetchData();
   }, [currentUser]);
 
-  const buildCard = (category) => {
+  const buildCard = (playlist) => {
     return (
-      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={category?.id}>
+      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={playlist?.id}>
         <Card className={classes.card} variant="outlined">
           <CardActions>
-            <Link to={`/category/${category?.id}`}>
+            <Link to={`/categoryplaylist/${playlist?.id}`}>
               <CardHeader
                 className={classes.titleHead}
-                title={category?.name}
+                title={playlist?.name}
               />
               <CardMedia
                 className={classes.media}
                 component="img"
-                image={category?.icons[0]?.url}
-                title="character image"
+                image={playlist?.images[0]?.url}
+                title={playlist?.name}
               />
             </Link>
           </CardActions>
@@ -110,11 +115,10 @@ const Categories = () => {
       <div>
         <h1>Categories</h1>
         <Grid container className={classes.grid} spacing={5}>
-          {categoriesData &&
-            categoriesData.map((category) => buildCard(category))}
+          {categoryData && categoryData.map((playlist) => buildCard(playlist))}
         </Grid>
       </div>
     );
 };
 
-export default Categories;
+export default Category;

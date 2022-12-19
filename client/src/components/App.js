@@ -8,6 +8,7 @@ import Home from "../pages/Home";
 import NewReleases from "../pages/NewReleases";
 import Sidebar from "./Sidebar";
 import Categories from "../pages/Categories";
+import Category from "../pages/Category";
 import { makeStyles } from "@material-ui/core/styles";
 import AlbumDetails from "../pages/AlbumDetails";
 import Playlist from "../pages/Playlist";
@@ -18,6 +19,7 @@ import PrivateRoute from "./PrivateRoute";
 import Lyrics from "./Lyrics";
 
 import "../styles/App.css";
+import Error from "./Error";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -45,7 +47,8 @@ function App() {
             <Route element={<PrivateRoute />}>
               <Route path="/search" element={<Search />} />
               <Route path="/new-releases" element={<NewReleases />} />
-              <Route path="/categories/:id" element={<Categories />} />
+              <Route path="/categories" element={<Categories />} />
+              <Route path="/category/:id" element={<Category />} />
               <Route path="/album/:id" element={<AlbumDetails />} />
               <Route path="/" element={<Home />} />
               <Route path="/library" element={<Library />} />
@@ -54,6 +57,10 @@ function App() {
               <Route path="/account" element={<Account />} />
               <Route path="/spotifycallback" element={<SpotifyCallback />} />
             </Route>
+            <Route
+              path="*"
+              element={<Error message="Error 404: That page does not exist!" />}
+            />
           </Routes>
         </main>
       </Router>
