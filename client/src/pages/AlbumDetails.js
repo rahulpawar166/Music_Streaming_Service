@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Card, CardHeader, Grid, makeStyles, Button } from "@material-ui/core";
 import { AuthContext } from "../firebase/Auth";
+import Player from "../components/Player"
 
 const useStyles = makeStyles({
   card: {
@@ -44,10 +45,16 @@ const AlbumDetails = () => {
   const [albumDetails, setAlbumDetails] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [playingTrack, setPlayingTrack] = useState();
 
   const handleAddToPlaylist = async (trackId) => {
     return;
   };
+
+  const handlePlayingTrack = (track) => {
+    setPlayingTrack(track);
+    console.log("Track is: ", track)
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,6 +78,7 @@ const AlbumDetails = () => {
 
   const buildCard = (artist, track) => {
     return (
+      
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.id}>
         <Card className={classes.card} variant="outlined">
           {/* <CardHeader className={classes.titleHead} title={track?.id} /> */}
@@ -79,7 +87,7 @@ const AlbumDetails = () => {
           <Button onClick={() => handleAddToPlaylist(track?.id)}>
             Add To PlayList
           </Button>
-          <Button>Play</Button>
+          <Button onClick ={() => handlePlayingTrack(track)}>Play</Button>
           <br />
           <Link to={`/Lyrics/${artist}/${track?.name}`}>Lyrics</Link>
         </Card>
@@ -115,6 +123,7 @@ const AlbumDetails = () => {
               buildCard(albumDetails.artists[0].name, track),
             )}
           </Grid>
+          {playingTrack && <div><Player accessToken={(window.localStorage.getItem("accessToken"))} trackUri={(playingTrack?.uri)}/></div>}
         </div>
       )
     );
