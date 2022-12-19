@@ -1,4 +1,3 @@
-const validate = require("./validate");
 const mongoCollections = require("../config/mongoCollections");
 const users = mongoCollections.users;
 
@@ -14,6 +13,7 @@ const storeRefreshToken = async (uid, token) => {
   return token;
 };
 
+// Stores the current access token for a user's Spotify account
 const storeAccessToken = async (uid, token) => {
   const usersCollection = await users();
   const result = await usersCollection.updateOne(
@@ -33,6 +33,7 @@ const getRefreshToken = async (uid) => {
   return result.refresh_token;
 };
 
+// Retreives the current access token for a given user
 const getAccessToken = async (uid) => {
   const usersCollection = await users();
   const result = await usersCollection.findOne({ uid: uid });

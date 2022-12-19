@@ -10,10 +10,7 @@ import {
   CardMedia,
   Button,
 } from "@material-ui/core";
-// import { Default } from "react-toastify/dist/utils";
-import DefaultImage from "../img/DefaultImage.jpeg";
 import { AuthProvider, AuthContext } from "../firebase/Auth";
-// import { playlist } from "../../../server/config/mongoCollections";
 
 const useStyles = makeStyles({
   card: {
@@ -56,34 +53,6 @@ const AlbumSong = () => {
   const [loading, setLoading] = useState(true);
   const [found, setFound] = useState(false);
 
-  //   const addToPlaylist = async (trackId) => {
-
-  //     try {
-  //       const { data } = await axios.post(
-  //         `http://localhost:3008/playlist/addTrack`,{
-  //           playlistId:currentUser.uid,
-  //           albumId:trackId
-
-  //         }
-  //       );
-  //     } catch (error) {
-  //       console.log("error", error);
-  //     }
-  //   };
-
-  // const getPlayList=async()=>{
-
-  //   try {
-  //     const { data } = await axios.get(
-  //       `http://localhost:3008/playlist/playListData`
-  //     );
-  //     console.log(data)
-  //     setPlayListId(data[0]._id)
-  //   } catch (error) {
-  //     console.log("error", error);
-  //   }
-  //  }
-
   const getCategories = async () => {
     const requestInit = {
       headers: {
@@ -121,7 +90,6 @@ const AlbumSong = () => {
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.id}>
         <Card className={classes.card} variant="outlined">
           <CardHeader className={classes.titleHead} title={track?.name} />
-          {/* <Link to={`${track?.id}`} /> */}
           <span>{track?.description}</span>
           <CardMedia
             className={classes.media}
@@ -129,7 +97,6 @@ const AlbumSong = () => {
             image={track?.images[0]?.url}
             title="categories image"
           />
-          {/* <img src={track?.images[0].url} width={100} height={100}/> */}
           <br />
         </Card>
       </Grid>

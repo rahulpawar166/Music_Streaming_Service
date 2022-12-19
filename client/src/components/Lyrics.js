@@ -4,7 +4,6 @@ import Player from "./Player";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Card, CardHeader, Grid, makeStyles, Button } from "@material-ui/core";
-import DefaultImage from "../img/DefaultImage.jpeg";
 
 const useStyles = makeStyles({
   card: {

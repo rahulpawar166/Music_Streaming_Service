@@ -11,7 +11,8 @@ import Categories from "../pages/Categories";
 import Player from "./Player";
 import { makeStyles } from "@material-ui/core/styles";
 import AlbumDetails from "../pages/AlbumDetails";
-import PlayList from "../pages/PlayList";
+import Playlist from "../pages/Playlist";
+import Library from "../pages/Library";
 import Search from "./Search";
 import SpotifyCallback from "./SpotifyCallback";
 import PrivateRoute from "./PrivateRoute";
@@ -48,7 +49,8 @@ function App() {
               <Route path="/categories/:id" element={<Categories />} />
               <Route path="/album/:id" element={<AlbumDetails />} />
               <Route path="/" element={<Home />} />
-              <Route path="/playlists" element={<PlayList />} />
+              <Route path="/library" element={<Library />} />
+              <Route path="/playlist/:id" element={<Playlist />} />
               <Route path="/lyrics/:artist/:trackName" element={<Lyrics />} />
               <Route path="/account" element={<Account />} />
               <Route path="/spotifycallback" element={<SpotifyCallback />} />

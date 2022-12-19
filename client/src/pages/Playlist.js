@@ -12,7 +12,6 @@ import {
   Button,
 } from "@material-ui/core";
 
-import DefaultImage from "../img/DefaultImage.jpeg";
 import { AuthContext } from "../firebase/Auth";
 
 const useStyles = makeStyles({
@@ -46,7 +45,7 @@ const useStyles = makeStyles({
   },
 });
 
-const PlayList = () => {
+const Playlist = () => {
   const classes = useStyles();
   const [trackData, setTrackData] = useState([]);
   const [playlistData, setPlayListData] = useState([]);
@@ -55,7 +54,6 @@ const PlayList = () => {
 
   const getPlayList = async () => {
     try {
-      console.log("frontend getplaylist function");
       const { data } = await axios.post(
         `http://localhost:3008/playlist/playListData`,
         { uid: window.localStorage.getItem("currentUser") },
@@ -166,4 +164,4 @@ const PlayList = () => {
       </div>
     );
 };
-export default PlayList;
+export default Playlist;

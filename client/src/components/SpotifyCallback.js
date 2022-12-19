@@ -7,15 +7,20 @@ import axios from "axios";
 const SpotifyCallback = (props) => {
   const { currentUser } = useContext(AuthContext);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [cookies, setCookie] = useCookies(["spotify_access_token"]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const generateToken = async () => {
+      const userToken = await currentUser.getIdToken();
       const { data } = await axios.post(
         "http://localhost:3008/auth/spotify_access_token",
         {
           code: searchParams.get("code"),
+        },
+        {
+          headers: {
+            FirebaseIdToken: userToken,
+          },
         },
       );
       if (data.success) setLoading(false);
@@ -27,8 +32,7 @@ const SpotifyCallback = (props) => {
     return <h1>Error: {searchParams.get("error")}</h1>;
   if (!searchParams.has("code")) return <h1>Error: No code</h1>;
   if (loading) return <h1>Loading...</h1>;
-  if (cookies["spotify_access_token"])
-    return <Navigate to="/" replace={true} />;
+  return <Navigate to="/" replace={true} />;
 };
 
 export default SpotifyCallback;

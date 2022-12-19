@@ -1,4 +1,5 @@
 const axios = require("axios");
+const qs = require("qs");
 const usersData = require("./data").usersData;
 
 const refreshAccessToken = async (uid) => {
@@ -33,6 +34,8 @@ const buildSpotifyAxiosInstance = async (uid) => {
       const access_token = await usersData.getAccessToken(uid);
       if (access_token && !config.headers["Authorization"])
         config.headers["Authorization"] = `Bearer ${access_token}`;
+      if (!config.headers["Content-Type"])
+        config.headers["Content-Type"] = "application/json";
       return config;
     },
     (error) => {
@@ -52,7 +55,7 @@ const buildSpotifyAxiosInstance = async (uid) => {
           !originalRequest._retry
         ) {
           originalRequest._retry = true;
-          const access_token = await refreshAccessToken();
+          const access_token = await refreshAccessToken(uid);
           originalRequest.headers.Authorization = `Bearer ${access_token}`;
           return axios(originalRequest);
         }

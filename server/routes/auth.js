@@ -2,7 +2,6 @@ const express = require("express");
 const axios = require("axios");
 const qs = require("qs");
 const auth = require("../auth");
-const validate = require("../data/validate");
 const usersData = require("../data").usersData;
 const router = express.Router();
 
@@ -40,7 +39,7 @@ router.post("/spotify_access_token", auth, async (req, res) => {
     // Store refresh token in user document
     await usersData.storeRefreshToken(req.firebaseUid, data.refresh_token);
     await usersData.storeAccessToken(req.firebaseUid, data.access_token);
-    return res.status(200).json({ success: true });
+    return res.status(201).json({ success: true });
   } catch (e) {
     console.error(e);
     return res.status(e.status || 400).json({ error: e.message });

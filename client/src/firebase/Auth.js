@@ -13,17 +13,6 @@ export const AuthProvider = ({ children }) => {
     onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
       setUserLoading(false);
-      if (user) {
-        axios.interceptors.request.use(
-          async (config) => {
-            config.headers.FirebaseIdToken = await user.getIdToken(true);
-            return config;
-          },
-          (error) => {
-            return Promise.reject(error);
-          },
-        );
-      }
     });
   }, []);
 

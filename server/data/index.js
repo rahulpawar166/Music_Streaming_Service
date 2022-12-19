@@ -1,5 +1,4 @@
 module.exports = {
-  playlistsData: require("./playlists"),
+  playlistData: require("./playlists"),
   usersData: require("./users"),
-  albumData: require("./albums"),
 };

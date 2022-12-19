@@ -22,7 +22,7 @@ const Account = () => {
       response_type: "code",
       client_id: process.env.REACT_APP_SPOTIFY_CLIENT_ID,
       scope:
-        "user-read-private user-read-email streaming user-library-modify user-library-read",
+        "user-read-email user-read-private user-read-recently-played user-read-playback-position user-top-read user-library-modify user-library-read streaming app-remote-control ugc-image-upload",
       redirect_uri: process.env.REACT_APP_SPOTIFY_REDIRECT_URI,
       state: cookieState,
     }).map(([key, value]) => queryString.set(key, value));

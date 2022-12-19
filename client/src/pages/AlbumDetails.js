@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
+import Error from "../components/Error";
+import Loading from "../components/Loading";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Card, CardHeader, Grid, makeStyles, Button } from "@material-ui/core";
-import DefaultImage from "../img/DefaultImage.jpeg";
 import { AuthContext } from "../firebase/Auth";
-import Loading from "../components/Loading";
 
 const useStyles = makeStyles({
   card: {
@@ -32,61 +32,37 @@ const useStyles = makeStyles({
     maxWidth: "200px",
   },
   button: {
-    // color: "#1e8678",
     fontWeight: "bold",
     fontSize: 12,
   },
 });
 
-const AlbumSong = () => {
+const AlbumDetails = () => {
   const classes = useStyles();
   const { currentUser } = useContext(AuthContext);
-  //to get data of particular albums
   const { id } = useParams();
-  const [playListId, setPlayListId] = useState();
-  const [trackAlbums, setTrackAlbums] = useState();
+  const [albumDetails, setAlbumDetails] = useState(null);
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [found, setFound] = useState(false);
-
-  const addToPlaylist = async (trackId) => {
-    try {
-      const { data } = await axios.post(
-        `http://localhost:3008/playlist/addTrack`,
-        {
-          playlistId: currentUser.uid,
-          albumId: trackId,
-        },
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const getAlbums = async () => {
-    const requestInit = {
-      headers: {
-        Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    };
-
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_URL_ALBUMS_ID_TRACKS}/${id}`,
-        requestInit,
-      );
-      setLoading(false);
-      setFound(true);
-      setTrackAlbums(response.data);
-    } catch (error) {
-      setFound(false);
-      setLoading(false);
-      console.error(error);
-    }
-  };
 
   useEffect(() => {
-    getAlbums();
+    const fetchData = async () => {
+      try {
+        const userToken = await currentUser.getIdToken();
+        const { data } = await axios.get(`http://localhost:3008/albums/${id}`, {
+          headers: {
+            FirebaseIdToken: userToken,
+          },
+        });
+        if (!data) throw "Request for album details failed!";
+        setAlbumDetails(data);
+        setLoading(false);
+      } catch (e) {
+        setError(e.message);
+        console.error(e);
+      }
+    };
+    if (currentUser) fetchData();
   }, [currentUser, id]);
 
   const buildCard = (artist, track) => {
@@ -96,9 +72,6 @@ const AlbumSong = () => {
           {/* <CardHeader className={classes.titleHead} title={track?.id} /> */}
           <CardHeader className={classes.titleHead} title={track?.name} />
           <br />
-          <Button onClick={() => addToPlaylist(track?.id)}>
-            Add To PlayList
-          </Button>
           <Button>Play</Button>
           <br />
           <br />
@@ -109,29 +82,35 @@ const AlbumSong = () => {
   };
 
   if (loading) return <Loading />;
-  else if (!found) {
-    return <h1>404: not enough data for this page</h1>;
-  } else
+  else if (error) return <Error message={error} />;
+  else
     return (
-      <div>
-        <h1>{trackAlbums?.name}</h1>
+      albumDetails && (
+        <div key={albumDetails.id}>
+          <h1>{albumDetails.name}</h1>
 
-        <img
-          className="Album"
-          src={trackAlbums?.images[0]?.url}
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src = DefaultImage;
-          }}
-          alt="Album"
-        />
-        <br />
-        <Grid container className={classes.grid} spacing={5}>
-          {trackAlbums?.tracks?.items.map((track) =>
-            buildCard(trackAlbums?.artists[0]?.name, track),
-          )}
-        </Grid>
-      </div>
+          <img
+            className="Album"
+            src={albumDetails.images[0].url}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "/images/no-image.jpg";
+            }}
+            alt={albumDetails.name}
+          />
+          <p>
+            {`${albumDetails.total_tracks} ${
+              parseInt(albumDetails.total_tracks) === 1 ? "Song" : "Songs"
+            }`}
+          </p>
+          <br />
+          <Grid container className={classes.grid} spacing={5}>
+            {albumDetails.tracks.items.map((track) =>
+              buildCard(albumDetails.artists[0].name, track),
+            )}
+          </Grid>
+        </div>
+      )
     );
 };
-export default AlbumSong;
+export default AlbumDetails;
