@@ -95,7 +95,19 @@ const TrackDetails = () => {
             alt={trackDetails?.name}
           />
           <p>Length: {trackDetails?.duration_ms}</p>
-          <></>
+          <p>Track Number: {trackDetails?.track_number}</p>
+          <Button>Add To PlayList</Button>
+          <br />
+          <Button>Play</Button>
+          <br />
+          <Button
+            className="lyrics"
+            href={`/Lyrics/${encodeURIComponent(
+              trackDetails?.artists[0]?.name,
+            )}/${encodeURIComponent(trackDetails?.name)}`}
+          >
+            Lyrics
+          </Button>
         </Paper>
       )
     );

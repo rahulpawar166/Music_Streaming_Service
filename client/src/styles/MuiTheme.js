@@ -14,9 +14,6 @@ const theme = createTheme({
       dark: "#26418f",
       contrastText: "#ffffff",
     },
-    typography: {
-      fontSize: 12,
-    },
   },
 });
 
