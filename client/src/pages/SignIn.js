@@ -1,4 +1,5 @@
 import "../styles/UserAuth.css";
+import "../styles/App.css"
 import { useState, forwardRef } from "react";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";

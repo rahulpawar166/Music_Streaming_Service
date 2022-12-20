@@ -1,119 +1,136 @@
-import React, { useEffect, useState,useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
-import { Card, CardActions, CardHeader, Grid, makeStyles, CardMedia, Button } from "@material-ui/core";
+import {
+  Card,
+  CardActions,
+  CardHeader,
+  Grid,
+  makeStyles,
+  CardMedia,
+  Button,
+} from "@material-ui/core";
 // import { Default } from "react-toastify/dist/utils";
 import { AuthProvider, AuthContext } from "../firebase/Auth";
 // import { playlist } from "../../../server/config/mongoCollections";
+import Loading from "./Loading";
+import FadeIn from "react-fade-in";
 const useStyles = makeStyles({
   card: {
     maxWidth: 250,
-    height: "auto",
+    height: "370px",
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 5,
-    border: "1px solid #1e8678",
     boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
+    backgroundColor: "rgba(236, 219, 186, 0.2)",
+  },
+  title: {
+    color: "#008c00",
   },
   titleHead: {
-    borderBottom: "1px solid #1e8678",
-    fontWeight: "bold",
+    color: "#ffffff",
+    fontSize: "5px",
+    height: "auto",
+    overflow: "hidden",
   },
   grid: {
     flexGrow: 1,
     flexDirection: "row",
+    marginLeft: "20px",
+    marginRight: "20px",
   },
   media: {
-    height: "200px",
-    width: "200px",
-    maxHeight: "200px",
-    maxWidth: "200px",
+    margin: "0 0 0 0",
+  },
+  artist: {
+    color: "#BDB5B4",
   },
   button: {
-    // color: "#1e8678",
     fontWeight: "bold",
     fontSize: 12,
+  },
+  link: {
+    textDecoration: "none",
   },
 });
 
 const Recommendations = () => {
-  const classes = useStyles();
+  const { currentUser } = useContext(AuthContext);
+  // const [newReleasesData, setNewReleasesData] = useState(null);
+  // const [newReleasesLoading, setNewReleasesLoading] = useState(true);
   const [trackAlbums, setTrackAlbums] = useState();
-
+  const classes = useStyles();
   const [loading, setLoading] = useState(true);
   const [found, setFound] = useState(false);
 
-  const getGenreSeeds = async () => {
-    let seed_artists="4NHQUGzhtTLFvgF5SZesLK"
-    let seed_tracks= "0c6xIDDpzE81m2q797ordA"
-    let seed_genres = encodeURIComponent("rock,hip-hop,pop")
-    const requestInit = {
-      headers: {
-        Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-    };
-
-    try {
-    const response = await axios.get(
-        `https://api.spotify.com/v1/recommendations?seed_artists=${seed_artists}&seed_genres=${seed_genres}&seed_tracks=${seed_tracks}` ,
-        requestInit
-        )
-    
-
-      console.log("we get response");
-      console.log("data=", response.data.tracks);
-
-      setLoading(false);
-      setFound(true);
-      setTrackAlbums(response.data.tracks);
-    } catch (error) {
-      setFound(false);
-      setLoading(false);
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
-    console.log("inside recommendations")
-    getGenreSeeds();
-  }, []);
+    const fetchData = async () => {
+      try {
+        const userToken = await currentUser.getIdToken();
+        const { data } = await axios.get(
+          "http://localhost:3008/albums/recommendations",
+          {
+            headers: {
+              FirebaseIdToken: userToken,
+            },
+          },
+        );
+        if (!data) throw "Failed to fetch search data!";
+        console.log(data);
+        setTrackAlbums(data);
+        setLoading(false);
+        setFound(true);
+      } catch (error) {
+        console.error(error);
+        setFound(true);
+        setLoading(false);
+      }
+    };
+    if (currentUser) fetchData();
+  }, [currentUser]);
 
   const buildCard = (track) => {
     return (
-      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.album.id}>
-        <Card className={classes.card} variant="outlined">
-        <CardActions>
-        <Link to={`/AlbumSong/${track?.album.id}`}>
-          
-          <CardHeader className={classes.titleHead} title={track?.name} />
-          <img src={track?.album.images[0].url} width={200} height={200}/>
-          <br/>
-          <span>{track?.album.artists[0].name}</span>
-          </Link>
-          </CardActions>
-          
-        </Card>
+      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.id}>
+        <FadeIn>
+          <Card className={classes.card} variant="outlined">
+            <CardActions>
+              <Link className={classes.link} to={`/album/${track?.album.id}`}>
+                <CardMedia
+                  className={classes.media}
+                  component="img"
+                  image={track?.album.images[0]?.url}
+                  title="character image"
+                />
+                <CardHeader
+                  className={classes.titleHead}
+                  title={
+                    track?.album.name > 30
+                      ? track?.album.name.substring(0, 27) + "..."
+                      : track?.album.name.substring(0, 30)
+                  }
+                />
+                <span className={classes.artist}>
+                  {track?.album.artists[0].name}
+                </span>
+              </Link>
+            </CardActions>
+          </Card>
+        </FadeIn>
       </Grid>
-      
     );
   };
 
   if (loading) {
-    return (
-      <div>
-        <h2> {"Loading please wait for few second"}</h2>
-        <h2> {"................................."}</h2>
-      </div>
-    );
+    return <Loading />;
   } else if (!found) {
     return <h1>404: not enough data for this page</h1>;
   } else
     return (
       <div>
         <br />
-        <h1>Recommendations</h1>
+        <h1 className={classes.title}>Recommendations</h1>
         <br />
         <Grid container className={classes.grid} spacing={5}>
           {trackAlbums?.map((track) => buildCard(track))}

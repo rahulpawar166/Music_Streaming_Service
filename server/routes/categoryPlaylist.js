@@ -9,29 +9,6 @@ const unflatten = flat.unflatten;
 
 client.connect().then(() => {});
 
-router.get("/", auth, async (req, res) => {
-  try {
-    let spotifyAxiosInstance = await spotifyAxios(req.firebaseUid);
-    let exists = await client.exists("categories");
-    if (exists) {
-      const cached = await client.get("categories");
-      return res.status(200).json(Object.values(unflatten(JSON.parse(cached))));
-    } else {
-      const { data } = await spotifyAxiosInstance.get(
-        "https://api.spotify.com/v1/browse/categories?country=US&limit=50",
-      );
-      if (!data) throw new Error("Spotify API returned no data!");
-      client.set("categories", JSON.stringify(flat(data.categories.items)), {
-        EX: 86400,
-      });
-      return res.status(200).json(data.categories.items);
-    }
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ error: e });
-  }
-});
-
 router.get("/:id", auth, async (req, res) => {
   try {
     let id = req.params.id;
@@ -46,24 +23,24 @@ router.get("/:id", auth, async (req, res) => {
       throw "Error: id cannot be an empty string or just spaces!";
     }
     let spotifyAxiosInstance = await spotifyAxios(req.firebaseUid);
-    let exists = await client.hExists("categorydetails", id);
+    let exists = await client.hExists("categoryPlaylist", id);
     if (exists) {
-      const cached = await client.hGet("categorydetails", id);
+      const cached = await client.hGet("categoryPlaylist", id);
       return res.status(200).json(Object.values(unflatten(JSON.parse(cached))));
     } else {
       const { data } = await spotifyAxiosInstance.get(
-        `https://api.spotify.com/v1/browse/categories/${id}/playlists?country=US&limit=50`,
+        `https://api.spotify.com/v1/playlists/${id}`,
       );
       if (!data) throw new Error("Spotify API returned no data!");
       client.hSet(
-        "categorydetails",
+        "categoryPlaylist",
         id,
-        JSON.stringify(flat(data.playlists.items)),
+        JSON.stringify(flat(data.tracks.items)),
         {
           EX: 86400,
         },
       );
-      return res.status(200).json(data.playlists.items);
+      return res.status(200).json(data.tracks.items);
     }
   } catch (e) {
     console.error(e);

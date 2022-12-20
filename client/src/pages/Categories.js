@@ -13,35 +13,60 @@ import React, { useContext, useEffect, useState } from "react";
 import Error from "../components/Error";
 import Loading from "../components/Loading";
 import { AuthContext } from "../firebase/Auth";
+import logo from "../icons/incognitomode2.png";
+import FadeIn from "react-fade-in";
 
 const useStyles = makeStyles({
+  logo: {
+    marginTop: "20px",
+    height: 100,
+    width: 100,
+  },
+
   card: {
     maxWidth: 250,
-    height: "auto",
+    height: "300px",
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 5,
-    border: "1px solid #1e8678",
     boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
+    backgroundColor: "rgba(236, 219, 186, 0.2)",
+  },
+  title: {
+    marginTop: "20px",
+    color: "#008c00",
+  },
+  subTitle: {
+    color: "#C84B31",
+    textAlign: "left",
+    marginLeft: "70px",
   },
   titleHead: {
-    borderBottom: "1px solid #1e8678",
-    fontWeight: "bold",
+    color: "#ffffff",
+    fontSize: "5px",
+    height: "auto",
+    overflow: "hidden",
   },
   grid: {
     flexGrow: 1,
     flexDirection: "row",
+    marginLeft: "20px",
+    marginRight: "20px",
   },
   media: {
-    height: "200px",
-    width: "200px",
-    maxHeight: "200px",
-    maxWidth: "200px",
+    margin: "0 0 0 0",
+  },
+
+  link: {
+    textDecoration: "none",
   },
   button: {
-    // color: "#1e8678",
-    fontWeight: "bold",
-    fontSize: 12,
+    backgroundColor: "#ECDBBA",
+    color: "#161616",
+    "&:hover": {
+      backgroundColor: "#FCDBBB",
+      color: "#161616",
+    },
   },
 });
 
@@ -83,22 +108,24 @@ const Categories = () => {
   const buildCard = (category) => {
     return (
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={category?.id}>
-        <Card className={classes.card} variant="outlined">
-          <CardActions>
-            <Link to={`/category/${category?.id}`}>
-              <CardHeader
-                className={classes.titleHead}
-                title={category?.name}
-              />
-              <CardMedia
-                className={classes.media}
-                component="img"
-                image={category?.icons[0]?.url}
-                title="character image"
-              />
-            </Link>
-          </CardActions>
-        </Card>
+        <FadeIn>
+          <Card className={classes.card} variant="outlined">
+            <CardActions>
+              <Link className={classes.link} to={`/category/${category?.id}`}>
+                <CardMedia
+                  className={classes.media}
+                  component="img"
+                  image={category?.icons[0]?.url}
+                  title="character image"
+                />
+                <CardHeader
+                  className={classes.titleHead}
+                  title={category?.name}
+                />
+              </Link>
+            </CardActions>
+          </Card>
+        </FadeIn>
       </Grid>
     );
   };
@@ -108,7 +135,16 @@ const Categories = () => {
   else
     return (
       <div>
-        <h1>Categories</h1>
+        <a href="/">
+          <img
+            className={classes.logo}
+            src={logo}
+            alt="logo"
+            width={100}
+            height={100}
+          />
+        </a>
+        <h1 className={classes.title}>Categories</h1>
         <Grid container className={classes.grid} spacing={5}>
           {categoriesData &&
             categoriesData.map((category) => buildCard(category))}

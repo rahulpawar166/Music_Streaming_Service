@@ -3,39 +3,98 @@ import axios from "axios";
 import Error from "../components/Error";
 import Loading from "../components/Loading";
 import { Link } from "react-router-dom";
+import PlayerContext from "../components/PlayerContext";
 import { useParams } from "react-router-dom";
-import { Card, CardHeader, Grid, makeStyles, Button } from "@material-ui/core";
+import {
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  Grid,
+  makeStyles,
+  Button,
+  List,
+  ListItem,
+  Divider,
+  ListItemText,
+} from "@material-ui/core";
 import { AuthContext } from "../firebase/Auth";
+import TableContainer from "@mui/material/TableContainer";
+import AddPlaylistPopup from "../components/AddPlaylistPopup";
 
 const useStyles = makeStyles({
-  card: {
-    maxWidth: 250,
-    height: "auto",
+  albumImg: {
+    width: "30%",
+    height: "30%",
+    objectFit: "cover",
+    borderRadius: "20px",
+  },
+
+  title: {
+    marginTop: "20px",
+    color: "#008c00",
+  },
+  subTitle: {
+    color: "#C84B31",
+    textAlign: "center",
+  },
+
+  link: {
+    textDecoration: "none",
+    color: "white",
+  },
+
+  addToPlaylistBtn: {
+    backgroundColor: "#ECDBBA",
+    color: "#161616",
+    "&:hover": {
+      backgroundColor: "#FCDBBB",
+      color: "#161616",
+    },
+  },
+
+  playBtn: {
+    color: "#5d0000",
+    weight: "bold",
+    marginLeft: "50px",
+    backgroundColor: "#02A82F",
+    "&:hover": {
+      backgroundColor: "#038B28",
+    },
+  },
+
+  lyricsBtn: {
+    backgroundColor: "#e31f5f",
+    marginLeft: "50px",
+    color: "#ffffff",
+    "&:hover": {
+      backgroundColor: "#E1114D",
+    },
+  },
+
+  tableContainer: {
+    backgroundColor: "#262626",
     marginLeft: "auto",
-    marginRight: "auto",
-    borderRadius: 5,
-    border: "1px solid #1e8678",
-    boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
-  },
-  titleHead: {
-    borderBottom: "1px solid #1e8678",
-    fontWeight: "bold",
-  },
-  grid: {
-    flexGrow: 1,
-    flexDirection: "row",
-  },
-  media: {
-    height: "200px",
-    width: "200px",
-    maxHeight: "200px",
-    maxWidth: "200px",
-  },
-  button: {
-    fontWeight: "bold",
-    fontSize: 12,
+    marginTop: "30px",
   },
 });
+const addToPlaylist = async (trackId, trackname, img_url) => {
+  try {
+    const { data } = await axios.post(
+      `http://localhost:3008/playlist/addTrack`,
+      {
+        uid: window.localStorage.getItem("currentUser"),
+        albumId: trackId,
+        name: window.localStorage.getItem("currentPlaylist"),
+        trackname: trackname,
+        img_url: img_url,
+      },
+    );
+  } catch (error) {
+    console.log("error", error);
+  }
+};
 
 const AlbumDetails = () => {
   const classes = useStyles();
@@ -44,9 +103,24 @@ const AlbumDetails = () => {
   const [albumDetails, setAlbumDetails] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [playingTrack, setPlayingTrack] = useContext(PlayerContext);
+  const [popupOpened, setPopupOpened] = useState(false);
 
-  const handleAddToPlaylist = async (trackId) => {
-    return;
+  const handlePopupOpened = () => {
+    setPopupOpened(true);
+  };
+
+  const handlePopupClosed = () => {
+    setPopupOpened(false);
+  };
+
+  const handleAddToPlaylist = async (track) => {
+    const userToken = await currentUser.getIdToken();
+    handlePopupOpened();
+  };
+
+  const handlePlayingTrack = (track) => {
+    setPlayingTrack(track);
   };
 
   useEffect(() => {
@@ -69,34 +143,16 @@ const AlbumDetails = () => {
     if (currentUser) fetchData();
   }, [currentUser, id]);
 
-  const buildCard = (artist, track) => {
-    return (
-      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.id}>
-        <Card className={classes.card} variant="outlined">
-          {/* <CardHeader className={classes.titleHead} title={track?.id} /> */}
-          <CardHeader className={classes.titleHead} title={track?.name} />
-          <br />
-          <Button onClick={() => handleAddToPlaylist(track?.id)}>
-            Add To PlayList
-          </Button>
-          <Button>Play</Button>
-          <br />
-          <Link to={`/Lyrics/${artist}/${track?.name}`}>Lyrics</Link>
-        </Card>
-      </Grid>
-    );
-  };
-
   if (loading) return <Loading />;
   else if (error) return <Error message={error} />;
   else
     return (
       albumDetails && (
         <div key={albumDetails.id}>
-          <h1>{albumDetails.name}</h1>
+          <h1 className={classes.title}>{albumDetails.name}</h1>
 
           <img
-            className="Album"
+            className={classes.albumImg}
             src={albumDetails.images[0].url}
             onError={(e) => {
               e.target.onerror = null;
@@ -104,17 +160,85 @@ const AlbumDetails = () => {
             }}
             alt={albumDetails.name}
           />
-          <p>
+          {/* <p style={{ textAlign: "center" }}>
+            Number of Tracks:{" "}
             {`${albumDetails.total_tracks} ${
               parseInt(albumDetails.total_tracks) === 1 ? "Song" : "Songs"
             }`}
-          </p>
+          </p> */}
           <br />
-          <Grid container className={classes.grid} spacing={5}>
-            {albumDetails.tracks.items.map((track) =>
-              buildCard(albumDetails.artists[0].name, track),
-            )}
-          </Grid>
+
+          <TableContainer
+            container="true"
+            className={classes.tableContainer}
+            spacing={5}
+          >
+            {/* {albumDetails.tracks.items.map((track) => */}
+            <div style={{ maxWidth: "1500px" }}>
+              {/* <h2 className={classes.subTitle} style={{ textAlign: "center" }}>Track</h2> */}
+              <List className={classes.list} style={{ marginTop: "10px" }}>
+                {albumDetails.tracks.items?.map((element, idx) => (
+                  <div>
+                    <AddPlaylistPopup
+                      open={popupOpened}
+                      handleClose={handlePopupClosed}
+                      track={{ element }}
+                    />
+                    <ListItem className={classes.listItem} key={element?.id}>
+                      <ListItemText
+                        className={classes.link}
+                        style={{ maxWidth: "25px" }}
+                      >
+                        {idx + 1}.
+                      </ListItemText>
+                      <ListItemText
+                        style={{
+                          maxWidth: "1150px",
+                          textAlign: "start",
+                          textDecoration: "none",
+                        }}
+                      >
+                        <Link
+                          className={classes.link}
+                          to={`/track/${element?.id}`}
+                        >
+                          {element.name}
+                        </Link>
+                      </ListItemText>
+
+                      <Button
+                        className={classes.addToPlaylistBtn}
+                        variant="contained"
+                        style={{ textAlign: "start" }}
+                        onClick={() => handleAddToPlaylist(element)}
+                      >
+                        Add To PlayList
+                      </Button>
+
+                      <br />
+                      <Button
+                        className={classes.playBtn}
+                        onClick={() => handlePlayingTrack(element)}
+                      >
+                        Play
+                      </Button>
+                      <br />
+                      <Button
+                        className={classes.lyricsBtn}
+                        href={`/lyrics/${encodeURIComponent(
+                          albumDetails?.artists[0]?.name,
+                        )}/${encodeURIComponent(element?.name)}`}
+                      >
+                        Lyrics
+                      </Button>
+                    </ListItem>
+                  </div>
+                ))}
+              </List>
+            </div>
+            {/* buildCard(albumDetails.artists[0].name, track), */}
+            {/* )} */}
+          </TableContainer>
         </div>
       )
     );
