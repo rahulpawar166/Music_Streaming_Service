@@ -32,6 +32,7 @@ const useStyles = makeStyles({
     maxWidth: "200px",
   },
   button: {
+    // color: "#1e8678",
     fontWeight: "bold",
     fontSize: 12,
   },
@@ -43,6 +44,7 @@ const TrackDetails = () => {
   const { id } = useParams();
   const [trackDetails, setTrackDetails] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [found, setFound] = useState(false);
   const [error, setError] = useState({
     exists: false,
     message: "",
@@ -61,7 +63,8 @@ const TrackDetails = () => {
             FirebaseIdToken: userToken,
           },
         });
-        if (!data) throw "Request for track details failed!";
+        // if (!data) throw "Request for track details failed!";
+        console.log(data);
         setTrackDetails(data);
         setError({
           exists: false,
@@ -71,29 +74,29 @@ const TrackDetails = () => {
       } catch (e) {
         console.error(e);
         setLoading(false);
-        setError({ exists: true, message: e.message });
+        setError({
+          exists: true,
+          message: e.message,
+        });
       }
     };
     if (currentUser) fetchData();
   }, [currentUser, id]);
 
   if (loading) return <Loading />;
-  else if (error) return <Error message={error} />;
+  // else if (error) return <Error message={error} />;
   else
     return (
       trackDetails && (
-        <Paper variant="outlined">
+        <Paper>
           <h1>{trackDetails?.name}</h1>
           <h2>{trackDetails?.artists[0]?.name}</h2>
           <img
             className="Track"
             src={trackDetails?.album?.images[0]?.url}
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = "/images/no-image.jpg";
-            }}
             alt={trackDetails?.name}
           />
+          <p>Popularity: {trackDetails?.popularity}</p>
           <p>Length: {trackDetails?.duration_ms}</p>
           <p>Track Number: {trackDetails?.track_number}</p>
           <Button>Add To PlayList</Button>
@@ -102,7 +105,7 @@ const TrackDetails = () => {
           <br />
           <Button
             className="lyrics"
-            href={`/Lyrics/${encodeURIComponent(
+            href={`/lyrics/${encodeURIComponent(
               trackDetails?.artists[0]?.name,
             )}/${encodeURIComponent(trackDetails?.name)}`}
           >
