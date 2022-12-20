@@ -16,16 +16,16 @@ import {
   Button,
   List,
   ListItem,
-  Divider ,
-  ListItemText
+  Divider,
+  ListItemText,
 } from "@material-ui/core";
 
 // import { Card, CardHeader, Grid, makeStyles, Button } from "@material-ui/core";
-import { AuthContext } from "../firebase/Auth"; 
+import { AuthContext } from "../firebase/Auth";
 // import Table from '@mui/material/Table';
 // import TableBody from '@mui/material/TableBody';
 // import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
+import TableContainer from "@mui/material/TableContainer";
 // import TableHead from '@mui/material/TableHead';
 // import TableRow from '@mui/material/TableRow';
 // import Paper from '@mui/material/Paper';
@@ -58,17 +58,17 @@ const useStyles = makeStyles({
     fontSize: 12,
   },
 });
-const addToPlaylist = async (trackId,trackname,img_url) => {
-    
+const addToPlaylist = async (trackId, trackname, img_url) => {
   try {
     const { data } = await axios.post(
-      `http://localhost:3008/playlist/addTrack`,{
-        uid:window.localStorage.getItem("currentUser"),  
-        albumId:trackId,
-        name:window.localStorage.getItem("currentPlaylist"),
-        trackname:trackname,
-        img_url:img_url
-      }
+      `http://localhost:3008/playlist/addTrack`,
+      {
+        uid: window.localStorage.getItem("currentUser"),
+        albumId: trackId,
+        name: window.localStorage.getItem("currentPlaylist"),
+        trackname: trackname,
+        img_url: img_url,
+      },
     );
   } catch (error) {
     console.log("error", error);
@@ -118,7 +118,7 @@ const AlbumDetails = () => {
   //           <h1>Track</h1>
   //           <List style={{ marginTop: '30px' }}>
   //               {track?.map((element, idx) => (
-                   
+
   //                       <ListItem key={element?.name}>
   //                           <ListItemText style={{ maxWidth: '25px' }}>{idx + 1}.</ListItemText>
   //                           <ListItemText style={{ textAlign: 'start' }} >{element?.name}</ListItemText>
@@ -126,7 +126,7 @@ const AlbumDetails = () => {
   //                             Add To PlayList
   //                           </Button>
   //                       </ListItem>
-                          
+
   //               ))}
   //           </List>
   //       </div>
@@ -140,7 +140,7 @@ const AlbumDetails = () => {
   //     //      Add To PlayList
   //     //    </Button>
   //     //    <Button>Play</Button>
-  //     //    <Button href={`/Lyrics/${artist}/${track?.name}`}>Lyrics</Button>         
+  //     //    <Button href={`/Lyrics/${artist}/${track?.name}`}>Lyrics</Button>
   //     //    </TableRow>
   //     // </TableHead>
   //     // <TableBody>
@@ -179,33 +179,52 @@ const AlbumDetails = () => {
             }}
             alt={albumDetails.name}
           />
-          <p style={{textAlign: 'center'}}>
-          Number of Tracks:  {`${albumDetails.total_tracks} ${
+          <p style={{ textAlign: "center" }}>
+            Number of Tracks:{" "}
+            {`${albumDetails.total_tracks} ${
               parseInt(albumDetails.total_tracks) === 1 ? "Song" : "Songs"
             }`}
           </p>
           <br />
           <TableContainer container="true" className={classes.grid} spacing={5}>
             {/* {albumDetails.tracks.items.map((track) => */}
-              <div style={{ maxWidth: '1500px' }}>
-              <h1 style={{ textAlign: 'center' }}>Track</h1>
-              <List style={{ marginTop: '30px' }}>
-                  {albumDetails.tracks.items?.map((element, idx) => (
-                    <ListItem key={element?.name}>
-                        <ListItemText style={{ maxWidth: '25px' }}>{idx + 1}.</ListItemText>
-                        <ListItemText style={{maxWidth: '1150px', textAlign: 'start' }} >{element?.name}</ListItemText>
-                        <Button style={{textAlign: 'start'}} onClick={() => addToPlaylist(element?.id,element?.name)}>
-                          Add To PlayList
-                        </Button><br/>
-                        <Button onClick={() => handlePlayingTrack(element)}>
-                          Play
-                        </Button><br/>
-                        <Button className="lyrics" href={`/Lyrics/${albumDetails?.artists[0]?.name}/${element?.name}`}>Lyrics</Button>         
-                    </ListItem>
-                  ))}
-                  </List>
-              </div>
-               {/* buildCard(albumDetails.artists[0].name, track), */}
+            <div style={{ maxWidth: "1500px" }}>
+              <h1 style={{ textAlign: "center" }}>Track</h1>
+              <List style={{ marginTop: "30px" }}>
+                {albumDetails.tracks.items?.map((element, idx) => (
+                  <ListItem key={element?.name}>
+                    <ListItemText style={{ maxWidth: "25px" }}>
+                      {idx + 1}.
+                    </ListItemText>
+                    <ListItemText
+                      style={{ maxWidth: "1150px", textAlign: "start" }}
+                    >
+                      {element?.name}
+                    </ListItemText>
+                    <Button
+                      style={{ textAlign: "start" }}
+                      onClick={() => addToPlaylist(element?.id, element?.name)}
+                    >
+                      Add To PlayList
+                    </Button>
+                    <br />
+                    <Button onClick={() => handlePlayingTrack(element)}>
+                      Play
+                    </Button>
+                    <br />
+                    <Button
+                      className="lyrics"
+                      href={`/lyrics/${encodeURIComponent(
+                        albumDetails?.artists[0]?.name,
+                      )}/${encodeURIComponent(element?.name)}`}
+                    >
+                      Lyrics
+                    </Button>
+                  </ListItem>
+                ))}
+              </List>
+            </div>
+            {/* buildCard(albumDetails.artists[0].name, track), */}
             {/* )} */}
           </TableContainer>
         </div>
