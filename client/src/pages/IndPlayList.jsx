@@ -1,6 +1,6 @@
-import React, { useEffect, useState,useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import { Link,useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   Card,
   CardActions,
@@ -12,11 +12,10 @@ import {
   Button,
   List,
   ListItem,
-  Divider ,
-  ListItemText
+  Divider,
+  ListItemText,
 } from "@material-ui/core";
-import DeleteIcon from '@material-ui/icons/Delete';
-
+import DeleteIcon from "@material-ui/icons/Delete";
 
 const useStyles = makeStyles({
   card: {
@@ -49,80 +48,77 @@ const useStyles = makeStyles({
   },
 });
 
+const IndPlayList = () => {
+  const [currentData, setCurrentData] = useState();
+  const { PlaylistName } = useParams();
+  const classes = useStyles();
 
+  const getPlayList = async () => {
+    try {
+      console.log("frontend getplaylist function");
+      const { data } = await axios.post(
+        `http://localhost:3008/playlist/playListData`,
+        { uid: window.localStorage.getItem("currentUser") },
+      );
 
-const IndPlayList=()=>{
-    const [currentData,setCurrentData]=useState()
-    const {PlaylistName}=useParams()
-    const classes = useStyles();
-
-    const getPlayList = async()=>{
-
-        try {
-          console.log("frontend getplaylist function")
-          const { data } = await axios.post(
-            `http://localhost:3008/playlist/playListData`,{uid:window.localStorage.getItem("currentUser")}
-          );
-          
-          //SET LIST OF ALBBUMS INSIDE PLAYLISTDATA
-          data.albums.forEach((element)=> {
-            if(element.name === PlaylistName) {
-                console.log(element.tracks)
-                setCurrentData(element.tracks)
-            }
-        })
-        
-        } catch (error) {
-          console.log("error", error);
+      //SET LIST OF ALBBUMS INSIDE PLAYLISTDATA
+      data.albums.forEach((element) => {
+        if (element.name === PlaylistName) {
+          console.log(element.tracks);
+          setCurrentData(element.tracks);
         }
-      }
+      });
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
-      const deleteTrack=async(trackId)=>{
-            try{
-                console.log("name of playlist",PlaylistName,trackId)
-                const { data } = await axios.post(
-                              `http://localhost:3008/playlist/deleteTrack`,{
-                                uid:window.localStorage.getItem("currentUser"),  
-                                name: PlaylistName,
-                                albumId:trackId 
-                            })
+  const deleteTrack = async (trackId) => {
+    try {
+      console.log("name of playlist", PlaylistName, trackId);
+      const { data } = await axios.post(
+        `http://localhost:3008/playlist/deleteTrack`,
+        {
+          uid: window.localStorage.getItem("currentUser"),
+          name: PlaylistName,
+          albumId: trackId,
+        },
+      );
 
-                        console.log("data after delete",data)
+      console.log("data after delete", data);
 
-                        data.albums.forEach((element)=> {
-                            if(element.name === PlaylistName) {
-                                console.log(element.tracks)
-                                setCurrentData(element.tracks)
-                            }
-                        })
-            }catch(error){
-                console.log(error)
-            }
-      }
+      data.albums.forEach((element) => {
+        if (element.name === PlaylistName) {
+          console.log(element.tracks);
+          setCurrentData(element.tracks);
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  useEffect(() => {
+    getPlayList();
+  }, []);
 
-    useEffect(()=>{
-        getPlayList()
-    },[])
-
-    return(
-        <div style={{ maxWidth: '500px' }}>
-            <h1>Playlist : {PlaylistName}</h1>
-            <List style={{ marginTop: '30px' }}>
-                {currentData?.map((element, idx) => (
-                   
-                        <ListItem key={element?.name}>
-                            <ListItemText style={{ maxWidth: '25px' }}>{idx + 1}.</ListItemText>
-                            <ListItemText style={{ textAlign: 'start' }} >{element?.name}</ListItemText>
-                            <a onClick={()=>deleteTrack(element?.trackId) }>
-                                <DeleteIcon/>
-                            </a>
-                        </ListItem>
-                        
-                   
-                ))}
-            </List>
-        </div>
-    )
-}
-export default IndPlayList
+  return (
+    <div style={{ maxWidth: "500px" }}>
+      <h1>Playlist : {PlaylistName}</h1>
+      <List style={{ marginTop: "30px" }}>
+        {currentData?.map((element, idx) => (
+          <ListItem key={element?.name}>
+            <ListItemText style={{ maxWidth: "25px" }}>{idx + 1}.</ListItemText>
+            <ListItemText style={{ textAlign: "start" }}>
+              {element?.name}
+            </ListItemText>
+            <a onClick={() => deleteTrack(element?.trackId)}>
+              <DeleteIcon />
+            </a>
+          </ListItem>
+        ))}
+      </List>
+    </div>
+  );
+};
+export default IndPlayList;
