@@ -14,10 +14,9 @@ import Error from "../components/Error";
 import Loading from "../components/Loading";
 import { AuthContext } from "../firebase/Auth";
 import logo from "../icons/incognitomode2.png";
-import FadeIn from 'react-fade-in';
+import FadeIn from "react-fade-in";
 
 const useStyles = makeStyles({
-  
   logo: {
     marginTop: "20px",
     height: 100,
@@ -31,16 +30,16 @@ const useStyles = makeStyles({
     marginRight: "auto",
     borderRadius: 5,
     boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
-    backgroundColor: "rgba(236, 219, 186, 0.2)"
+    backgroundColor: "rgba(236, 219, 186, 0.2)",
   },
   title: {
     marginTop: "20px",
-    color: "#346751",
+    color: "#008c00",
   },
   subTitle: {
     color: "#C84B31",
     textAlign: "left",
-    marginLeft: "70px"
+    marginLeft: "70px",
   },
   titleHead: {
     color: "#ffffff",
@@ -52,22 +51,22 @@ const useStyles = makeStyles({
     flexGrow: 1,
     flexDirection: "row",
     marginLeft: "20px",
-    marginRight: "20px"
+    marginRight: "20px",
   },
   media: {
     margin: "0 0 0 0",
   },
 
   link: {
-    textDecoration: "none"
+    textDecoration: "none",
   },
   button: {
     backgroundColor: "#ECDBBA",
     color: "#161616",
-    '&:hover': {
+    "&:hover": {
       backgroundColor: "#FCDBBB",
       color: "#161616",
-   }
+    },
   },
 });
 
@@ -110,23 +109,22 @@ const Categories = () => {
     return (
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={category?.id}>
         <FadeIn>
-        <Card className={classes.card} variant="outlined">
-          <CardActions>
-            <Link className={classes.link} to={`/category/${category?.id}`}>
-            <CardMedia
-                className={classes.media}
-                component="img"
-                image={category?.icons[0]?.url}
-                title="character image"
-              />
-              <CardHeader
-                className={classes.titleHead}
-                title={category?.name}
-              />
-              
-            </Link>
-          </CardActions>
-        </Card>
+          <Card className={classes.card} variant="outlined">
+            <CardActions>
+              <Link className={classes.link} to={`/category/${category?.id}`}>
+                <CardMedia
+                  className={classes.media}
+                  component="img"
+                  image={category?.icons[0]?.url}
+                  title="character image"
+                />
+                <CardHeader
+                  className={classes.titleHead}
+                  title={category?.name}
+                />
+              </Link>
+            </CardActions>
+          </Card>
         </FadeIn>
       </Grid>
     );
@@ -137,7 +135,15 @@ const Categories = () => {
   else
     return (
       <div>
-        <a href="/"><img className={classes.logo} src={logo} alt="logo" width={100} height={100} /></a>
+        <a href="/">
+          <img
+            className={classes.logo}
+            src={logo}
+            alt="logo"
+            width={100}
+            height={100}
+          />
+        </a>
         <h1 className={classes.title}>Categories</h1>
         <Grid container className={classes.grid} spacing={5}>
           {categoriesData &&

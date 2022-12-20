@@ -39,6 +39,7 @@ const NavigationMenu = () => {
         return (
           <ListItem button onClick={() => navigate(item.link)} key={item.key}>
             <ListItemIcon>{item.icon}</ListItemIcon>
+
             <ListItemText primary={item.text} />
           </ListItem>
         );

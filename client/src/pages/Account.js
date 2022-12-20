@@ -8,7 +8,7 @@ import { doSignOut } from "../firebase/FirebaseFunctions";
 import { useNavigate } from "react-router-dom";
 import { makeStyles } from "@material-ui/core";
 import logo from "../icons/incognitomode2.png";
-import ContactlessIcon from '@material-ui/icons/Contactless';
+import ContactlessIcon from "@material-ui/icons/Contactless";
 
 const useStyles = makeStyles({
   alert: {
@@ -24,26 +24,29 @@ const useStyles = makeStyles({
 
   title: {
     marginTop: "20px",
-    color: "#346751",
+    color: "#008c00",
   },
   subTitle: {
     color: "#C84B31",
-    textAlign: "center"
+    textAlign: "center",
   },
-
+  signout: {
+    backgroundColor: "#e31f5f",
+    color: "#ffffff",
+  },
   description: {
     color: "#ffffff",
-    textAlign: "center"
+    textAlign: "center",
   },
 
   connectSpotify: {
-    color: "#ffffff",
-    backgroundColor: "#02A82F",
-    '&:hover': {
-      backgroundColor: "#038B28",
-    }
-  },
+    color: "#5d0000",
 
+    backgroundColor: "#02A82F",
+    "&:hover": {
+      backgroundColor: "#038B28",
+    },
+  },
 });
 
 const Account = () => {
@@ -78,17 +81,27 @@ const Account = () => {
   let connected = cookies.spotify_connected === "true";
   return (
     <Box className={classes.pageRoot}>
-      <a href="/"><img className={classes.logo} src={logo} alt="logo" width={100} height={100} /></a>
+      <a href="/">
+        <img
+          className={classes.logo}
+          src={logo}
+          alt="logo"
+          width={100}
+          height={100}
+        />
+      </a>
       <h1 className={classes.title}>Account</h1>
       <h2 className={classes.subTitle}>
-        {currentUser
-          ?`Hello ${currentUser.displayName},`
-          : "Not logged in!"}
+        {currentUser ? `Hello ${currentUser.displayName},` : "Not logged in!"}
       </h2>
-      <p className={classes.description}>Welcome to Incognito,<br/>
-          Incognito provides music streaming service, and to enjoy this music service we need your Spotify Premium <br/>
-          account to get connected with our server. So please take some moment and connect your Spotify Premium <br/>
-          acoount with us and enjoy seamless music streaming by Incognito!!! 
+      <p className={classes.description}>
+        Welcome to Incognito,
+        <br />
+        Incognito provides music streaming service, and to enjoy this music
+        service we need your Spotify Premium <br />
+        account to get connected with our server. So please take some moment and
+        connect your Spotify Premium <br />
+        acoount with us and enjoy seamless music streaming by Incognito!!!
       </p>
       {!connected && (
         <Alert className={classes.alert} severity="error">
@@ -97,8 +110,8 @@ const Account = () => {
         </Alert>
       )}
       <br />
-      <Button 
-      className={classes.connectSpotify}
+      <Button
+        className={classes.connectSpotify}
         variant={connected ? "contained" : "contained"}
         onClick={connected ? disconnectSpotify : generateSpotifyToken}
         startIcon={<ContactlessIcon />}
@@ -107,7 +120,12 @@ const Account = () => {
       </Button>
       <br />
       <br />
-      <Button className={classes.signout} variant="contained" color="secondary" onClick={handleSignOut}>
+      <Button
+        className={classes.signout}
+        variant="contained"
+        color="secondary"
+        onClick={handleSignOut}
+      >
         Sign Out
       </Button>
     </Box>

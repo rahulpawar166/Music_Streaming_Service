@@ -24,17 +24,16 @@ import TableContainer from "@mui/material/TableContainer";
 import AddPlaylistPopup from "../components/AddPlaylistPopup";
 
 const useStyles = makeStyles({
-
-  albumImg:{
-    width:"30%",
-    height:"30%",
-    objectFit:"cover",
-    borderRadius:"20px",
+  albumImg: {
+    width: "30%",
+    height: "30%",
+    objectFit: "cover",
+    borderRadius: "20px",
   },
-  
+
   title: {
     marginTop: "20px",
-    color: "#ffffff",
+    color: "#008c00",
   },
   subTitle: {
     color: "#C84B31",
@@ -43,41 +42,42 @@ const useStyles = makeStyles({
 
   link: {
     textDecoration: "none",
-    color:"white"
+    color: "white",
   },
 
   addToPlaylistBtn: {
     backgroundColor: "#ECDBBA",
     color: "#161616",
-    '&:hover': {
+    "&:hover": {
       backgroundColor: "#FCDBBB",
       color: "#161616",
-   }
+    },
   },
 
   playBtn: {
-    color: "#ffffff",
+    color: "#5d0000",
+    weight: "bold",
     marginLeft: "50px",
     backgroundColor: "#02A82F",
-    '&:hover': {
+    "&:hover": {
       backgroundColor: "#038B28",
-    }
+    },
   },
 
   lyricsBtn: {
-    backgroundColor: "#E63467",
+    backgroundColor: "#e31f5f",
     marginLeft: "50px",
     color: "#ffffff",
-    '&:hover': {
+    "&:hover": {
       backgroundColor: "#E1114D",
-   }
+    },
   },
 
   tableContainer: {
     backgroundColor: "#262626",
     marginLeft: "auto",
     marginTop: "30px",
-  }
+  },
 });
 const addToPlaylist = async (trackId, trackname, img_url) => {
   try {
@@ -152,7 +152,7 @@ const AlbumDetails = () => {
           <h1 className={classes.title}>{albumDetails.name}</h1>
 
           <img
-             className={classes.albumImg}
+            className={classes.albumImg}
             src={albumDetails.images[0].url}
             onError={(e) => {
               e.target.onerror = null;
@@ -168,7 +168,11 @@ const AlbumDetails = () => {
           </p> */}
           <br />
 
-          <TableContainer container="true" className={classes.tableContainer} spacing={5}>
+          <TableContainer
+            container="true"
+            className={classes.tableContainer}
+            spacing={5}
+          >
             {/* {albumDetails.tracks.items.map((track) => */}
             <div style={{ maxWidth: "1500px" }}>
               {/* <h2 className={classes.subTitle} style={{ textAlign: "center" }}>Track</h2> */}
@@ -180,8 +184,11 @@ const AlbumDetails = () => {
                       handleClose={handlePopupClosed}
                       track={{ element }}
                     />
-                    <ListItem className={classes.listItem}  key={element?.id}>
-                      <ListItemText className={classes.link} style={{ maxWidth: "25px" }}>
+                    <ListItem className={classes.listItem} key={element?.id}>
+                      <ListItemText
+                        className={classes.link}
+                        style={{ maxWidth: "25px" }}
+                      >
                         {idx + 1}.
                       </ListItemText>
                       <ListItemText
@@ -191,11 +198,16 @@ const AlbumDetails = () => {
                           textDecoration: "none",
                         }}
                       >
-                      <Link className={classes.link} to={`/track/${element?.id}`}>{element.name}</Link>
+                        <Link
+                          className={classes.link}
+                          to={`/track/${element?.id}`}
+                        >
+                          {element.name}
+                        </Link>
                       </ListItemText>
 
                       <Button
-                       className={classes.addToPlaylistBtn}
+                        className={classes.addToPlaylistBtn}
                         variant="contained"
                         style={{ textAlign: "start" }}
                         onClick={() => handleAddToPlaylist(element)}
@@ -204,12 +216,15 @@ const AlbumDetails = () => {
                       </Button>
 
                       <br />
-                      <Button className={classes.playBtn} onClick={() => handlePlayingTrack(element)}>
+                      <Button
+                        className={classes.playBtn}
+                        onClick={() => handlePlayingTrack(element)}
+                      >
                         Play
                       </Button>
                       <br />
                       <Button
-                         className={classes.lyricsBtn}
+                        className={classes.lyricsBtn}
                         href={`/lyrics/${encodeURIComponent(
                           albumDetails?.artists[0]?.name,
                         )}/${encodeURIComponent(element?.name)}`}
