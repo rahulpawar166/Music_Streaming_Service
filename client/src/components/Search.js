@@ -241,7 +241,7 @@ const Search = () => {
   else {
     return (
       <div className="fancy-border">
-        <img  className={classes.logo} src={logo} alt="logo" width={100} height={100} />
+        <a href="/"><img className={classes.logo} src={logo} alt="logo" width={100} height={100} /></a>
         <h1 className={classes.title}>Search</h1>
         <SearchSongs className={classes.search} searchValue={searchValue}/>
         <Box>
