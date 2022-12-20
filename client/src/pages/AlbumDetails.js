@@ -81,9 +81,14 @@ const AlbumDetails = () => {
   const [albumDetails, setAlbumDetails] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [playingTrack, setPlayingTrack] = useContext(PlayerContext);
 
   const handleAddToPlaylist = async (trackId) => {
     return;
+  };
+
+  const handlePlayingTrack = (track) => {
+    setPlayingTrack(track);
   };
 
   useEffect(() => {
@@ -191,7 +196,7 @@ const AlbumDetails = () => {
                         <Button style={{textAlign: 'start'}} onClick={() => addToPlaylist(element?.id,element?.name)}>
                           Add To PlayList
                         </Button><br/>
-                        <Button>
+                        <Button onClick={() => handlePlayingTrack(track)}>
                           Play
                         </Button><br/>
                         <Button className="lyrics" href={`/Lyrics/${albumDetails?.artists[0]?.name}/${element?.name}`}>Lyrics</Button>         
