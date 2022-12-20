@@ -26,7 +26,6 @@ import SpotifyCallback from "./SpotifyCallback";
 import SpotifyPrivateRoute from "./SpotifyPrivateRoute";
 import Recommendations from "./Recommendations";
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -53,13 +52,14 @@ function App() {
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Helmet>
       <Router>
-        <Sidebar />
-        <main className={classes.content}>
-          <Routes>
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/forgotpassword" element={<ForgotPassword />} />
-            <Route element={<PrivateRoute />} />
+        <div className={classes.root}>
+          <Sidebar />
+          <main className={classes.content}>
+            <Routes>
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/forgotpassword" element={<ForgotPassword />} />
+              <Route element={<PrivateRoute />} />
               <Route path="/account" element={<Account />} />
               <Route path="/spotifycallback" element={<SpotifyCallback />} />
               <Route element={<SpotifyPrivateRoute />}>
@@ -72,9 +72,8 @@ function App() {
                 <Route path="/library" element={<Library />} />
                 <Route path="/playlist/:id" element={<Playlist />} />
                 <Route path="/lyrics/:artist/:trackName" element={<Lyrics />} />
-                <Route path="/Recommendations" element={<Recommendations />} /> 
+                <Route path="/Recommendations" element={<Recommendations />} />
                 <Route path="/track/:id" element={<TrackDetails />} />
-
               </Route>
               <Route
                 path="*"
@@ -91,6 +90,7 @@ function App() {
               />
             </footer>
           )}
+        </div>
       </Router>
     </PlayerContext.Provider>
   );
