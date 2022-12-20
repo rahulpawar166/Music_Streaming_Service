@@ -102,7 +102,7 @@ router.get("/:id", auth, async (req, res) => {
   try {
     let id = req.params.id;
     const dbResult = await playlistData.getPlaylist(req.firebaseUid, id);
-    return res.status(200).json(JSON.parse(dbResult));
+    return res.status(200).json(dbResult);
   } catch (e) {
     console.error(e);
     return res.status(500).json({ error: e || "Internal server error" });

@@ -149,11 +149,10 @@ const AlbumDetails = () => {
                 {albumDetails.tracks.items?.map((element, idx) => (
                   <div>
                     <AddPlaylistPopup
-                      track={{ element }}
                       open={popupOpened}
                       handleClose={handlePopupClosed}
+                      track={{ element }}
                     />
-
                     <ListItem key={element?.id}>
                       <ListItemText style={{ maxWidth: "25px" }}>
                         {idx + 1}.

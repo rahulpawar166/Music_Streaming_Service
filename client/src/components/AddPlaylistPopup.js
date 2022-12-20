@@ -13,7 +13,6 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
-import { element } from "prop-types";
 
 const AddPlaylistPopup = (props) => {
   const [value, setValue] = useState("");
@@ -21,6 +20,7 @@ const AddPlaylistPopup = (props) => {
   const { currentUser } = useContext(AuthContext);
 
   const handleChange = async (event) => {
+    // debugger;
     console.log("set value called");
     setValue(event.target.value);
     console.log(value);
@@ -30,6 +30,7 @@ const AddPlaylistPopup = (props) => {
     props.handleClose();
     try {
       const userToken = await currentUser.getIdToken();
+      console.log("playlist value=", value, props.track);
       const { data } = await axios.post(
         `http://localhost:3008/playlists/addto/${value}`,
         {
@@ -45,6 +46,7 @@ const AddPlaylistPopup = (props) => {
     } catch (error) {
       console.log("error", error);
     }
+    setValue("");
   };
 
   const getPlaylistName = async () => {
@@ -67,6 +69,7 @@ const AddPlaylistPopup = (props) => {
 
   useEffect(() => {
     getPlaylistName();
+    console.log(props.track);
   }, []);
 
   return (
@@ -84,7 +87,7 @@ const AddPlaylistPopup = (props) => {
             {allPlayListData?.map((element) => {
               return (
                 <FormControlLabel
-                  value={element?._id}
+                  value={element._id}
                   control={<Radio />}
                   label={element?.name}
                 />

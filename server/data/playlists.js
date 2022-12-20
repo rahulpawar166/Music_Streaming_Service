@@ -92,6 +92,7 @@ const addTrack = async (ownerId, playlistId, track) => {
 };
 
 const removeTrack = async (ownerId, playlistId, trackId) => {
+  console.log("we reached backend with", ownerId, playlistId, trackId);
   const playlistCollection = await playlists();
   const result = await playlistCollection.findOneAndUpdate(
     {
@@ -100,7 +101,7 @@ const removeTrack = async (ownerId, playlistId, trackId) => {
     },
     {
       $pull: {
-        tracks: { trackId: trackId },
+        tracks: { id: trackId },
       },
     },
     {
@@ -111,7 +112,8 @@ const removeTrack = async (ownerId, playlistId, trackId) => {
     throw `Playlist with id ${playlistId} was not found`;
   if (result.modifiedCount === 0)
     throw `Track with id ${trackId} was not removed from playlist with id ${playlistId}`;
-  return result.value;
+  console.log(result);
+  return result;
 };
 
 const getAllUserPlaylists = async (ownerId) => {
