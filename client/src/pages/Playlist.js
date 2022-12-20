@@ -2,51 +2,82 @@ import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import {
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  CardMedia,
-  Grid,
   makeStyles,
   Button,
   List,
   ListItem,
-  Divider,
+  TableContainer,
   ListItemText,
 } from "@material-ui/core";
-
+import PlayerContext from "../components/PlayerContext";
 import { AuthContext } from "../firebase/Auth";
 import DeleteIcon from "@material-ui/icons/Delete";
+import PlayArrowIcon from "@material-ui/icons/PlayArrow";
+import Error from "../components/Error";
+import Loading from "../components/Loading";
 
 const useStyles = makeStyles({
-  card: {
-    maxWidth: 250,
-    height: "auto",
+  albumImg: {
+    width: "30%",
+    height: "30%",
+    objectFit: "cover",
+    borderRadius: "4px",
+  },
+
+  title: {
+    marginTop: "20px",
+    color: "#008c00",
+  },
+  subTitle: {
+    color: "#C84B31",
+    textAlign: "center",
+  },
+
+  link: {
+    textDecoration: "none",
+    color: "white",
+  },
+
+  addToPlaylistBtn: {
+    backgroundColor: "#ECDBBA",
+    color: "#161616",
+    "&:hover": {
+      backgroundColor: "#FCDBBB",
+      color: "#161616",
+    },
+  },
+
+  playBtn: {
+    color: "#ffffff",
+    weight: "bold",
+    marginLeft: "50px",
+    backgroundColor: "#02A82F",
+    "&:hover": {
+      backgroundColor: "#038B28",
+    },
+  },
+  deleteBtn: {
+    backgroundColor: "#e31f5f",
+    color: "#ffffff",
+    weight: "bold",
+    marginLeft: "50px",
+    "&:hover": {
+      backgroundColor: "#E1114D",
+    },
+  },
+  lyricsBtn: {
+    backgroundColor: "#e31f5f",
+    marginLeft: "50px",
+    color: "#ffffff",
+    "&:hover": {
+      backgroundColor: "#E1114D",
+    },
+  },
+
+  tableContainer: {
+    backgroundColor: "#262626",
     marginLeft: "auto",
-    marginRight: "auto",
-    borderRadius: 5,
-    border: "1px solid #1e8678",
-    boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
-  },
-  titleHead: {
-    borderBottom: "1px solid #1e8678",
-    fontWeight: "bold",
-  },
-  grid: {
-    flexGrow: 1,
-    flexDirection: "row",
-  },
-  media: {
-    height: "200px",
-    width: "200px",
-    maxHeight: "200px",
-    maxWidth: "200px",
-  },
-  button: {
-    // color: "#1e8678",
-    fontWeight: "bold",
-    fontSize: 12,
+    marginTop: "30px",
   },
 });
 
@@ -54,36 +85,50 @@ const Playlist = () => {
   const classes = useStyles();
   const [playlistData, setPlayListData] = useState();
   const [loading, setLoading] = useState(true);
-  const [found, setFound] = useState(false);
+  const [error, setError] = useState({
+    exists: false,
+    message: "",
+  });
+  const [needsRefresh, setNeedsRefresh] = useState(true);
   const { currentUser } = useContext(AuthContext);
   const { id } = useParams();
+  const [playingTrack, setPlayingTrack] = useContext(PlayerContext);
 
-  const getPlayList = async (id) => {
-    try {
-      const userToken = await currentUser.getIdToken();
-      const { data } = await axios.get(
-        `http://localhost:3008/playlists/${id}`,
-        {
-          headers: {
-            FirebaseIdToken: userToken,
-          },
-        },
-      );
-      console.log(data);
-      setPlayListData(data);
-      setLoading(false);
-      setFound(true);
-    } catch (error) {
-      console.log("error", error);
-      setLoading(false);
-      setFound(false);
-    }
+  const handlePlayingTrack = (track) => {
+    setPlayingTrack(track);
   };
 
+  useEffect(() => {
+    const getPlayList = async (id) => {
+      try {
+        const userToken = await currentUser.getIdToken();
+        const { data } = await axios.get(
+          `http://localhost:3008/playlists/${id}`,
+          {
+            headers: {
+              FirebaseIdToken: userToken,
+            },
+          },
+        );
+        setPlayListData(data);
+        setNeedsRefresh(false);
+        setLoading(false);
+        setError({ exists: false, message: "" });
+      } catch (error) {
+        console.error(error);
+        setLoading(false);
+        setError({
+          exists: true,
+          message: "Failed to fetch playlist data! Whoops!",
+        });
+      }
+    };
+    if (currentUser && needsRefresh && id) getPlayList(id);
+  }, [id, needsRefresh, currentUser]);
+
   const deleteFromPlaylist = async (trackId) => {
-    console.log("button clicked");
-    const userToken = await currentUser.getIdToken();
     try {
+      const userToken = await currentUser.getIdToken();
       const { data } = await axios.patch(
         `http://localhost:3008/playlists/removefrom/${id}`,
         {
@@ -96,54 +141,93 @@ const Playlist = () => {
           },
         },
       );
-      setPlayListData(data);
-      setLoading(false);
-      setFound(true);
-      console.log(playlistData);
+      setNeedsRefresh(true);
+      setError({ exists: false, message: "" });
     } catch (error) {
-      console.log("error", error);
+      console.error(error);
       setLoading(false);
-      setFound(false);
+      setError({
+        exists: true,
+        message: "Failed to delete track from playlist!",
+      });
     }
   };
 
-  useEffect(() => {
-    getPlayList(id);
-  }, [id]);
+  if (error.exists) return <Error message={error.message} />;
+  else if (loading) return <Loading />;
+  else
+    return (
+      playlistData && (
+        <div key={playlistData.id}>
+          <h1 className={classes.title}>{playlistData?.name}</h1>
+          <img
+            className={classes.albumImg}
+            src={playlistData.cover}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "/images/default-cover.jpg";
+            }}
+            alt={playlistData.name + " Cover"}
+          />
+          <br />
 
-  if (loading) {
-    return (
-      <div>
-        <h2> {"Loading please wait for few second"}</h2>
-        <h2> {"................................."}</h2>
-      </div>
-    );
-  } else if (!found) {
-    return <h1>404: not enough data for this page</h1>;
-  } else
-    return (
-      <div>
-        <h1>{" tracks"}</h1>
-        <br />
-        <div>
-          <h1>Playlist : {playlistData?.name}</h1>
-          <List style={{ marginTop: "30px" }}>
-            {playlistData?.tracks?.map((element, idx) => (
-              <ListItem key={element?.idx}>
-                <ListItemText style={{ maxWidth: "25px", color: "white" }}>
-                  {idx + 1}.
-                </ListItemText>
-                <ListItemText style={{ textAlign: "start", color: "white" }}>
-                  {element?.name}
-                </ListItemText>
-                <a onClick={() => deleteFromPlaylist(element?.id)}>
-                  <DeleteIcon />
-                </a>
-              </ListItem>
-            ))}
-          </List>
+          <TableContainer
+            container="true"
+            className={classes.tableContainer}
+            spacing={5}
+          >
+            <div style={{ maxWidth: "1500px" }}>
+              <List className={classes.list} style={{ marginTop: "10px" }}>
+                {playlistData?.tracks?.map((element, idx) => (
+                  <ListItem className={classes.listItem} key={element?.id}>
+                    <ListItemText
+                      className={classes.link}
+                      style={{ maxWidth: "25px" }}
+                    >
+                      {idx + 1}.
+                    </ListItemText>
+                    <ListItemText
+                      style={{
+                        maxWidth: "1150px",
+                        textAlign: "start",
+                        textDecoration: "none",
+                      }}
+                    >
+                      <Link
+                        className={classes.link}
+                        to={`/track/${element?.id}`}
+                      >
+                        {element?.name}
+                      </Link>
+                    </ListItemText>
+
+                    <Button
+                      className={classes.deleteBtn}
+                      onClick={() => deleteFromPlaylist(element?.id)}
+                    >
+                      <DeleteIcon />
+                    </Button>
+                    <Button
+                      className={classes.playBtn}
+                      onClick={() => handlePlayingTrack(element)}
+                    >
+                      <PlayArrowIcon />
+                    </Button>
+                    {/* <Button
+                      className={classes.lyricsBtn}
+                      href={`/lyrics/${encodeURIComponent(
+                        albumDetails?.artists[0]?.name,
+                      )}/${encodeURIComponent(element?.name)}`}
+                    >
+                      Lyrics
+                    </Button> */}
+                  </ListItem>
+                ))}
+              </List>
+            </div>
+          </TableContainer>
         </div>
-      </div>
+      )
     );
 };
 export default Playlist;

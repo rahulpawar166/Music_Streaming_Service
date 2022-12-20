@@ -66,20 +66,23 @@ function App() {
               <Route path="/account" element={<Account />} />
               <Route path="/spotifycallback" element={<SpotifyCallback />} />
               <Route element={<SpotifyPrivateRoute />}>
-              <Route path="/search" element={<Search />} />
-              <Route path="/new-releases" element={<NewReleases />} />
-              <Route path="/categories" element={<Categories />} />
-              <Route path="/category/:id" element={<Category />} />
-              <Route path="/categoryplaylist/:id" element={<CategoryPlaylist />} />
-              <Route path="/album/:id" element={<AlbumDetails />} />
-              <Route path="/" element={<Home />} />
-              <Route path="/library" element={<Library />} />
-              <Route path="/playlist/:id" element={<Playlist />} />
-              <Route path="/lyrics/:artist/:trackName" element={<Lyrics />} />
-              <Route path="/Recommendations" element={<Recommendations />} />
-              <Route path="/track/:id" element={<TrackDetails />} />
-              <Route path="/artist/:id" element={<Artist />} />
-            </Route>
+                <Route path="/search" element={<Search />} />
+                <Route path="/new-releases" element={<NewReleases />} />
+                <Route path="/categories" element={<Categories />} />
+                <Route path="/category/:id" element={<Category />} />
+                <Route
+                  path="/categoryplaylist/:id"
+                  element={<CategoryPlaylist />}
+                />
+                <Route path="/album/:id" element={<AlbumDetails />} />
+                <Route path="/" element={<Home />} />
+                <Route path="/library" element={<Library />} />
+                <Route path="/playlist/:id" element={<Playlist />} />
+                <Route path="/lyrics/:artist/:trackName" element={<Lyrics />} />
+                <Route path="/Recommendations" element={<Recommendations />} />
+                <Route path="/track/:id" element={<TrackDetails />} />
+                <Route path="/artist/:id" element={<Artist />} />
+              </Route>
               <Route
                 path="*"
                 element={

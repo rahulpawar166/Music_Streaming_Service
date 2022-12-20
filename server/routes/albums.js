@@ -70,7 +70,7 @@ router.get("/:id", auth, async (req, res) => {
       throw "Error: id must be a string!";
     }
     id = id.trim();
-    if (id.length === 0){
+    if (id.length === 0) {
       throw "Error: id cannot be an empty string or just spaces!";
     }
     let exists = await client.hExists("albumdetails", id);

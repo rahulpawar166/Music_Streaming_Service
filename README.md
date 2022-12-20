@@ -4,6 +4,7 @@
 - This project uses ReactJS, Firebase, ExpressJS, Redis, MongoDB, and Spotify API.
 
 # Installation
+
 - ImageMagick
 - MongoDb
 -- Install the latest version of MongoDB Community Server(package msi)<br/>
@@ -18,13 +19,15 @@
 -- https://nodejs.org/download/release/v16.18.1/<br/>
 
 # How to Set Up Application:
+
 1. Clone the repository
 2. Open the folder in a source-code editor like Visual Studio Code
 3. Type cd client and cd server in two different terminals and Run `npm i` or `npm install` in order to install all the required libraries for this project
-3. Run `npm run seed` to run the task of seeding the db
-4. Run `npm start` to start the router
+4. Run `npm run seed` to run the task of seeding the db
+5. Run `npm start` to start the router
 
 # Credentials
+
 - In order to use this application, you must have a Spotify Account (Premium preferred)
 Username: ___
 <br/>Password: ___<br/>
@@ -38,4 +41,5 @@ Username: ___
 6. Users also have exposure to different categories of music and can be recommended new music.
 
 # Github Repo Link
+
 - https://github.com/rahulpawar166/Music_Streaming_Service
