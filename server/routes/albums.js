@@ -49,7 +49,7 @@ router.get("/recommendations", auth, async (req, res) => {
         req.firebaseUid,
         JSON.stringify(flat(data.tracks)),
         {
-          EX: 300,
+          EX: 180,
         },
       );
       return res.status(200).json(data.tracks);
