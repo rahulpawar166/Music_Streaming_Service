@@ -68,6 +68,7 @@ const Category = () => {
           },
         );
         if (!data) throw "Failed to fetch categories data!";
+        console.log(data)
         setCategoryData(data);
         setLoading(false);
         setError({
@@ -113,7 +114,7 @@ const Category = () => {
   else
     return (
       <div>
-        <h1>Categories</h1>
+        <h1>Category Playlists</h1>
         <Grid container className={classes.grid} spacing={5}>
           {categoryData && categoryData.map((playlist) => buildCard(playlist))}
         </Grid>

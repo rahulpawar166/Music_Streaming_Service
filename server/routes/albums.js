@@ -46,7 +46,7 @@ router.get("/recommendations", auth, async (req, res) => {
       );
       if (!data) throw "Spotify API returned no data";
       client.set("recommendations", JSON.stringify(flat(data.tracks)), {
-        EX: 86400,
+        EX: 300,
       });
       return res.status(200).json(data.tracks);
     }
