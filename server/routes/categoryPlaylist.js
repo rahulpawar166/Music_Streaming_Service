@@ -12,6 +12,16 @@ client.connect().then(() => {});
 router.get("/:id", auth, async (req, res) => {
   try {
     let id = req.params.id;
+    if (!id) {
+      return res.status(400).json({ error: "MUST INPUT ID" });
+    }
+    if (typeof id !== "string") {
+      throw "Error: id must be a string!";
+    }
+    id = id.trim();
+    if (id.length === 0){
+      throw "Error: id cannot be an empty string or just spaces!";
+    }
     let spotifyAxiosInstance = await spotifyAxios(req.firebaseUid);
     let exists = await client.hExists("categoryPlaylist", id);
     if (exists) {
