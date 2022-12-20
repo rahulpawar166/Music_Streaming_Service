@@ -1,11 +1,10 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/server/images
-/client/public/images/cover-*.jpg
-server/uploads
+client/public/images/cover-*.jpg
 node_modules
 server/uploads
+server/images
 /.pnp
 .pnp.js
 

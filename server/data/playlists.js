@@ -1,18 +1,13 @@
 const playlists = require("../config/mongoCollections").playlists;
-const spawnSync = require("child_process").spawnSync;
 let { ObjectId } = require("mongodb");
-const fs = require("fs");
-const path = require("path");
-const axios = require("axios");
-const download = require("download");
 
 const createPlaylist = async (ownerId, name, public, tracks) => {
   const playlistCollection = await playlists();
   const result = await playlistCollection.insertOne({
     ownerId: ownerId,
-    name: name || "New Playlist",
-    cover: "/images/default-cover.jpg",
-    public: public || false,
+    name: name,
+    cover: "/images/default-playlist-cover.png",
+    public: public,
     tracks: tracks || [],
   });
   if (!result.acknowledged) throw `Inserting playlist ${name} failed`;
@@ -75,9 +70,8 @@ const addTrack = async (ownerId, playlistId, track) => {
     ownerId: ownerId,
   });
   if (!findResult) throw `No playlist with id ${playlistId} found`;
-  if (findResult.tracks.find((dbTrack) => dbTrack.id === track.id)) {
+  if (findResult.tracks.find((dbTrack) => dbTrack.trackId === track.trackId))
     throw `That track is already in playlist with id ${playlistId}`;
-  }
   const result = await playlistCollection.findOneAndUpdate(
     {
       _id: ObjectId(playlistId),
@@ -94,55 +88,6 @@ const addTrack = async (ownerId, playlistId, track) => {
   );
   if (result.modifiedCount === 0)
     throw `Track with id ${track.trackId} was not added to playlist with id ${playlistId}`;
-  if (
-    result.value.tracks.length === 1 ||
-    result.value.tracks.length === 4 ||
-    result.value.tracks.length === 9
-  ) {
-    let fileArray = [];
-    await Promise.all(
-      result.value.tracks.slice(0, 9).map(async (element) => {
-        const imagePath = path.resolve("./", "images");
-        const filename = `${element.id}.jpeg`;
-        const fullFileName = path.resolve(imagePath, filename);
-        fileArray.push(fullFileName);
-        if (!fs.existsSync(fullFileName)) {
-          await download(element.imageUrl, imagePath, {
-            filename: filename,
-          });
-          return;
-        }
-        return;
-      }),
-    );
-    let coverFilename = `cover-${result.value._id}.jpg`;
-    let montageResult = spawnSync("magick", [
-      "montage",
-      ...fileArray,
-      coverFilename,
-    ]);
-    console.log(montageResult);
-    let mvResult = spawnSync("mv", [
-      path.join(__dirname, "..", coverFilename),
-      path.join(__dirname, "..", "..", "client", "public", "images"),
-    ]);
-    console.log(mvResult);
-    const updateCoverResult = await playlistCollection.findOneAndUpdate(
-      {
-        _id: ObjectId(playlistId),
-        ownerId: ownerId,
-      },
-      {
-        $set: {
-          cover: `/images/${coverFilename}`,
-        },
-      },
-      {
-        returnDocument: "after",
-      },
-    );
-    return updateCoverResult.value;
-  }
   return result.value;
 };
 

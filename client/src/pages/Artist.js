@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import PlayerContext from "../components/PlayerContext";
 import { useParams } from "react-router-dom";
 import FadeIn from "react-fade-in";
+
 import {
   Card,
   CardActions,
@@ -48,12 +49,32 @@ const useStyles = makeStyles({
     maxHeight: "200px",
     maxWidth: "200px",
   },
+  button: {
+    fontWeight: "bold",
+    fontSize: 12,
+  },
   title: {
     fontSize: "40px",
     marginTop: "20px",
     color: "#008c00",
   },
 });
+const addToPlaylist = async (trackId, trackname, img_url) => {
+  try {
+    const { data } = await axios.post(
+      `http://localhost:3008/playlist/addTrack`,
+      {
+        uid: window.localStorage.getItem("currentUser"),
+        albumId: trackId,
+        name: window.localStorage.getItem("currentPlaylist"),
+        trackname: trackname,
+        img_url: img_url,
+      },
+    );
+  } catch (error) {
+    console.log("error", error);
+  }
+};
 
 const Artist = () => {
   const classes = useStyles();
@@ -62,6 +83,25 @@ const Artist = () => {
   const [artistDetails, setArtistDetails] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [playingTrack, setPlayingTrack] = useContext(PlayerContext);
+  const [popupOpened, setPopupOpened] = useState(false);
+
+  const handlePopupOpened = () => {
+    setPopupOpened(true);
+  };
+
+  const handlePopupClosed = () => {
+    setPopupOpened(false);
+  };
+
+  const handleAddToPlaylist = async (track) => {
+    const userToken = await currentUser.getIdToken();
+    handlePopupOpened();
+  };
+
+  const handlePlayingTrack = (track) => {
+    setPlayingTrack(track);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -107,9 +147,29 @@ const Artist = () => {
                 />
               </Link>
             </CardActions>
+            <Button className={classes.button}>Add</Button>
           </Card>
         </FadeIn>
       </Grid>
+      // <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={artist?.id}>
+
+      //   <Card className={classes.card} variant="outlined">
+      //     <CardActions>
+      //     <CardHeader className={classes.titleHead} title={artist?.name > 30 ? artist?.name.substring(0, 27) + "..." : artist?.name.substring(0, 30)
+      //         } /><br/>
+      //       {/* <Link className={classes.link} to={`/artist/${artist?.id}`}> */}
+      //       <CardMedia
+      //           className={classes.media}
+      //           component="img"
+      //           image={artist?.images[0]?.url}
+      //           title={artist?.name}
+      //         />
+
+      //       {/* </Link> */}
+      //     </CardActions>
+      //   </Card>
+      //   </FadeIn>
+      // </Grid>
     );
   };
 

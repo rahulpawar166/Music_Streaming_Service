@@ -39,9 +39,7 @@ router.post("/spotify_access_token", auth, async (req, res) => {
     // Store refresh token in user document
     await usersData.storeRefreshToken(req.firebaseUid, data.refresh_token);
     await usersData.storeAccessToken(req.firebaseUid, data.access_token);
-    return res
-      .status(201)
-      .json({ success: true, access_token: data.access_token });
+    return res.status(201).json({ success: true , access_token: data.access_token});
   } catch (e) {
     console.error(e);
     return res.status(e.status || 400).json({ error: e.message });

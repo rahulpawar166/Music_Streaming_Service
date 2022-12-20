@@ -1,19 +1,27 @@
+import React, { useEffect, useState, useContext } from "react";
+import axios from "axios";
+import Error from "../components/Error";
+import Loading from "../components/Loading";
+import { Link } from "react-router-dom";
+import PlayerContext from "../components/PlayerContext";
+import { useParams } from "react-router-dom";
 import {
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  Grid,
+  makeStyles,
   Button,
   List,
   ListItem,
+  Divider,
   ListItemText,
-  makeStyles,
 } from "@material-ui/core";
-import TableContainer from "@mui/material/TableContainer";
-import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import AddPlaylistPopup from "../components/AddPlaylistPopup";
-import Error from "../components/Error";
-import Loading from "../components/Loading";
-import PlayerContext from "../components/PlayerContext";
 import { AuthContext } from "../firebase/Auth";
+import TableContainer from "@mui/material/TableContainer";
+import AddPlaylistPopup from "../components/AddPlaylistPopup";
 
 const useStyles = makeStyles({
   albumImg: {
@@ -22,6 +30,7 @@ const useStyles = makeStyles({
     objectFit: "cover",
     borderRadius: "20px",
   },
+
   title: {
     marginTop: "20px",
     color: "#008c00",
@@ -30,10 +39,12 @@ const useStyles = makeStyles({
     color: "#C84B31",
     textAlign: "center",
   },
+
   link: {
     textDecoration: "none",
     color: "white",
   },
+
   addToPlaylistBtn: {
     backgroundColor: "#ECDBBA",
     color: "#161616",
@@ -52,6 +63,7 @@ const useStyles = makeStyles({
       backgroundColor: "#038B28",
     },
   },
+
   lyricsBtn: {
     backgroundColor: "#e31f5f",
     marginLeft: "50px",
@@ -60,16 +72,13 @@ const useStyles = makeStyles({
       backgroundColor: "#E1114D",
     },
   },
+
   tableContainer: {
     backgroundColor: "#262626",
     marginLeft: "auto",
     marginTop: "30px",
   },
-  list: {
-    marginTop: "10px",
-  },
 });
-
 const addToPlaylist = async (trackId, trackname, img_url) => {
   try {
     const { data } = await axios.post(
@@ -87,7 +96,7 @@ const addToPlaylist = async (trackId, trackname, img_url) => {
   }
 };
 
-const Album = () => {
+const AlbumDetails = () => {
   const classes = useStyles();
   const { currentUser } = useContext(AuthContext);
   const { id } = useParams();
@@ -95,7 +104,6 @@ const Album = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [playingTrack, setPlayingTrack] = useContext(PlayerContext);
-  const [trackToAdd, setTrackToAdd] = useState(null);
   const [popupOpened, setPopupOpened] = useState(false);
 
   const handlePopupOpened = () => {
@@ -106,8 +114,8 @@ const Album = () => {
     setPopupOpened(false);
   };
 
-  const handleAddToPlaylist = async (element) => {
-    setTrackToAdd(element);
+  const handleAddToPlaylist = async (track) => {
+    const userToken = await currentUser.getIdToken();
     handlePopupOpened();
   };
 
@@ -141,14 +149,8 @@ const Album = () => {
     return (
       albumDetails && (
         <div key={albumDetails.id}>
-          {trackToAdd && (
-            <AddPlaylistPopup
-              track={trackToAdd}
-              open={popupOpened}
-              handleClose={handlePopupClosed}
-            />
-          )}
           <h1 className={classes.title}>{albumDetails.name}</h1>
+
           <img
             className={classes.albumImg}
             src={albumDetails.images[0].url}
@@ -158,6 +160,12 @@ const Album = () => {
             }}
             alt={albumDetails.name}
           />
+          {/* <p style={{ textAlign: "center" }}>
+            Number of Tracks:{" "}
+            {`${albumDetails.total_tracks} ${
+              parseInt(albumDetails.total_tracks) === 1 ? "Song" : "Songs"
+            }`}
+          </p> */}
           <br />
 
           <TableContainer
@@ -167,10 +175,15 @@ const Album = () => {
           >
             {/* {albumDetails.tracks.items.map((track) => */}
             <div style={{ maxWidth: "1500px" }}>
-              <h1 style={{ textAlign: "center" }}>Track</h1>
-              <List className={classes.list}>
+              {/* <h2 className={classes.subTitle} style={{ textAlign: "center" }}>Track</h2> */}
+              <List className={classes.list} style={{ marginTop: "10px" }}>
                 {albumDetails.tracks.items?.map((element, idx) => (
                   <div>
+                    <AddPlaylistPopup
+                      open={popupOpened}
+                      handleClose={handlePopupClosed}
+                      track={{ element }}
+                    />
                     <ListItem className={classes.listItem} key={element?.id}>
                       <ListItemText
                         className={classes.link}
@@ -203,7 +216,10 @@ const Album = () => {
                       </Button>
 
                       <br />
-                      <Button onClick={() => handlePlayingTrack(element)}>
+                      <Button
+                        className={classes.playBtn}
+                        onClick={() => handlePlayingTrack(element)}
+                      >
                         Play
                       </Button>
                       <br />
@@ -220,9 +236,11 @@ const Album = () => {
                 ))}
               </List>
             </div>
+            {/* buildCard(albumDetails.artists[0].name, track), */}
+            {/* )} */}
           </TableContainer>
         </div>
       )
     );
 };
-export default Album;
+export default AlbumDetails;
