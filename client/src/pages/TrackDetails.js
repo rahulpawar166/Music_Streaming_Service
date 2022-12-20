@@ -103,7 +103,14 @@ const TrackDetails = () => {
             alt={trackDetails?.name}
           />
           <p>Popularity: {trackDetails?.popularity}</p>
-          <p>Length: {trackDetails?.duration_ms}</p>
+          <p>
+            Length:{" "}
+            {trackDetails?.duration_ms
+              ? `${new Date(trackDetails.duration_ms).getMinutes()}:${new Date(
+                  trackDetails.duration_ms,
+                ).getSeconds()}`
+              : "N/A"}
+          </p>
           <p>Track Number: {trackDetails?.track_number}</p>
           <Button>Add To PlayList</Button>
           <br />
