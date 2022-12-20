@@ -4,7 +4,7 @@ import Loading from "../components/Loading";
 import { AuthContext } from "../firebase/Auth";
 import { Link } from "react-router-dom";
 import logo from "../icons/incognitomode2.png";
-import FadeIn from 'react-fade-in';
+import FadeIn from "react-fade-in";
 import {
   Button,
   Card,
@@ -17,7 +17,6 @@ import {
 } from "@material-ui/core";
 
 const useStyles = makeStyles({
-
   logo: {
     marginTop: "20px",
     height: 100,
@@ -31,16 +30,16 @@ const useStyles = makeStyles({
     marginRight: "auto",
     borderRadius: 5,
     boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
-    backgroundColor: "rgba(236, 219, 186, 0.2)"
+    backgroundColor: "rgba(236, 219, 186, 0.2)",
   },
   title: {
     marginTop: "20px",
-    color: "#346751",
+    color: "#008c00",
   },
   subTitle: {
     color: "#C84B31",
     textAlign: "left",
-    marginLeft: "70px"
+    marginLeft: "70px",
   },
   titleHead: {
     color: "#ffffff",
@@ -52,23 +51,23 @@ const useStyles = makeStyles({
     flexGrow: 1,
     flexDirection: "row",
     marginLeft: "20px",
-    marginRight: "20px"
+    marginRight: "20px",
   },
   media: {
     margin: "0 0 0 0",
   },
 
   link: {
-    textDecoration: "none"
+    textDecoration: "none",
   },
 
   button: {
     backgroundColor: "#ECDBBA",
     color: "#161616",
-    '&:hover': {
+    "&:hover": {
       backgroundColor: "#FCDBBB",
       color: "#161616",
-   }
+    },
   },
 });
 
@@ -114,30 +113,28 @@ const Home = () => {
   const buildAlbumCard = (album) => {
     return (
       album && (
-        
         <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={album.id}>
           <FadeIn>
-          <Card className={classes.card} variant="outlined">
-            <CardActions>
-              <Link className={classes.link} to={`/album/${album.id}`}>
-              <CardMedia
-                  className={classes.media}
-                  component="img"
-                  image={album.images[0].url}
-                  alt={album.name}
-                />
-                <CardHeader
-                  className={classes.titleHead}
-                  title={
-                    album.name.length > 32
-                      ? album.name.substring(0, 29) + "..."
-                      : album.name.substring(0, 32)
-                  }
-                />
-                
-              </Link>
-            </CardActions>
-          </Card>
+            <Card className={classes.card} variant="outlined">
+              <CardActions>
+                <Link className={classes.link} to={`/album/${album.id}`}>
+                  <CardMedia
+                    className={classes.media}
+                    component="img"
+                    image={album.images[0].url}
+                    alt={album.name}
+                  />
+                  <CardHeader
+                    className={classes.titleHead}
+                    title={
+                      album.name.length > 32
+                        ? album.name.substring(0, 29) + "..."
+                        : album.name.substring(0, 32)
+                    }
+                  />
+                </Link>
+              </CardActions>
+            </Card>
           </FadeIn>
         </Grid>
       )
@@ -149,28 +146,27 @@ const Home = () => {
       track && (
         <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track.id}>
           <FadeIn>
-          <Card className={classes.card} variant="outlined">
-            <CardActions>
-              <Link className={classes.link} to={`/track/${track.id}`}>
-              <CardMedia
-                  className={classes.media}
-                  component="img"
-                  image={track.album.images[0].url}
-                  alt={track.name}
-                />
+            <Card className={classes.card} variant="outlined">
+              <CardActions>
+                <Link className={classes.link} to={`/track/${track.id}`}>
+                  <CardMedia
+                    className={classes.media}
+                    component="img"
+                    image={track.album.images[0].url}
+                    alt={track.name}
+                  />
 
-                <CardHeader
-                  className={classes.titleHead}
-                  title={
-                    track.name.length > 32
-                      ? track.name.substring(0, 29) + "..."
-                      : track.name.substring(0, 32)
-                  }
-                />
-                
-              </Link>
-            </CardActions>
-          </Card>
+                  <CardHeader
+                    className={classes.titleHead}
+                    title={
+                      track.name.length > 32
+                        ? track.name.substring(0, 29) + "..."
+                        : track.name.substring(0, 32)
+                    }
+                  />
+                </Link>
+              </CardActions>
+            </Card>
           </FadeIn>
         </Grid>
       )
@@ -181,11 +177,21 @@ const Home = () => {
   else
     return (
       <div className="fancy-border">
-        <a href="/"><img className={classes.logo} src={logo} alt="logo" width={100} height={100} /></a>
+        <a href="/">
+          <img
+            className={classes.logo}
+            src={logo}
+            alt="logo"
+            width={100}
+            height={100}
+          />
+        </a>
         <h1 className={classes.title}>Home</h1>
         <Grid container xs={12}>
           <Grid item className={classes.grid}>
-            <Button className={classes.button} href={`/Recommendations`}>Want New Music?</Button>
+            <Button className={classes.button} href={`/Recommendations`}>
+              Want New Music?
+            </Button>
 
             <h2 className={classes.subTitle}>New Releases</h2>
             <Grid container className={classes.grid} spacing={5}>

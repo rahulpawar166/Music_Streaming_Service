@@ -9,7 +9,6 @@ import { Paper, makeStyles, Button, Typography } from "@material-ui/core";
 import { AuthContext } from "../firebase/Auth";
 
 const useStyles = makeStyles((theme) => ({
-
   trackPaper: {
     width: "fit-content",
     margin: "0 auto",
@@ -17,34 +16,32 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(3),
     paddingBottom: theme.spacing(3),
     marginTop: theme.spacing(20),
-    backgroundColor: "rgba(236, 219, 186, 0.2)"
-
+    backgroundColor: "rgba(236, 219, 186, 0.2)",
   },
-  trackImg:{
-    width:"40%",
-    height:"40%",
-    objectFit:"cover",
-    borderRadius:"20px",
+  trackImg: {
+    width: "40%",
+    height: "40%",
+    objectFit: "cover",
+    borderRadius: "20px",
     marginTop: "20px",
   },
-  
+
   title: {
     marginTop: "20px",
     color: "#ffffff",
-    fontSize:"40px"
+    fontSize: "40px",
   },
   subTitle: {
     color: "#A5A5A5",
     textAlign: "center",
-    fontSize:"30px",
+    fontSize: "30px",
     marginTop: "10px",
-    marginBottom: "10px"
-    
+    marginBottom: "10px",
   },
 
   link: {
     textDecoration: "none",
-    color:"white"
+    color: "white",
   },
 
   addToPlaylistBtn: {
@@ -52,31 +49,31 @@ const useStyles = makeStyles((theme) => ({
 
     marginTop: "20px",
     color: "#161616",
-    '&:hover': {
+    "&:hover": {
       backgroundColor: "#FCDBBB",
       color: "#161616",
-   }
+    },
   },
 
   playBtn: {
     color: "#ffffff",
     marginTop: "20px",
     marginLeft: "40px",
-    backgroundColor: "#02A82F",
-    '&:hover': {
+    backgroundColor: "#008a00",
+    "&:hover": {
       backgroundColor: "#038B28",
-    }
+    },
   },
 
   lyricsBtn: {
-    backgroundColor: "#E63467",
+    backgroundColor: "#e31f5f",
     marginTop: "20px",
     marginLeft: "40px",
     color: "#ffffff",
-    '&:hover': {
+    "&:hover": {
       backgroundColor: "#E1114D",
-   }
-  }
+    },
+  },
 }));
 
 const TrackDetails = () => {
@@ -133,8 +130,12 @@ const TrackDetails = () => {
     return (
       trackDetails && (
         <Paper variant="outlined" className={classes.trackPaper}>
-          <Typography className={classes.title} variant="h1">{trackDetails?.name}</Typography>
-          <Typography className={classes.subTitle} variant="h2">{trackDetails?.artists[0]?.name}</Typography>
+          <Typography className={classes.title} variant="h1">
+            {trackDetails?.name}
+          </Typography>
+          <Typography className={classes.subTitle} variant="h2">
+            {trackDetails?.artists[0]?.name}
+          </Typography>
           <img
             className={classes.trackImg}
             src={trackDetails?.album?.images[0]?.url}
@@ -150,11 +151,16 @@ const TrackDetails = () => {
               : "N/A"}
           </p>
           <p className={classes.description}>Track Number: {trackDetails?.track_number}</p> */}
-          <br/>
+          <br />
           <Button className={classes.addToPlaylistBtn}>Add To PlayList</Button>
-          
-          <Button className={classes.playBtn} onClick={() => handlePlayingTrack(trackDetails)}>Play</Button>
-          
+
+          <Button
+            className={classes.playBtn}
+            onClick={() => handlePlayingTrack(trackDetails)}
+          >
+            Play
+          </Button>
+
           <Button
             className={classes.lyricsBtn}
             href={`/lyrics/${encodeURIComponent(
