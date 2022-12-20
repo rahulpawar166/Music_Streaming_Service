@@ -9,39 +9,74 @@ import { Paper, makeStyles, Button, Typography } from "@material-ui/core";
 import { AuthContext } from "../firebase/Auth";
 
 const useStyles = makeStyles((theme) => ({
-  card: {
-    maxWidth: 250,
-    height: "auto",
-    marginLeft: "auto",
-    marginRight: "auto",
-    borderRadius: 5,
-    border: "1px solid #1e8678",
-    boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
-  },
-  titleHead: {
-    borderBottom: "1px solid #1e8678",
-    fontWeight: "bold",
-  },
-  grid: {
-    flexGrow: 1,
-    flexDirection: "row",
-  },
-  media: {
-    height: "60vh",
-    width: "auto",
-  },
-  button: {
-    // color: "#1e8678",
-    fontWeight: "bold",
-    fontSize: 12,
-  },
+
   trackPaper: {
     width: "fit-content",
     margin: "0 auto",
     paddingLeft: theme.spacing(3),
     paddingRight: theme.spacing(3),
     paddingBottom: theme.spacing(3),
+    marginTop: theme.spacing(20),
+    backgroundColor: "rgba(236, 219, 186, 0.2)"
+
   },
+  trackImg:{
+    width:"40%",
+    height:"40%",
+    objectFit:"cover",
+    borderRadius:"20px",
+    marginTop: "20px",
+  },
+  
+  title: {
+    marginTop: "20px",
+    color: "#ffffff",
+    fontSize:"40px"
+  },
+  subTitle: {
+    color: "#A5A5A5",
+    textAlign: "center",
+    fontSize:"30px",
+    marginTop: "10px",
+    marginBottom: "10px"
+    
+  },
+
+  link: {
+    textDecoration: "none",
+    color:"white"
+  },
+
+  addToPlaylistBtn: {
+    backgroundColor: "#ECDBBA",
+
+    marginTop: "20px",
+    color: "#161616",
+    '&:hover': {
+      backgroundColor: "#FCDBBB",
+      color: "#161616",
+   }
+  },
+
+  playBtn: {
+    color: "#ffffff",
+    marginTop: "20px",
+    marginLeft: "40px",
+    backgroundColor: "#02A82F",
+    '&:hover': {
+      backgroundColor: "#038B28",
+    }
+  },
+
+  lyricsBtn: {
+    backgroundColor: "#E63467",
+    marginTop: "20px",
+    marginLeft: "40px",
+    color: "#ffffff",
+    '&:hover': {
+      backgroundColor: "#E1114D",
+   }
+  }
 }));
 
 const TrackDetails = () => {
@@ -98,15 +133,15 @@ const TrackDetails = () => {
     return (
       trackDetails && (
         <Paper variant="outlined" className={classes.trackPaper}>
-          <Typography variant="h2">{trackDetails?.name}</Typography>
-          <Typography variant="h4">{trackDetails?.artists[0]?.name}</Typography>
+          <Typography className={classes.title} variant="h1">{trackDetails?.name}</Typography>
+          <Typography className={classes.subTitle} variant="h2">{trackDetails?.artists[0]?.name}</Typography>
           <img
-            className={classes.media}
+            className={classes.trackImg}
             src={trackDetails?.album?.images[0]?.url}
             alt={trackDetails?.name}
           />
-          <p>Popularity: {trackDetails?.popularity}</p>
-          <p>
+          {/* <p className={classes.description}>Popularity: {trackDetails?.popularity}</p>
+          <p className={classes.description}>
             Length:{" "}
             {trackDetails?.duration_ms
               ? `${new Date(trackDetails.duration_ms).getMinutes()}:${new Date(
@@ -114,13 +149,14 @@ const TrackDetails = () => {
                 ).getSeconds()}`
               : "N/A"}
           </p>
-          <p>Track Number: {trackDetails?.track_number}</p>
-          <Button>Add To PlayList</Button>
-          <br />
-          <Button onClick={() => handlePlayingTrack(trackDetails)}>Play</Button>
-          <br />
+          <p className={classes.description}>Track Number: {trackDetails?.track_number}</p> */}
+          <br/>
+          <Button className={classes.addToPlaylistBtn}>Add To PlayList</Button>
+          
+          <Button className={classes.playBtn} onClick={() => handlePlayingTrack(trackDetails)}>Play</Button>
+          
           <Button
-            className="lyrics"
+            className={classes.lyricsBtn}
             href={`/lyrics/${encodeURIComponent(
               trackDetails?.artists[0]?.name,
             )}/${encodeURIComponent(trackDetails?.name)}`}

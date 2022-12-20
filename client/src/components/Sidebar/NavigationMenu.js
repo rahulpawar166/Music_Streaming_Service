@@ -51,7 +51,7 @@ const NavigationMenu = () => {
         <ListItemIcon>
           <AccountCircleIcon />
         </ListItemIcon>
-        <ListItemText primary={currentUser ? "Profile" : "Sign In"} />
+        <ListItemText primary={currentUser ? "Account" : "Sign In"} />
       </ListItem>
     </List>
   );
