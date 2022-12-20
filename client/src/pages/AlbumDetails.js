@@ -3,6 +3,7 @@ import axios from "axios";
 import Error from "../components/Error";
 import Loading from "../components/Loading";
 import { Link } from "react-router-dom";
+import PlayerContext from "../components/PlayerContext";
 import { useParams } from "react-router-dom";
 import {
   Card,
@@ -196,7 +197,7 @@ const AlbumDetails = () => {
                         <Button style={{textAlign: 'start'}} onClick={() => addToPlaylist(element?.id,element?.name)}>
                           Add To PlayList
                         </Button><br/>
-                        <Button onClick={() => handlePlayingTrack(track)}>
+                        <Button onClick={() => handlePlayingTrack(element)}>
                           Play
                         </Button><br/>
                         <Button className="lyrics" href={`/Lyrics/${albumDetails?.artists[0]?.name}/${element?.name}`}>Lyrics</Button>         
