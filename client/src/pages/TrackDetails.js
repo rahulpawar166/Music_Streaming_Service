@@ -2,11 +2,11 @@ import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import Error from "../components/Error";
 import Loading from "../components/Loading";
+import PlayerContext from "../components/PlayerContext";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Paper, makeStyles, Button, Typography } from "@material-ui/core";
 import { AuthContext } from "../firebase/Auth";
-import { ThemeContext } from "@emotion/react";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -46,15 +46,19 @@ const useStyles = makeStyles((theme) => ({
 
 const TrackDetails = () => {
   const classes = useStyles();
+  const [playingTrack, setPlayingTrack] = useContext(PlayerContext);
   const { currentUser } = useContext(AuthContext);
   const { id } = useParams();
   const [trackDetails, setTrackDetails] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [found, setFound] = useState(false);
   const [error, setError] = useState({
     exists: false,
     message: "",
   });
+
+  const handlePlayingTrack = (track) => {
+    setPlayingTrack(track);
+  };
 
   const handleAddToPlaylist = async (trackId) => {
     return;
@@ -69,8 +73,7 @@ const TrackDetails = () => {
             FirebaseIdToken: userToken,
           },
         });
-        // if (!data) throw "Request for track details failed!";
-        console.log(data);
+        if (!data) throw "Request for track details failed!";
         setTrackDetails(data);
         setError({
           exists: false,
@@ -90,7 +93,7 @@ const TrackDetails = () => {
   }, [currentUser, id]);
 
   if (loading) return <Loading />;
-  // else if (error) return <Error message={error} />;
+  else if (error.exists) return <Error message={error.message} />;
   else
     return (
       trackDetails && (
@@ -114,7 +117,7 @@ const TrackDetails = () => {
           <p>Track Number: {trackDetails?.track_number}</p>
           <Button>Add To PlayList</Button>
           <br />
-          <Button>Play</Button>
+          <Button onClick={() => handlePlayingTrack(trackDetails)}>Play</Button>
           <br />
           <Button
             className="lyrics"
