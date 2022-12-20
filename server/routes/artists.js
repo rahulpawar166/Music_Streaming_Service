@@ -22,25 +22,20 @@ router.get("/:id", auth, async (req, res) => {
     if (id.length === 0) {
       throw "Error: id cannot be an empty string or just spaces!";
     }
-    let spotifyAxiosInstance = await spotifyAxios(req.firebaseUid);
-    let exists = await client.hExists("categoryPlaylist", id);
+    let exists = await client.hExists("artistdetails", id);
     if (exists) {
-      const cached = await client.hGet("categoryPlaylist", id);
-      return res.status(200).json(Object.values(unflatten(JSON.parse(cached))));
+      const cached = await client.hGet("artistdetails", id);
+      return res.status(200).json(unflatten(JSON.parse(cached)));
     } else {
-      const { data } = await spotifyAxiosInstance.get(
-        `https://api.spotify.com/v1/playlists/${id}`,
+      const authAxios = await spotifyAxios(req.firebaseUid);
+      const { data } = await authAxios.get(
+        `https://api.spotify.com/v1/artists/${id}/albums`,
       );
-      if (!data) throw new Error("Spotify API returned no data!");
-      client.hSet(
-        "categoryPlaylist",
-        id,
-        JSON.stringify(flat(data.tracks.items)),
-        {
-          EX: 86400,
-        },
-      );
-      return res.status(200).json(data.tracks.items);
+      if (!data) throw "Spotify API returned no data";
+      client.hSet("artistdetails", id, JSON.stringify(flat(data)), {
+        EX: 86400,
+      });
+      return res.status(200).json(data);
     }
   } catch (e) {
     console.error(e);

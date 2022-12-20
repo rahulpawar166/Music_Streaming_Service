@@ -17,6 +17,11 @@ const useStyles = makeStyles((theme) => ({
   },
   lyrics: {
     whiteSpace: "pre-line",
+    
+  },
+  title: {
+    marginTop: "20px",
+    color: "#008c00",
   },
 }));
 
@@ -54,7 +59,9 @@ const Lyrics = () => {
   else
     return (
       <div>
-        <Typography variant="h3">Lyrics</Typography>
+        <Typography variant="h1" className={classes.title}>
+          Lyrics
+        </Typography>
         <Paper className={classes.lyricsPaper}>
           <Typography className={classes.lyrics} variant="body1">
             {lyricsData && lyricsData}

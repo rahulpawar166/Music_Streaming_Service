@@ -39,6 +39,7 @@ const NavigationMenu = () => {
         return (
           <ListItem button onClick={() => navigate(item.link)} key={item.key}>
             <ListItemIcon>{item.icon}</ListItemIcon>
+
             <ListItemText primary={item.text} />
           </ListItem>
         );
@@ -51,7 +52,7 @@ const NavigationMenu = () => {
         <ListItemIcon>
           <AccountCircleIcon />
         </ListItemIcon>
-        <ListItemText primary={currentUser ? "Profile" : "Sign In"} />
+        <ListItemText primary={currentUser ? "Account" : "Sign In"} />
       </ListItem>
     </List>
   );

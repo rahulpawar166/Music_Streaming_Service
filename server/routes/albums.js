@@ -49,7 +49,7 @@ router.get("/recommendations", auth, async (req, res) => {
         req.firebaseUid,
         JSON.stringify(flat(data.tracks)),
         {
-          EX: 300,
+          EX: 180,
         },
       );
       return res.status(200).json(data.tracks);
@@ -63,6 +63,16 @@ router.get("/recommendations", auth, async (req, res) => {
 router.get("/:id", auth, async (req, res) => {
   try {
     let id = req.params.id;
+    if (!id) {
+      return res.status(400).json({ error: "MUST INPUT ID" });
+    }
+    if (typeof id !== "string") {
+      throw "Error: id must be a string!";
+    }
+    id = id.trim();
+    if (id.length === 0) {
+      throw "Error: id cannot be an empty string or just spaces!";
+    }
     let exists = await client.hExists("albumdetails", id);
     if (exists) {
       const cached = await client.hGet("albumdetails", id);

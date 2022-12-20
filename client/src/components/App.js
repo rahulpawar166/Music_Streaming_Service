@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import PlayerContext from "../components/PlayerContext";
 import Account from "../pages/Account";
 import AlbumDetails from "../pages/AlbumDetails";
+import Artist from "../pages/Artist";
 import Categories from "../pages/Categories";
 import Category from "../pages/Category";
 import CategoryPlaylist from "../pages/CategoryPlaylist";
@@ -69,7 +70,10 @@ function App() {
                 <Route path="/new-releases" element={<NewReleases />} />
                 <Route path="/categories" element={<Categories />} />
                 <Route path="/category/:id" element={<Category />} />
-                <Route path="/categoryplaylist/:id" element={<CategoryPlaylist />} />
+                <Route
+                  path="/categoryplaylist/:id"
+                  element={<CategoryPlaylist />}
+                />
                 <Route path="/album/:id" element={<AlbumDetails />} />
                 <Route path="/" element={<Home />} />
                 <Route path="/library" element={<Library />} />
@@ -77,6 +81,7 @@ function App() {
                 <Route path="/lyrics/:artist/:trackName" element={<Lyrics />} />
                 <Route path="/Recommendations" element={<Recommendations />} />
                 <Route path="/track/:id" element={<TrackDetails />} />
+                <Route path="/artist/:id" element={<Artist />} />
               </Route>
               <Route
                 path="*"
