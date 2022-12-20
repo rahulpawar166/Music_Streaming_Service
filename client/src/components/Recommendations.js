@@ -37,63 +37,59 @@ const useStyles = makeStyles({
 });
 
 const Recommendations = () => {
-  const classes = useStyles();
+  const { currentUser } = useContext(AuthContext);
+  // const [newReleasesData, setNewReleasesData] = useState(null);
+  // const [newReleasesLoading, setNewReleasesLoading] = useState(true);
   const [trackAlbums, setTrackAlbums] = useState();
-
+  const classes = useStyles();
   const [loading, setLoading] = useState(true);
   const [found, setFound] = useState(false);
 
-  const getGenreSeeds = async () => {
-    let seed_artists="4NHQUGzhtTLFvgF5SZesLK"
-    let seed_tracks= "0c6xIDDpzE81m2q797ordA"
-    let seed_genres = encodeURIComponent("rock,hip-hop,pop")
-    const requestInit = {
-      headers: {
-        Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-    };
-
-    try {
-    const response = await axios.get(
-        `https://api.spotify.com/v1/recommendations?seed_artists=${seed_artists}&seed_genres=${seed_genres}&seed_tracks=${seed_tracks}` ,
-        requestInit
-        )
-    
-
-      console.log("we get response");
-      console.log("data=", response.data.tracks);
-
-      setLoading(false);
-      setFound(true);
-      setTrackAlbums(response.data.tracks);
-    } catch (error) {
-      setFound(false);
-      setLoading(false);
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
-    console.log("inside recommendations")
-    getGenreSeeds();
-  }, []);
+    const fetchData = async () => {
+      try {
+        const userToken = await currentUser.getIdToken();
+        const { data } = await axios.get(
+          "http://localhost:3008/albums/recommendations",
+          {
+            headers: {
+              FirebaseIdToken: userToken,
+            },
+          },
+        );
+        if (!data) throw "Failed to fetch search data!";
+       console.log(data)
+        setTrackAlbums(data);
+        setLoading(false);
+        setFound(true);
+      } catch (error) {
+        console.error(error);
+        setFound(true)
+        setLoading(false);
+      }
+    };
+    if (currentUser) fetchData();
+  }, [currentUser]);
 
   const buildCard = (track) => {
     return (
-      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.album.id}>
-        <Card className={classes.card} variant="outlined">
-        <CardActions>
-        <Link to={`/AlbumSong/${track?.album.id}`}>
-          
-          <CardHeader className={classes.titleHead} title={track?.name} />
-          <img src={track?.album.images[0].url} width={200} height={200}/>
-          <br/>
-          <span>{track?.album.artists[0].name}</span>
-          </Link>
+      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.id}>
+          <Card className={classes.card} variant="outlined">
+          <CardActions>
+            <Link to={`/album/${track?.album.id}`}>
+              <CardHeader
+                className={classes.titleHead}
+                title={track?.album.name}
+              />
+              <CardMedia
+                className={classes.media}
+                component="img"
+                image={track?.album.images[0]?.url}
+                title="character image"
+              />
+              <span>{track?.album.artists[0].name}</span>
+            </Link> 
           </CardActions>
-          
         </Card>
       </Grid>
       
