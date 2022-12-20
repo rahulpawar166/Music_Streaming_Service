@@ -42,7 +42,7 @@ router.get("/:id", auth, async (req, res) => {
       } else {
         const authAxios = await spotifyAxios(req.firebaseUid);
         const { data } = await authAxios.get(
-          `https://api.spotify.com/v1/albums/${id}`,
+          `https://api.spotify.com/v1/tracks/${id}`,
         );
         if (!data) throw "Spotify API returned no data";
         client.hSet("tracksdetails", id, JSON.stringify(flat(data)), {
