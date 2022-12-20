@@ -10,9 +10,14 @@ import {
   Grid,
   makeStyles,
   Button,
+  List,
+  ListItem,
+  Divider,
+  ListItemText,
 } from "@material-ui/core";
 
 import { AuthContext } from "../firebase/Auth";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 const useStyles = makeStyles({
   card: {
@@ -47,102 +52,64 @@ const useStyles = makeStyles({
 
 const Playlist = () => {
   const classes = useStyles();
-  const [trackData, setTrackData] = useState([]);
-  const [playlistData, setPlayListData] = useState([]);
+  const [playlistData, setPlayListData] = useState();
   const [loading, setLoading] = useState(true);
   const [found, setFound] = useState(false);
+  const { currentUser } = useContext(AuthContext);
+  const { id } = useParams();
 
-  const getPlayList = async () => {
+  const getPlayList = async (id) => {
     try {
-      const { data } = await axios.post(
-        `http://localhost:3008/playlist/playListData`,
-        { uid: window.localStorage.getItem("currentUser") },
+      const userToken = await currentUser.getIdToken();
+      const { data } = await axios.get(
+        `http://localhost:3008/playlists/${id}`,
+        {
+          headers: {
+            FirebaseIdToken: userToken,
+          },
+        },
       );
       console.log(data);
-      //SET LIST OF ALBBUMS INSIDE PLAYLISTDATA
-      setPlayListData(data.albums);
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
-  const getData = async () => {
-    // debugger;
-    console.log("inside playlist get data");
-    const requestInit = {
-      headers: {
-        Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    };
-
-    let trackId = playlistData;
-    console.log("trackId", trackId);
-    trackId = trackId.join(",");
-    console.log(trackId);
-
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_GET_TRACKS}?ids=${trackId}`,
-        requestInit,
-      );
-
-      console.log("data=", response);
+      setPlayListData(data);
       setLoading(false);
       setFound(true);
-      setTrackData(response.data.tracks);
     } catch (error) {
-      setFound(false);
+      console.log("error", error);
       setLoading(false);
-      console.log(error);
+      setFound(false);
     }
   };
 
   const deleteFromPlaylist = async (trackId) => {
     console.log("button clicked");
-
+    const userToken = await currentUser.getIdToken();
     try {
-      const { data } = await axios.post(
-        `http://localhost:3008/playlist/deleteTrack`,
+      const { data } = await axios.patch(
+        `http://localhost:3008/playlists/removefrom/${id}`,
         {
-          playlistId: window.localStorage.getItem("currentUser"),
-          albumId: trackId,
+          trackId: trackId,
+        },
+
+        {
+          headers: {
+            FirebaseIdToken: userToken,
+          },
         },
       );
-      setPlayListData(data.albums);
+      setPlayListData(data);
+      setLoading(false);
+      setFound(true);
+      console.log(playlistData);
     } catch (error) {
       console.log("error", error);
-    }
-  };
-
-  useEffect(() => {
-    getPlayList();
-  }, []);
-
-  useEffect(() => {
-    if (playlistData.length > 0) {
-      getData();
-    } else {
-      setFound(false);
       setLoading(false);
+      setFound(false);
     }
-  }, [playlistData]);
-
-  const buildCard = (track) => {
-    return (
-      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.id}>
-        <Card className={classes.card} variant="outlined">
-          <CardHeader className={classes.titleHead} title={track?.id} />
-          <CardHeader className={classes.titleHead} title={track?.name} />
-
-          <Button onClick={() => deleteFromPlaylist(track?.id)}>
-            delete From PlayList
-          </Button>
-          <br />
-        </Card>
-      </Grid>
-    );
   };
+
+  useEffect(() => {
+    getPlayList(id);
+  }, [id]);
 
   if (loading) {
     return (
@@ -158,9 +125,24 @@ const Playlist = () => {
       <div>
         <h1>{" tracks"}</h1>
         <br />
-        <Grid container className={classes.grid} spacing={5}>
-          {trackData?.map((track) => buildCard(track))}
-        </Grid>
+        <div>
+          <h1>Playlist : {playlistData?.name}</h1>
+          <List style={{ marginTop: "30px" }}>
+            {playlistData?.tracks?.map((element, idx) => (
+              <ListItem key={element?.idx}>
+                <ListItemText style={{ maxWidth: "25px", color: "white" }}>
+                  {idx + 1}.
+                </ListItemText>
+                <ListItemText style={{ textAlign: "start", color: "white" }}>
+                  {element?.name}
+                </ListItemText>
+                <a onClick={() => deleteFromPlaylist(element?.id)}>
+                  <DeleteIcon />
+                </a>
+              </ListItem>
+            ))}
+          </List>
+        </div>
       </div>
     );
 };

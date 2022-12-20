@@ -64,6 +64,25 @@ const Playlists = () => {
     setPopupOpened(false);
   };
 
+  const deletePlaylist = async (playlistId) => {
+    const userToken = await currentUser.getIdToken();
+    try {
+      const { data: playlistData } = await axios.delete(
+        `http://localhost:3008/playlists/${playlistId}`,
+        {
+          headers: {
+            FirebaseIdToken: userToken,
+          },
+        },
+      );
+      console.log(playlistData);
+      if (!playlistData) throw "No playlists were found for this user!";
+      setUserPlaylists(playlistData);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -96,6 +115,7 @@ const Playlists = () => {
       playlist && (
         <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={playlist._id}>
           <Card className={classes.card} variant="outlined">
+            {/* <Button onClick={deletePlaylist(playlist._id)}>Delete</Button> */}
             <CardActions>
               <Link to={`/playlist/${playlist._id}`}>
                 <CardHeader

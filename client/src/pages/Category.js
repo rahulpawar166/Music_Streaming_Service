@@ -14,35 +14,55 @@ import { useParams } from "react-router-dom";
 import Error from "../components/Error";
 import Loading from "../components/Loading";
 import { AuthContext } from "../firebase/Auth";
+import FadeIn from 'react-fade-in';
 
 const useStyles = makeStyles({
   card: {
     maxWidth: 250,
-    height: "auto",
+    height: "350px",
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 5,
-    border: "1px solid #1e8678",
     boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
+    backgroundColor: "rgba(236, 219, 186, 0.2)"
+  },
+  title: {
+    marginTop: "20px",
+    color: "#346751",
+  },
+  subTitle: {
+    color: "#C84B31",
+    textAlign: "left",
+    marginLeft: "70px"
   },
   titleHead: {
-    borderBottom: "1px solid #1e8678",
-    fontWeight: "bold",
+    color: "#ffffff",
+    fontSize: "5px",
+    height: "auto",
+    overflow: "hidden",
   },
   grid: {
     flexGrow: 1,
     flexDirection: "row",
+    marginLeft: "20px",
+    marginRight: "20px",
+    marginTop: "20px",
+    marginBottom: "20px"
   },
   media: {
-    height: "200px",
-    width: "200px",
-    maxHeight: "200px",
-    maxWidth: "200px",
+    margin: "0 0 0 0",
+  },
+
+  link: {
+    textDecoration: "none"
   },
   button: {
-    // color: "#1e8678",
-    fontWeight: "bold",
-    fontSize: 12,
+    backgroundColor: "#ECDBBA",
+    color: "#161616",
+    '&:hover': {
+      backgroundColor: "#FCDBBB",
+      color: "#161616",
+   }
   },
 });
 
@@ -68,6 +88,7 @@ const Category = () => {
           },
         );
         if (!data) throw "Failed to fetch categories data!";
+        console.log(data)
         setCategoryData(data);
         setLoading(false);
         setError({
@@ -88,22 +109,27 @@ const Category = () => {
   const buildCard = (playlist) => {
     return (
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={playlist?.id}>
+        <FadeIn>
         <Card className={classes.card} variant="outlined">
           <CardActions>
-            <Link to={`/categoryplaylist/${playlist?.id}`}>
-              <CardHeader
-                className={classes.titleHead}
-                title={playlist?.name}
-              />
-              <CardMedia
+            <Link className={classes.link} to={`/categoryplaylist/${playlist?.id}`}>
+              
+            <CardMedia
                 className={classes.media}
                 component="img"
                 image={playlist?.images[0]?.url}
                 title={playlist?.name}
               />
+              
+              <CardHeader
+                className={classes.titleHead}
+                title={playlist?.name > 30 ? playlist?.name.substring(0, 27) + "..." : playlist?.name.substring(0, 30)}
+              />
+              
             </Link>
           </CardActions>
         </Card>
+        </FadeIn>
       </Grid>
     );
   };
@@ -113,7 +139,7 @@ const Category = () => {
   else
     return (
       <div>
-        <h1>Categories</h1>
+        <h1>Category Playlists</h1>
         <Grid container className={classes.grid} spacing={5}>
           {categoryData && categoryData.map((playlist) => buildCard(playlist))}
         </Grid>

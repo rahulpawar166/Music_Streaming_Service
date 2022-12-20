@@ -4,13 +4,13 @@ main {
 .logo {
   margin-bottom: -2em;
 }
-h1 {
+/* h1 {
   font-size: 30pt;
   color: #5c5cb7;
 }
 h2 {
   color: #5c5cb7;
-}
+} */
 .active {
   font-weight: bold;
   color: red !important;
@@ -24,11 +24,12 @@ input {
   height: 20px;
   width: 200px;
 }
-span {
+/* span {
   font-size: 12pt;
   font-weight: bold;
-  color: #4e4eb2;
-}
+   color: #ffffff; 
+} */
+
 .forgotPassword {
   background: none !important;
   border: none !important;
@@ -112,4 +113,18 @@ span {
     transform: translate(500px, 100px) rotate(-10deg);
     border-radius: 76% 24% 33% 67% / 68% 55% 45% 32%;
   }
+}
+
+
+.searchBar {
+  background-color: rgb(67, 137, 62);
+  width: 20%;
+  height: 30px;
+  padding-left: 10px;
+  color: white;
+  font-size: 14px;
+  font-weight: regular;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  border: none;
 }

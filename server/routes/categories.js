@@ -39,7 +39,7 @@ router.get("/:id", auth, async (req, res) => {
     let exists = await client.hExists("categorydetails", id);
     if (exists) {
       const cached = await client.hGet("categorydetails", id);
-      return res.status(200).json(unflatten(JSON.parse(cached)));
+      return res.status(200).json(Object.values(unflatten(JSON.parse(cached))));
     } else {
       const { data } = await spotifyAxiosInstance.get(
         `https://api.spotify.com/v1/browse/categories/${id}/playlists?country=US&limit=50`,

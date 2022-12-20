@@ -32,6 +32,34 @@ router.get("/new", auth, async (req, res) => {
   }
 });
 
+router.get("/recommendations", auth, async (req, res) => {
+  try {
+    let exists = await client.hExists("recommendations", req.firebaseUid);
+    if (exists) {
+      const cached = await client.hGet("recommendations", req.firebaseUid);
+      return res.status(200).json(Object.values(unflatten(JSON.parse(cached))));
+    } else {
+      const authAxios = await spotifyAxios(req.firebaseUid);
+      const { data } = await authAxios.get(
+        "https://api.spotify.com/v1/recommendations?seed_artists=4NHQUGzhtTLFvgF5SZesLK&seed_genres=rock%2Chip-hop%2Cpop&seed_tracks=0c6xIDDpzE81m2q797ordA",
+      );
+      if (!data) throw "Spotify API returned no data";
+      client.hSet(
+        "recommendations",
+        req.firebaseUid,
+        JSON.stringify(flat(data.tracks)),
+        {
+          EX: 300,
+        },
+      );
+      return res.status(200).json(data.tracks);
+    }
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: e });
+  }
+});
+
 router.get("/:id", auth, async (req, res) => {
   try {
     let id = req.params.id;

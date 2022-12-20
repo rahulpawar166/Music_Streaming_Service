@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../firebase/Auth";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import FadeIn from 'react-fade-in';
 import {
   Card,
   CardActions,
@@ -19,33 +20,63 @@ import Loading from "./Loading";
 import logo from "../icons/incognitomode2.png";
 
 const useStyles = makeStyles({
+  logo: {
+    marginTop: "20px",
+    height: 100,
+    width: 100,
+  },
+
+  search: {
+    width: "300px"
+  },
+
   card: {
     maxWidth: 250,
-    height: "auto",
+    height: "350px",
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 5,
-    border: "1px solid #1e8678",
     boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
+    backgroundColor: "rgba(236, 219, 186, 0.2)"
+  },
+  title: {
+    marginTop: "20px",
+    color: "#346751",
+  },
+  subTitle: {
+    color: "#C84B31",
+    textAlign: "left",
+    marginLeft: "70px"
   },
   titleHead: {
-    borderBottom: "1px solid #1e8678",
-    fontWeight: "bold",
+    color: "#ffffff",
+    fontSize: "5px",
+    height: "auto",
+    overflow: "hidden",
   },
   grid: {
     flexGrow: 1,
     flexDirection: "row",
+    marginLeft: "0px",
+    marginRight: "20px"
   },
   media: {
-    height: "200px",
-    width: "200px",
-    maxHeight: "200px",
-    maxWidth: "200px",
+    margin: "0 0 0 0",
+  },
+  
+  link: {
+    textDecoration: "none"
+  },
+  trackLink: {
+    textDecoration: "none"
   },
   button: {
-    // color: "#1e8678",
-    fontWeight: "bold",
-    fontSize: 12,
+    backgroundColor: "#ECDBBA",
+    color: "#161616",
+    '&:hover': {
+      backgroundColor: "#FCDBBB",
+      color: "#161616",
+   }
   },
 });
 
@@ -60,6 +91,8 @@ const Search = () => {
   const { currentUser } = useContext(AuthContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState(undefined);
+  const [found, setFound] = useState(false);
+  const [musicAlbums, setMusicAlbums] = useState([]);
 
   const handleFileUpload = async (e) => {
     try {
@@ -137,19 +170,22 @@ const Search = () => {
   const buildAlbumCard = (album) => {
     return (
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={album?.id}>
+        <FadeIn>
         <Card className={classes.card} variant="outlined">
           <CardActions>
-            <Link to={`/album/${album?.id}`}>
-              <CardHeader className={classes.titleHead} title={album?.name} />
-              <CardMedia
+            <Link className={classes.link} to={`/album/${album?.id}`}>
+            <CardMedia
                 className={classes.media}
                 component="img"
                 image={album?.images[0]?.url}
                 title={album?.name}
               />
+              <CardHeader className={classes.titleHead} title={album?.name > 30 ? album?.name.substring(0, 27) + "..." : album?.name.substring(0, 30)} />
+              
             </Link>
           </CardActions>
         </Card>
+        </FadeIn>
       </Grid>
     );
   };
@@ -157,19 +193,22 @@ const Search = () => {
   const buildTrackCard = (track) => {
     return (
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.id}>
+        <FadeIn>
         <Card className={classes.card} variant="outlined">
           <CardActions>
-            <Link to={`/track/${track?.id}`}>
-              <CardHeader className={classes.titleHead} title={track?.name} />
-              <CardMedia
+            <Link className={classes.link} to={`/track/${track?.id}`}>
+            <CardMedia
                 className={classes.media}
                 component="img"
                 image={track?.album.images[0].url}
                 title={track?.name}
               />
+              <CardHeader className={classes.titleHead} title={track?.name > 30 ? track?.name.substring(0, 27) + "..." : track?.name.substring(0, 30)} />
+              
             </Link>
           </CardActions>
         </Card>
+        </FadeIn>
       </Grid>
     );
   };
@@ -177,19 +216,23 @@ const Search = () => {
   const buildArtistCard = (artist) => {
     return (
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={artist?.id}>
+        <FadeIn>
         <Card className={classes.card} variant="outlined">
           <CardActions>
-            <Link to={`/artist/${artist?.id}`}>
-              <CardHeader className={classes.titleHead} title={artist?.name} />
-              <CardMedia
+            <Link className={classes.link} to={`/artist/${artist?.id}`}>
+            <CardMedia
                 className={classes.media}
                 component="img"
                 image={artist?.images[0]?.url}
                 title={artist?.name}
               />
+              <CardHeader className={classes.titleHead} title={artist?.name > 30 ? artist?.name.substring(0, 27) + "..." : artist?.name.substring(0, 30)
+              } />
+              
             </Link>
           </CardActions>
         </Card>
+        </FadeIn>
       </Grid>
     );
   };
@@ -198,11 +241,12 @@ const Search = () => {
   else {
     return (
       <div className="fancy-border">
-        <img className="logo" src={logo} alt="logo" width={100} height={100} />
-        <h1>{"Search"}</h1>
-        <SearchSongs searchValue={searchValue} />
+        <a href="/"><img className={classes.logo} src={logo} alt="logo" width={100} height={100} /></a>
+        <h1 className={classes.title}>Search</h1>
+        <SearchSongs className={classes.search} searchValue={searchValue}/>
         <Box>
           <Button
+           className={classes.button}
             component="label"
             variant="outlined"
             startIcon={<CloudUploadIcon />}
@@ -224,7 +268,7 @@ const Search = () => {
           <Grid container className={classes.grid} spacing={5}>
             {searchData.tracks && searchData.tracks.items && (
               <Grid item className={classes.grid}>
-                <h2>Tracks</h2>
+                <h2 className={classes.subTitle}>Tracks</h2>
                 <Grid container className={classes.grid} spacing={5}>
                   {searchData.tracks.items.map((track) =>
                     buildTrackCard(track),
@@ -234,7 +278,7 @@ const Search = () => {
             )}
             {searchData.albums && searchData.albums.items && (
               <Grid item className={classes.grid}>
-                <h2>Albums</h2>
+                <h2 className={classes.subTitle}>Albums</h2>
                 <Grid container className={classes.grid} spacing={5}>
                   {searchData.albums.items.map((album) =>
                     buildAlbumCard(album),
@@ -244,7 +288,7 @@ const Search = () => {
             )}
             {searchData.artists && searchData.artists.items && (
               <Grid item className={classes.grid}>
-                <h2>Artists</h2>
+                <h2 className={classes.subTitle}>Artists</h2>
                 <Grid container className={classes.grid} spacing={5}>
                   {searchData.artists.items.map((artist) =>
                     buildArtistCard(artist),
