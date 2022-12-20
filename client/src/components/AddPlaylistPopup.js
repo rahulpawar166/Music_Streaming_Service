@@ -30,6 +30,7 @@ const AddPlaylistPopup = (props) => {
     props.handleClose();
     try {
       const userToken = await currentUser.getIdToken();
+      console.log(props.track);
       const { data } = await axios.post(
         `http://localhost:3008/playlists/addto/${value}`,
         {
@@ -41,33 +42,32 @@ const AddPlaylistPopup = (props) => {
           },
         },
       );
-      if (!data) throw "Add to Playlist  request failed!";
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
-  const getPlaylistName = async () => {
-    const userToken = await currentUser.getIdToken();
-    try {
-      const { data } = await axios.get(
-        `http://localhost:3008/playlists/owned`,
-        {
-          headers: {
-            FirebaseIdToken: userToken,
-          },
-        },
-      );
-      console.log(data);
-      setAllPlayListData(data);
+      if (!data) throw "Add to Playlist request failed!";
     } catch (error) {
       console.log("error", error);
     }
   };
 
   useEffect(() => {
-    getPlaylistName();
-  }, []);
+    const getPlaylistName = async () => {
+      const userToken = await currentUser.getIdToken();
+      try {
+        const { data } = await axios.get(
+          `http://localhost:3008/playlists/owned`,
+          {
+            headers: {
+              FirebaseIdToken: userToken,
+            },
+          },
+        );
+        console.log(data);
+        setAllPlayListData(data);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    if (currentUser) getPlaylistName();
+  }, [currentUser]);
 
   return (
     <Dialog open={props.open}>

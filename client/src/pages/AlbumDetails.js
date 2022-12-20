@@ -77,6 +77,7 @@ const AlbumDetails = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [playingTrack, setPlayingTrack] = useContext(PlayerContext);
+  const [trackToAdd, setTrackToAdd] = useState(null);
   const [popupOpened, setPopupOpened] = useState(false);
 
   const handlePopupOpened = () => {
@@ -87,8 +88,8 @@ const AlbumDetails = () => {
     setPopupOpened(false);
   };
 
-  const handleAddToPlaylist = async (track) => {
-    const userToken = await currentUser.getIdToken();
+  const handleAddToPlaylist = async (element) => {
+    setTrackToAdd(element);
     handlePopupOpened();
   };
 
@@ -121,83 +122,96 @@ const AlbumDetails = () => {
   else
     return (
       albumDetails && (
-        <div key={albumDetails.id}>
-          <h1>{albumDetails.name}</h1>
+        <>
+          {trackToAdd && (
+            <AddPlaylistPopup
+              track={trackToAdd}
+              open={popupOpened}
+              handleClose={handlePopupClosed}
+            />
+          )}
+          <div key={albumDetails.id}>
+            <h1>{albumDetails.name}</h1>
+            <img
+              className="Album"
+              src={albumDetails.images[0].url}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "/images/no-image.jpg";
+              }}
+              alt={albumDetails.name}
+            />
+            <p style={{ textAlign: "center" }}>
+              Number of Tracks:{" "}
+              {`${albumDetails.total_tracks} ${
+                parseInt(albumDetails.total_tracks) === 1 ? "Song" : "Songs"
+              }`}
+            </p>
+            <br />
 
-          <img
-            className="Album"
-            src={albumDetails.images[0].url}
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = "/images/no-image.jpg";
-            }}
-            alt={albumDetails.name}
-          />
-          <p style={{ textAlign: "center" }}>
-            Number of Tracks:{" "}
-            {`${albumDetails.total_tracks} ${
-              parseInt(albumDetails.total_tracks) === 1 ? "Song" : "Songs"
-            }`}
-          </p>
-          <br />
+            <TableContainer
+              container="true"
+              className={classes.grid}
+              spacing={5}
+            >
+              {/* {albumDetails.tracks.items.map((track) => */}
+              <div style={{ maxWidth: "1500px" }}>
+                <h1 style={{ textAlign: "center" }}>Track</h1>
+                <List style={{ marginTop: "30px" }}>
+                  {albumDetails.tracks.items?.map((element, idx) => (
+                    <div>
+                      <ListItem key={element?.id}>
+                        <ListItemText style={{ maxWidth: "25px" }}>
+                          {idx + 1}.
+                        </ListItemText>
+                        <ListItemText
+                          style={{
+                            maxWidth: "1150px",
+                            textAlign: "start",
+                            textDecoration: "none",
+                          }}
+                        >
+                          <Link to={`/track/${element?.id}`}>
+                            {element.name}
+                          </Link>
+                        </ListItemText>
 
-          <TableContainer container="true" className={classes.grid} spacing={5}>
-            {/* {albumDetails.tracks.items.map((track) => */}
-            <div style={{ maxWidth: "1500px" }}>
-              <h1 style={{ textAlign: "center" }}>Track</h1>
-              <List style={{ marginTop: "30px" }}>
-                {albumDetails.tracks.items?.map((element, idx) => (
-                  <div>
-                    <AddPlaylistPopup
-                      track={{ element }}
-                      open={popupOpened}
-                      handleClose={handlePopupClosed}
-                    />
+                        <Button
+                          variant="contained"
+                          style={{ textAlign: "start" }}
+                          onClick={() =>
+                            handleAddToPlaylist({
+                              imageUrl: albumDetails.images[0].url,
+                              ...element,
+                            })
+                          }
+                        >
+                          Add To PlayList
+                        </Button>
 
-                    <ListItem key={element?.id}>
-                      <ListItemText style={{ maxWidth: "25px" }}>
-                        {idx + 1}.
-                      </ListItemText>
-                      <ListItemText
-                        style={{
-                          maxWidth: "1150px",
-                          textAlign: "start",
-                          textDecoration: "none",
-                        }}
-                      >
-                        <Link to={`/track/${element?.id}`}>{element.name}</Link>
-                      </ListItemText>
-
-                      <Button
-                        variant="contained"
-                        style={{ textAlign: "start" }}
-                        onClick={() => handleAddToPlaylist(element)}
-                      >
-                        Add To PlayList
-                      </Button>
-
-                      <br />
-                      <Button onClick={() => handlePlayingTrack(element)}>
-                        Play
-                      </Button>
-                      <br />
-                      <Button
-                        className="lyrics"
-                        href={`/lyrics/${encodeURIComponent(
-                          albumDetails?.artists[0]?.name,
-                        )}/${encodeURIComponent(element?.name)}`}
-                      >
-                        Lyrics
-                      </Button>
-                    </ListItem>
-                  </div>
-                ))}
-              </List>
-            </div>
-            {/* buildCard(albumDetails.artists[0].name, track), */}
-            {/* )} */}
-          </TableContainer>
-        </div>
+                        <br />
+                        <Button onClick={() => handlePlayingTrack(element)}>
+                          Play
+                        </Button>
+                        <br />
+                        <Button
+                          className="lyrics"
+                          href={`/lyrics/${encodeURIComponent(
+                            albumDetails?.artists[0]?.name,
+                          )}/${encodeURIComponent(element?.name)}`}
+                        >
+                          Lyrics
+                        </Button>
+                      </ListItem>
+                    </div>
+                  ))}
+                </List>
+              </div>
+              {/* buildCard(albumDetails.artists[0].name, track), */}
+              {/* )} */}
+            </TableContainer>
+          </div>
+        </>
       )
     );
 };
