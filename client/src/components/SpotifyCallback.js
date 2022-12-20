@@ -29,6 +29,7 @@ const SpotifyCallback = (props) => {
       if (data.success) {
         setCookie("spotify_connected", "true");
         setLoading(false);
+        window.localStorage.setItem("accessToken", data.access_token)
       }
     };
     if (searchParams.has("code") && currentUser) generateToken();

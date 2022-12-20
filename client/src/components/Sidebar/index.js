@@ -11,9 +11,6 @@ import NavigationMenu from "./NavigationMenu";
 
 const drawerWidth = "12rem";
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
   drawerButton: {
     width: "100%",
   },
@@ -21,8 +18,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
     ...theme.mixins.toolbar,
   },
   drawer: {
@@ -43,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     overflowX: "hidden",
-    width: theme.spacing(7) + 1,
+    width: theme.spacing(7),
   },
 }));
 
@@ -81,7 +76,6 @@ const Sidebar = () => {
       <Divider />
       <NavigationMenu />
       <Divider />
-      {/* <PlaylistList /> */}
     </Drawer>
   );
 };
