@@ -7,6 +7,8 @@ import Alert from "@material-ui/lab/Alert";
 import { doSignOut } from "../firebase/FirebaseFunctions";
 import { useNavigate } from "react-router-dom";
 import { makeStyles } from "@material-ui/core";
+import logo from "../icons/incognitomode2.png";
+import ContactlessIcon from '@material-ui/icons/Contactless';
 
 const useStyles = makeStyles({
   alert: {
@@ -14,6 +16,34 @@ const useStyles = makeStyles({
     margin: "0 auto",
   },
   pageRoot: {},
+  logo: {
+    marginTop: "20px",
+    height: 100,
+    width: 100,
+  },
+
+  title: {
+    marginTop: "20px",
+    color: "#346751",
+  },
+  subTitle: {
+    color: "#C84B31",
+    textAlign: "center"
+  },
+
+  description: {
+    color: "#ffffff",
+    textAlign: "center"
+  },
+
+  connectSpotify: {
+    color: "#ffffff",
+    backgroundColor: "#02A82F",
+    '&:hover': {
+      backgroundColor: "#038B28",
+    }
+  },
+
 });
 
 const Account = () => {
@@ -48,11 +78,18 @@ const Account = () => {
   let connected = cookies.spotify_connected === "true";
   return (
     <Box className={classes.pageRoot}>
-      <h1>
+      <a href="/"><img className={classes.logo} src={logo} alt="logo" width={100} height={100} /></a>
+      <h1 className={classes.title}>Account</h1>
+      <h2 className={classes.subTitle}>
         {currentUser
-          ? `Username: ${currentUser.displayName}`
+          ?`Hello ${currentUser.displayName},`
           : "Not logged in!"}
-      </h1>
+      </h2>
+      <p className={classes.description}>Welcome to Incognito,<br/>
+          Incognito provides music streaming service, and to enjoy this music service we need your Spotify Premium <br/>
+          account to get connected with our server. So please take some moment and connect your Spotify Premium <br/>
+          acoount with us and enjoy seamless music streaming by Incognito!!! 
+      </p>
       {!connected && (
         <Alert className={classes.alert} severity="error">
           Please connect your Spotify account! Incognito requires a Spotify
@@ -60,15 +97,17 @@ const Account = () => {
         </Alert>
       )}
       <br />
-      <Button
+      <Button 
+      className={classes.connectSpotify}
         variant={connected ? "contained" : "contained"}
         onClick={connected ? disconnectSpotify : generateSpotifyToken}
+        startIcon={<ContactlessIcon />}
       >
         {connected ? "Disconnect Spotify" : "Connect your Spotify"}
       </Button>
       <br />
       <br />
-      <Button variant="contained" color="secondary" onClick={handleSignOut}>
+      <Button className={classes.signout} variant="contained" color="secondary" onClick={handleSignOut}>
         Sign Out
       </Button>
     </Box>
