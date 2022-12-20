@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Paper, makeStyles, Button, Typography } from "@material-ui/core";
 import { AuthContext } from "../firebase/Auth";
+import AddPlaylistPopup from "../components/AddPlaylistPopup";
 
 const useStyles = makeStyles((theme) => ({
   trackPaper: {
@@ -83,17 +84,28 @@ const TrackDetails = () => {
   const { id } = useParams();
   const [trackDetails, setTrackDetails] = useState(null);
   const [loading, setLoading] = useState(true);
+
   const [error, setError] = useState({
     exists: false,
     message: "",
   });
+  const [popupOpened, setPopupOpened] = useState(false);
+
+  const handlePopupOpened = () => {
+    setPopupOpened(true);
+  };
+
+  const handlePopupClosed = () => {
+    setPopupOpened(false);
+  };
+
+  const handleAddToPlaylist = async (track) => {
+    const userToken = await currentUser.getIdToken();
+    handlePopupOpened();
+  };
 
   const handlePlayingTrack = (track) => {
     setPlayingTrack(track);
-  };
-
-  const handleAddToPlaylist = async (trackId) => {
-    return;
   };
 
   useEffect(() => {
@@ -130,6 +142,11 @@ const TrackDetails = () => {
     return (
       trackDetails && (
         <Paper variant="outlined" className={classes.trackPaper}>
+          <AddPlaylistPopup
+            open={popupOpened}
+            handleClose={handlePopupClosed}
+            track={{ trackDetails }}
+            />
           <Typography className={classes.title} variant="h1">
             {trackDetails?.name}
           </Typography>
@@ -141,18 +158,9 @@ const TrackDetails = () => {
             src={trackDetails?.album?.images[0]?.url}
             alt={trackDetails?.name}
           />
-          {/* <p className={classes.description}>Popularity: {trackDetails?.popularity}</p>
-          <p className={classes.description}>
-            Length:{" "}
-            {trackDetails?.duration_ms
-              ? `${new Date(trackDetails.duration_ms).getMinutes()}:${new Date(
-                  trackDetails.duration_ms,
-                ).getSeconds()}`
-              : "N/A"}
-          </p>
-          <p className={classes.description}>Track Number: {trackDetails?.track_number}</p> */}
+          
           <br />
-          <Button className={classes.addToPlaylistBtn}>Add To PlayList</Button>
+          <Button className={classes.addToPlaylistBtn} onClick={() => handleAddToPlaylist(trackDetails)}>Add To PlayList</Button>
 
           <Button
             className={classes.playBtn}
