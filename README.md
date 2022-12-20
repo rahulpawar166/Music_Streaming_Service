@@ -4,7 +4,6 @@
 - This project uses ReactJS, Firebase, ExpressJS, Redis, MongoDB, and Spotify API.
 
 # Installation
-
 - ImageMagick
 - MongoDb
 -- Install the latest version of MongoDB Community Server(package msi)<br/>
@@ -27,7 +26,6 @@
 5. Run `npm start` to start the router
 
 # Credentials
-
 - In order to use this application, you must have a Spotify Account (Premium preferred)
 Username: ___
 <br/>Password: ___<br/>
