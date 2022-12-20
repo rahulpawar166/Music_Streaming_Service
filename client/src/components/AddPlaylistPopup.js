@@ -1,19 +1,16 @@
-import { useState, useContext, useEffect } from "react";
-import axios from "axios";
+import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormLabel from "@material-ui/core/FormLabel";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import Checkbox from "@material-ui/core/Checkbox";
 import DialogTitle from "@mui/material/DialogTitle";
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../firebase/Auth";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControl from "@material-ui/core/FormControl";
-import FormLabel from "@material-ui/core/FormLabel";
-import { element } from "prop-types";
 
 const AddPlaylistPopup = (props) => {
   const [value, setValue] = useState("");

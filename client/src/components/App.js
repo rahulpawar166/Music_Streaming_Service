@@ -10,7 +10,6 @@ import Category from "../pages/Category";
 import CategoryPlaylist from "../pages/CategoryPlaylist";
 import ForgotPassword from "../pages/ForgotPassword";
 import Home from "../pages/Home";
-import IndPlayList from "../pages/IndPlayList";
 import Library from "../pages/Library";
 import NewReleases from "../pages/NewReleases";
 import Playlist from "../pages/Playlist";
@@ -69,7 +68,10 @@ function App() {
                 <Route path="/new-releases" element={<NewReleases />} />
                 <Route path="/categories" element={<Categories />} />
                 <Route path="/category/:id" element={<Category />} />
-                <Route path="/categoryplaylist/:id" element={<CategoryPlaylist />} />
+                <Route
+                  path="/categoryplaylist/:id"
+                  element={<CategoryPlaylist />}
+                />
                 <Route path="/album/:id" element={<AlbumDetails />} />
                 <Route path="/" element={<Home />} />
                 <Route path="/library" element={<Library />} />

@@ -10,9 +10,9 @@ const createPlaylist = async (ownerId, name, public, tracks) => {
   const playlistCollection = await playlists();
   const result = await playlistCollection.insertOne({
     ownerId: ownerId,
-    name: name,
-    cover: "/images/default-playlist-cover.png",
-    public: public,
+    name: name || "New Playlist",
+    cover: "/images/default-cover.jpg",
+    public: public || false,
     tracks: tracks || [],
   });
   if (!result.acknowledged) throw `Inserting playlist ${name} failed`;
