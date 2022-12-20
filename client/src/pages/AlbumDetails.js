@@ -24,33 +24,60 @@ import TableContainer from "@mui/material/TableContainer";
 import AddPlaylistPopup from "../components/AddPlaylistPopup";
 
 const useStyles = makeStyles({
-  card: {
-    maxWidth: 250,
-    height: "auto",
+
+  albumImg:{
+    width:"30%",
+    height:"30%",
+    objectFit:"cover",
+    borderRadius:"20px",
+  },
+  
+  title: {
+    marginTop: "20px",
+    color: "#ffffff",
+  },
+  subTitle: {
+    color: "#C84B31",
+    textAlign: "center",
+  },
+
+  link: {
+    textDecoration: "none",
+    color:"white"
+  },
+
+  addToPlaylistBtn: {
+    backgroundColor: "#ECDBBA",
+    color: "#161616",
+    '&:hover': {
+      backgroundColor: "#FCDBBB",
+      color: "#161616",
+   }
+  },
+
+  playBtn: {
+    color: "#ffffff",
+    marginLeft: "50px",
+    backgroundColor: "#02A82F",
+    '&:hover': {
+      backgroundColor: "#038B28",
+    }
+  },
+
+  lyricsBtn: {
+    backgroundColor: "#E63467",
+    marginLeft: "50px",
+    color: "#ffffff",
+    '&:hover': {
+      backgroundColor: "#E1114D",
+   }
+  },
+
+  tableContainer: {
+    backgroundColor: "#262626",
     marginLeft: "auto",
-    marginRight: "auto",
-    borderRadius: 5,
-    border: "1px solid #1e8678",
-    boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
-  },
-  titleHead: {
-    borderBottom: "1px solid #1e8678",
-    fontWeight: "bold",
-  },
-  grid: {
-    flexGrow: 1,
-    flexDirection: "row",
-  },
-  media: {
-    height: "200px",
-    width: "200px",
-    maxHeight: "200px",
-    maxWidth: "200px",
-  },
-  button: {
-    fontWeight: "bold",
-    fontSize: 12,
-  },
+    marginTop: "30px",
+  }
 });
 const addToPlaylist = async (trackId, trackname, img_url) => {
   try {
@@ -122,10 +149,10 @@ const AlbumDetails = () => {
     return (
       albumDetails && (
         <div key={albumDetails.id}>
-          <h1>{albumDetails.name}</h1>
+          <h1 className={classes.title}>{albumDetails.name}</h1>
 
           <img
-            className="Album"
+             className={classes.albumImg}
             src={albumDetails.images[0].url}
             onError={(e) => {
               e.target.onerror = null;
@@ -133,19 +160,19 @@ const AlbumDetails = () => {
             }}
             alt={albumDetails.name}
           />
-          <p style={{ textAlign: "center" }}>
+          {/* <p style={{ textAlign: "center" }}>
             Number of Tracks:{" "}
             {`${albumDetails.total_tracks} ${
               parseInt(albumDetails.total_tracks) === 1 ? "Song" : "Songs"
             }`}
-          </p>
+          </p> */}
           <br />
 
-          <TableContainer container="true" className={classes.grid} spacing={5}>
+          <TableContainer container="true" className={classes.tableContainer} spacing={5}>
             {/* {albumDetails.tracks.items.map((track) => */}
             <div style={{ maxWidth: "1500px" }}>
-              <h1 style={{ textAlign: "center" }}>Track</h1>
-              <List style={{ marginTop: "30px" }}>
+              {/* <h2 className={classes.subTitle} style={{ textAlign: "center" }}>Track</h2> */}
+              <List className={classes.list} style={{ marginTop: "10px" }}>
                 {albumDetails.tracks.items?.map((element, idx) => (
                   <div>
                     <AddPlaylistPopup
@@ -153,8 +180,8 @@ const AlbumDetails = () => {
                       handleClose={handlePopupClosed}
                       track={{ element }}
                     />
-                    <ListItem key={element?.id}>
-                      <ListItemText style={{ maxWidth: "25px" }}>
+                    <ListItem className={classes.listItem}  key={element?.id}>
+                      <ListItemText className={classes.link} style={{ maxWidth: "25px" }}>
                         {idx + 1}.
                       </ListItemText>
                       <ListItemText
@@ -164,10 +191,11 @@ const AlbumDetails = () => {
                           textDecoration: "none",
                         }}
                       >
-                        <Link to={`/track/${element?.id}`}>{element.name}</Link>
+                      <Link className={classes.link} to={`/track/${element?.id}`}>{element.name}</Link>
                       </ListItemText>
 
                       <Button
+                       className={classes.addToPlaylistBtn}
                         variant="contained"
                         style={{ textAlign: "start" }}
                         onClick={() => handleAddToPlaylist(element)}
@@ -176,12 +204,12 @@ const AlbumDetails = () => {
                       </Button>
 
                       <br />
-                      <Button onClick={() => handlePlayingTrack(element)}>
+                      <Button className={classes.playBtn} onClick={() => handlePlayingTrack(element)}>
                         Play
                       </Button>
                       <br />
                       <Button
-                        className="lyrics"
+                         className={classes.lyricsBtn}
                         href={`/lyrics/${encodeURIComponent(
                           albumDetails?.artists[0]?.name,
                         )}/${encodeURIComponent(element?.name)}`}
