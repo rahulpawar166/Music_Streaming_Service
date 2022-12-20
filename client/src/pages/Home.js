@@ -189,7 +189,7 @@ const Home = () => {
         <h1 className={classes.title}>Home</h1>
         <Grid container xs={12}>
           <Grid item className={classes.grid}>
-            <Button className={classes.button} href={`/Recommendations`}>
+            <Button className={classes.button} href={`/recommendations`}>
               Want New Music?
             </Button>
 

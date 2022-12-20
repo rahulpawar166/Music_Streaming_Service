@@ -1,18 +1,16 @@
-import { useState, useContext, useEffect } from "react";
-import axios from "axios";
+import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormLabel from "@material-ui/core/FormLabel";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import Checkbox from "@material-ui/core/Checkbox";
 import DialogTitle from "@mui/material/DialogTitle";
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../firebase/Auth";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControl from "@material-ui/core/FormControl";
-import FormLabel from "@material-ui/core/FormLabel";
 
 const AddPlaylistPopup = (props) => {
   const [value, setValue] = useState("");
@@ -20,8 +18,6 @@ const AddPlaylistPopup = (props) => {
   const { currentUser } = useContext(AuthContext);
 
   const handleChange = async (event) => {
-    // debugger;
-    console.log("set value called");
     setValue(event.target.value);
     console.log(value);
   };
@@ -30,7 +26,6 @@ const AddPlaylistPopup = (props) => {
     props.handleClose();
     try {
       const userToken = await currentUser.getIdToken();
-      console.log("playlist value=", value, props.track);
       const { data } = await axios.post(
         `http://localhost:3008/playlists/addto/${value}`,
         {
@@ -44,33 +39,30 @@ const AddPlaylistPopup = (props) => {
       );
       if (!data) throw "Add to Playlist  request failed!";
     } catch (error) {
-      console.log("error", error);
+      console.error(error);
     }
     setValue("");
   };
 
-  const getPlaylistName = async () => {
-    const userToken = await currentUser.getIdToken();
-    try {
-      const { data } = await axios.get(
-        `http://localhost:3008/playlists/owned`,
-        {
-          headers: {
-            FirebaseIdToken: userToken,
-          },
-        },
-      );
-      console.log(data);
-      setAllPlayListData(data);
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
   useEffect(() => {
-    getPlaylistName();
-    console.log(props.track);
-  }, []);
+    const getPlaylistName = async () => {
+      const userToken = await currentUser.getIdToken();
+      try {
+        const { data } = await axios.get(
+          `http://localhost:3008/playlists/owned`,
+          {
+            headers: {
+              FirebaseIdToken: userToken,
+            },
+          },
+        );
+        setAllPlayListData(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (currentUser) getPlaylistName();
+  }, [currentUser]);
 
   return (
     <Dialog open={props.open}>
