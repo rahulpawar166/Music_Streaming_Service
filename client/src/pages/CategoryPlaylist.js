@@ -1,10 +1,34 @@
-import React, { useEffect, useState,useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
+import Error from "../components/Error";
+import Loading from "../components/Loading";
 import { Link } from "react-router-dom";
+import PlayerContext from "../components/PlayerContext";
 import { useParams } from "react-router-dom";
-import {  Card, CardHeader, Grid, makeStyles, CardMedia, Button } from "@material-ui/core";
-import DefaultImage from "../img/DefaultImage.jpg";
-import { AuthProvider, AuthContext } from "../firebase/Auth";
+import {
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  Grid,
+  makeStyles,
+  Button,
+  List,
+  ListItem,
+  Divider ,
+  ListItemText
+} from "@material-ui/core";
+
+// import { Card, CardHeader, Grid, makeStyles, Button } from "@material-ui/core";
+import { AuthContext } from "../firebase/Auth"; 
+// import Table from '@mui/material/Table';
+// import TableBody from '@mui/material/TableBody';
+// import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+// import TableHead from '@mui/material/TableHead';
+// import TableRow from '@mui/material/TableRow';
+// import Paper from '@mui/material/Paper';
 
 const useStyles = makeStyles({
   card: {
@@ -36,81 +60,61 @@ const useStyles = makeStyles({
     fontSize: 12,
   },
 });
-
+const addToPlaylist = async (trackId,trackname,img_url) => {
+    
+  try {
+    const { data } = await axios.post(
+      `http://localhost:3008/playlist/addTrack`,{
+        uid:window.localStorage.getItem("currentUser"),  
+        albumId:trackId,
+        name:window.localStorage.getItem("currentPlaylist"),
+        trackname:trackname,
+        img_url:img_url
+      }
+    );
+  } catch (error) {
+    console.log("error", error);
+  }
+};
 const CategoryPlaylist = () => {
   const classes = useStyles();
-  // const {currentUser} = useContext(AuthContext);
   //to get data of particular albums
-  const {playlistId}=useParams();
-  // const [playListId, setPlayListId] = useState();
+  const {id}=useParams();
   const [trackAlbums, setTrackAlbums] = useState();
   const [loading, setLoading] = useState(true);
   const [found, setFound] = useState(false);
-
-  const addToPlaylist = async (trackId) => {
-    
-    try {
-      const { data } = await axios.post(
-        `http://localhost:3008/playlist/addTrack`,{
-          playlistId:window.localStorage.getItem("currentUser"),  
-          albumId:trackId
-          
-        }
-      );
-    } catch (error) {
-      console.log("error", error);
-    }
+  const [error, setError] = useState(null);
+  const { currentUser } = useContext(AuthContext);
+  const [playingTrack, setPlayingTrack] = useContext(PlayerContext);
+  const handleAddToPlaylist = async (trackId) => {
+    return;
   };
-  const getCategoriesPlaylist = async () => {
-    const requestInit = {
-      headers: {
-        Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    };
 
-    try {
-      const response = await axios.get(
-        `https://api.spotify.com/v1/playlists/${playlistId}`,
-        requestInit,
-      );
-
-      console.log("we get response");
-      console.log("data=", response.data);
-
-      setLoading(false);
-      setFound(true);
-      setTrackAlbums(response.data);
-    } catch (error) {
-      setFound(false);
-      setLoading(false);
-      console.log(error);
-    }
+  const handlePlayingTrack = (track) => {
+    setPlayingTrack(track);
   };
   useEffect(() => {
-    console.log("inside categories song")
-    getCategoriesPlaylist();
-  }, [playlistId]);
-  
-
-  const buildCard = (track) => {
-    return (
-      <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.track.id}>
-        <Card className={classes.card} variant="outlined">
-          {/* <CardHeader className={classes.titleHead} title={track?.id} /> */}
-          <CardHeader className={classes.titleHead} title={track?.track.name} />
-          <br />
-          <span>{track?.track?.artists[0]?.name}</span>
-          <br/>
-          <br/>
-          <Button onClick={() => addToPlaylist(track?.id)}>
-            Add To PlayList
-          </Button>
-          <Button>Play</Button>
-        </Card>
-      </Grid>
-    );
-  };
+    const fetchData = async () => {
+      try {
+        const userToken = await currentUser.getIdToken();
+        const { data } = await axios.get(`http://localhost:3008/categoryPlaylist/${id}`, {
+          headers: {
+            FirebaseIdToken: userToken,
+          },
+        });
+        console.log(id);
+        if (!data) throw "Request for album details failed!";
+        console.log(data);
+        setTrackAlbums(data);
+        setLoading(false);
+        setFound(true)
+      } catch (e) {
+        setError(e.message);
+        setFound(true)
+      }
+    };
+    if (currentUser) fetchData();
+  }, [currentUser, id]);
 
   if (loading) {
     return (
@@ -122,27 +126,43 @@ const CategoryPlaylist = () => {
   } else if (!found) {
     return <h1>404: not enough data for this page</h1>;
   } else
-    return (
-      <div>
-        <h1>{trackAlbums?.name}</h1>
-        <img
-        width={400}
-        height={400}
-          className="Album"
-          src={trackAlbums?.images[0]?.url}
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src = DefaultImage;
-          }}
-          alt="Album"
-        />
+  return (
+    trackAlbums && (
+      <div key={trackAlbums.id}>
+        <h1>{trackAlbums.name}</h1>
+        {/* <img
+            className="Album"
+            src={trackAlbums.album.images[0]?.url}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "/images/no-image.jpg";
+            }}
+            alt={trackAlbums.name}
+          /> */}
         <br />
-        <br />
-
-        <Grid container className={classes.grid} spacing={5}>
-          {trackAlbums?.tracks?.items.map((track) => buildCard(track))}
-        </Grid>
+        <TableContainer container="true" className={classes.grid} spacing={5}>
+          {/* {albumDetails.tracks.items.map((track) => */}
+            <div style={{ maxWidth: '1500px' }}>
+            <h1 style={{ textAlign: 'center' }}>Tracks</h1>
+            <List style={{ marginTop: '30px' }}>
+                {trackAlbums.map((element, idx) => (
+                  <ListItem key={element?.track.name}>
+                      <ListItemText style={{ maxWidth: '25px' }}>{idx + 1}.</ListItemText>
+                      <ListItemText style={{maxWidth: '1150px', textAlign: 'start' }} >{element?.track.name} - {element?.track.artists[0].name}</ListItemText>
+                      <Button style={{textAlign: 'start'}} onClick={() => addToPlaylist(element?.track.id,element?.track.name)}>
+                        Add To PlayList
+                      </Button><br/>
+                      <Button onClick={() => handlePlayingTrack(element)}>
+                        Play
+                      </Button><br/>
+                      <Button className="lyrics" href={`/Lyrics/${trackAlbums?.artists?.name}/${element?.track.name}`}>Lyrics</Button>         
+                  </ListItem>
+                ))}
+                </List>
+            </div>
+        </TableContainer>
       </div>
-    );
+    )
+  );
 };
 export default CategoryPlaylist;
