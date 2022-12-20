@@ -7,7 +7,7 @@ import Account from "../pages/Account";
 import AlbumDetails from "../pages/AlbumDetails";
 import Categories from "../pages/Categories";
 import Category from "../pages/Category";
-import CategoryPlaylist from "../pages/categoryPlaylist";
+import CategoryPlaylist from "../pages/CategoryPlaylist";
 import ForgotPassword from "../pages/ForgotPassword";
 import Home from "../pages/Home";
 import IndPlayList from "../pages/IndPlayList";
