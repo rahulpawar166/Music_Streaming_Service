@@ -57,13 +57,11 @@ const useStyles = makeStyles({
   media: {
     margin: "0 0 0 0",
   },
-  
+
   link: {
     textDecoration: "none"
   },
-  trackLink: {
-    textDecoration: "none"
-  },
+
   button: {
     backgroundColor: "#ECDBBA",
     color: "#161616",
@@ -183,7 +181,7 @@ const Home = () => {
   else
     return (
       <div className="fancy-border">
-        <img className={classes.logo} src={logo} alt="logo" width={100} height={100} />
+        <a href="/"><img className={classes.logo} src={logo} alt="logo" width={100} height={100} /></a>
         <h1 className={classes.title}>Home</h1>
         <Grid container xs={12}>
           <Grid item className={classes.grid}>

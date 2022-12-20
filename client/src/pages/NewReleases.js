@@ -14,33 +14,59 @@ import logo from "../icons/incognitomode2.png";
 import { Link } from "react-router-dom";
 
 const useStyles = makeStyles({
+  logo: {
+    marginTop: "20px",
+    height: 100,
+    width: 100,
+  },
+
   card: {
     maxWidth: 250,
-    height: "auto",
+    height: "350px",
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 5,
-    border: "1px solid #1e8678",
     boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
+    backgroundColor: "rgba(236, 219, 186, 0.2)"
+  },
+  title: {
+    marginTop: "20px",
+    color: "#346751",
+  },
+  subTitle: {
+    color: "#C84B31",
+    textAlign: "left",
+    marginLeft: "70px"
   },
   titleHead: {
-    borderBottom: "1px solid #1e8678",
-    fontWeight: "bold",
+    color: "#ffffff",
+    fontSize: "5px",
+    height: "auto",
+    overflow: "hidden",
   },
   grid: {
     flexGrow: 1,
     flexDirection: "row",
+    marginLeft: "20px",
+    marginRight: "20px"
   },
   media: {
-    height: "200px",
-    width: "200px",
-    maxHeight: "200px",
-    maxWidth: "200px",
+    margin: "0 0 0 0",
+  },
+
+  link: {
+    textDecoration: "none"
+  },
+  trackLink: {
+    textDecoration: "none"
   },
   button: {
-    // color: "#1e8678",
-    fontWeight: "bold",
-    fontSize: 12,
+    backgroundColor: "#ECDBBA",
+    color: "#161616",
+    '&:hover': {
+      backgroundColor: "#FCDBBB",
+      color: "#161616",
+   }
   },
 });
 
@@ -76,7 +102,13 @@ const NewReleases = () => {
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={album.id}>
         <Card className={classes.card} variant="outlined">
           <CardActions>
-            <Link to={`/album/${album.id}`}>
+            <Link className={classes.link} to={`/album/${album.id}`}>
+            <CardMedia
+                className={classes.media}
+                component="img"
+                image={album.images[0].url}
+                alt={album.name}
+              />
               <CardHeader
                 className={classes.titleHead}
                 title={
@@ -85,12 +117,7 @@ const NewReleases = () => {
                     : album.name.substring(0, 32)
                 }
               />
-              <CardMedia
-                className={classes.media}
-                component="img"
-                image={album.images[0].url}
-                alt={album.name}
-              />
+              
             </Link>
           </CardActions>
         </Card>
@@ -102,8 +129,8 @@ const NewReleases = () => {
   else
     return (
       <div className="fancy-border">
-        <img className="logo" src={logo} alt="logo" width={100} height={100} />
-        <h1>New Releases</h1>
+        <a href="/"><img className={classes.logo} src={logo} alt="logo" width={100} height={100} /></a>
+        <h1 className={classes.title}>New Releases</h1>
         <br />
         <Grid container className={classes.grid} spacing={5}>
           {newReleasesData
