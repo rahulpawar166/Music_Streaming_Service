@@ -19,16 +19,8 @@ import {
   Divider,
   ListItemText,
 } from "@material-ui/core";
-
-// import { Card, CardHeader, Grid, makeStyles, Button } from "@material-ui/core";
 import { AuthContext } from "../firebase/Auth";
-// import Table from '@mui/material/Table';
-// import TableBody from '@mui/material/TableBody';
-// import TableCell from '@mui/material/TableCell';
 import TableContainer from "@mui/material/TableContainer";
-// import TableHead from '@mui/material/TableHead';
-// import TableRow from '@mui/material/TableRow';
-// import Paper from '@mui/material/Paper';
 const useStyles = makeStyles({
   card: {
     maxWidth: 250,
@@ -112,56 +104,6 @@ const AlbumDetails = () => {
     if (currentUser) fetchData();
   }, [currentUser, id]);
 
-  // const buildCard = (artist, track) => {
-  //   return (
-  //     <div style={{ maxWidth: '500px' }}>
-  //           <h1>Track</h1>
-  //           <List style={{ marginTop: '30px' }}>
-  //               {track?.map((element, idx) => (
-
-  //                       <ListItem key={element?.name}>
-  //                           <ListItemText style={{ maxWidth: '25px' }}>{idx + 1}.</ListItemText>
-  //                           <ListItemText style={{ textAlign: 'start' }} >{element?.name}</ListItemText>
-  //                           <Button style={{textAlign: 'start'}} onClick={() => addToPlaylist(element?.id,element?.name)}>
-  //                             Add To PlayList
-  //                           </Button>
-  //                       </ListItem>
-
-  //               ))}
-  //           </List>
-  //       </div>
-
-  //     // <Table className="TrackTable" sx={{ maxWidth: 700 }} aria-label="simple table">
-  //     // <TableHead title={track?.id}>
-  //     //   <TableRow>
-  //     //     <TableCell >Track:</TableCell>
-  //     //     <TableCell style={{ maxWidth: '200px'}} component="th" scope="row">{track?.name}</TableCell>
-  //     //     <Button style={{textAlign: 'start'}} onClick={() => addToPlaylist(track?.id,track?.name)}>
-  //     //      Add To PlayList
-  //     //    </Button>
-  //     //    <Button>Play</Button>
-  //     //    <Button href={`/Lyrics/${artist}/${track?.name}`}>Lyrics</Button>
-  //     //    </TableRow>
-  //     // </TableHead>
-  //     // <TableBody>
-  //     //   </TableBody>
-  //     // </Table>
-  //     // <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.id}>
-  //     //   <Card className={classes.card} variant="outlined">
-  //     //     {/* <CardHeader className={classes.titleHead} title={track?.id} /> */}
-  //     //     <CardHeader className={classes.titleHead} title={track?.name} />
-  //     //     <br />
-  //     //     <Button onClick={() => handleAddToPlaylist(track?.id)}>
-  //     //       Add To PlayList
-  //     //     </Button>
-  //     //     <Button>Play</Button>
-  //     //     <br />
-  //     //     <Link to={`/Lyrics/${artist}/${track?.name}`}>Lyrics</Link>
-  //     //   </Card>
-  //     // </Grid>
-  //   );
-  // };
-
   if (loading) return <Loading />;
   else if (error) return <Error message={error} />;
   else
@@ -192,14 +134,18 @@ const AlbumDetails = () => {
               <h1 style={{ textAlign: "center" }}>Track</h1>
               <List style={{ marginTop: "30px" }}>
                 {albumDetails.tracks.items?.map((element, idx) => (
-                  <ListItem key={element?.name}>
+                  <ListItem key={element?.id}>
                     <ListItemText style={{ maxWidth: "25px" }}>
                       {idx + 1}.
                     </ListItemText>
                     <ListItemText
-                      style={{ maxWidth: "1150px", textAlign: "start" }}
+                      style={{
+                        maxWidth: "1150px",
+                        textAlign: "start",
+                        textDecoration: "none",
+                      }}
                     >
-                      {element?.name}
+                      <Link to={`/track/${element?.id}`}>{element.name}</Link>
                     </ListItemText>
                     <Button
                       style={{ textAlign: "start" }}
