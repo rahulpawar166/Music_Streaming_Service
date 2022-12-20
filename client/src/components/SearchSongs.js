@@ -1,5 +1,5 @@
 import React from "react";
-
+import "../styles/App.css"
 const SearchSongs = (props) => {
   const handleChange = (e) => {
     props.searchValue(e.target.value);
@@ -14,14 +14,14 @@ const SearchSongs = (props) => {
       className="center"
     >
       <label>
-        <span>Search: </span>
         <input
           autoComplete="off"
           type="text"
-          placeholder="Enter.."
+          placeholder="Search Album/ Track/ Artist"
           name="searchTerm"
           onChange={handleChange}
           aria-label="input song"
+          className="searchBar"
         />
       </label>
       <br />

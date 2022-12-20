@@ -1,39 +1,50 @@
-import React, { useEffect, useState,useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import { Card, CardActions, CardHeader, Grid, makeStyles, CardMedia, Button } from "@material-ui/core";
 // import { Default } from "react-toastify/dist/utils";
 import { AuthProvider, AuthContext } from "../firebase/Auth";
 // import { playlist } from "../../../server/config/mongoCollections";
+import Loading from "./Loading"
+import FadeIn from 'react-fade-in';
 const useStyles = makeStyles({
   card: {
     maxWidth: 250,
-    height: "auto",
+    height: "370px",
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 5,
-    border: "1px solid #1e8678",
     boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
+    backgroundColor: "rgba(236, 219, 186, 0.2)"
+  },
+  title: {
+    color: "#346751",
   },
   titleHead: {
-    borderBottom: "1px solid #1e8678",
-    fontWeight: "bold",
+    color: "#ffffff",
+    fontSize: "5px",
+    height: "auto",
+    overflow: "hidden",
   },
   grid: {
     flexGrow: 1,
     flexDirection: "row",
+    marginLeft: "20px",
+    marginRight: "20px"
   },
   media: {
-    height: "200px",
-    width: "200px",
-    maxHeight: "200px",
-    maxWidth: "200px",
+    margin: "0 0 0 0",
+  },
+  artist: {
+    color: "#BDB5B4"
   },
   button: {
-    // color: "#1e8678",
     fontWeight: "bold",
     fontSize: 12,
   },
+  link: {
+    textDecoration: "none"
+  }
 });
 
 const Recommendations = () => {
@@ -74,23 +85,29 @@ const Recommendations = () => {
   const buildCard = (track) => {
     return (
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.id}>
+        <FadeIn>
           <Card className={classes.card} variant="outlined">
           <CardActions>
-            <Link to={`/album/${track?.album.id}`}>
-              <CardHeader
-                className={classes.titleHead}
-                title={track?.album.name}
-              />
-              <CardMedia
+            <Link className={classes.link} to={`/album/${track?.album.id}`}>
+            <CardMedia
                 className={classes.media}
                 component="img"
                 image={track?.album.images[0]?.url}
                 title="character image"
               />
-              <span>{track?.album.artists[0].name}</span>
+              <CardHeader
+                className= {classes.titleHead}
+                title={
+                  track?.album.name > 30 
+                  ? track?.album.name.substring(0, 27) + "..." 
+                  : track?.album.name.substring(0, 30)
+                }
+              />
+              <span className={classes.artist}>{track?.album.artists[0].name}</span>
             </Link> 
           </CardActions>
         </Card>
+        </FadeIn>
       </Grid>
       
     );
@@ -98,10 +115,7 @@ const Recommendations = () => {
 
   if (loading) {
     return (
-      <div>
-        <h2> {"Loading please wait for few second"}</h2>
-        <h2> {"................................."}</h2>
-      </div>
+      <Loading />
     );
   } else if (!found) {
     return <h1>404: not enough data for this page</h1>;
@@ -109,7 +123,7 @@ const Recommendations = () => {
     return (
       <div>
         <br />
-        <h1>Recommendations</h1>
+        <h1 className={classes.title}>Recommendations</h1>
         <br />
         <Grid container className={classes.grid} spacing={5}>
           {trackAlbums?.map((track) => buildCard(track))}
