@@ -60,6 +60,8 @@ const Search = () => {
   const { currentUser } = useContext(AuthContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState(undefined);
+  const [found, setFound] = useState(false);
+  const [musicAlbums, setMusicAlbums] = useState([]);
 
   const handleFileUpload = async (e) => {
     try {

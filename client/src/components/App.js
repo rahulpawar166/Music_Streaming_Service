@@ -19,11 +19,13 @@ import Error from "./Error";
 import Lyrics from "./Lyrics";
 import Player from "./Player";
 import PrivateRoute from "./PrivateRoute";
-import Recommendations from "./Recommendations";
+import TrackDetails from "../pages/TrackDetails";
 import Search from "./Search";
 import Sidebar from "./Sidebar";
 import SpotifyCallback from "./SpotifyCallback";
 import SpotifyPrivateRoute from "./SpotifyPrivateRoute";
+import Recommendations from "./Recommendations";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,38 +53,28 @@ function App() {
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Helmet>
       <Router>
-        <div className={classes.root}>
-          <Sidebar />
-          <main className={classes.content}>
-            <Routes>
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/signin" element={<SignIn />} />
-              <Route path="/forgotpassword" element={<ForgotPassword />} />
-              <Route element={<PrivateRoute />}>
-                <Route path="/account" element={<Account />} />
-                <Route path="/spotifycallback" element={<SpotifyCallback />} />
-                <Route element={<SpotifyPrivateRoute />}>
-                  <Route path="/search" element={<Search />} />
-                  <Route path="/new-releases" element={<NewReleases />} />
-                  <Route path="/categories" element={<Categories />} />
-                  <Route path="/category/:id" element={<Category />} />
-                  <Route path="/album/:id" element={<AlbumDetails />} />
-                  <Route path="/" element={<Home />} />
-                  <Route path="/library" element={<Library />} />
-                  <Route path="/playlist/:id" element={<Playlist />} />
-                  <Route
-                    path="/lyrics/:artist/:trackName"
-                    element={<Lyrics />}
-                  />
-                  <Route
-                    path="/Recommendations"
-                    element={<Recommendations />}
-                  />
-                </Route>
-                <Route
-                  path="/IndPlayList/:PlaylistName"
-                  element={<IndPlayList />}
-                />
+        <Sidebar />
+        <main className={classes.content}>
+          <Routes>
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/forgotpassword" element={<ForgotPassword />} />
+            <Route element={<PrivateRoute />} />
+              <Route path="/account" element={<Account />} />
+              <Route path="/spotifycallback" element={<SpotifyCallback />} />
+              <Route element={<SpotifyPrivateRoute />}>
+                <Route path="/search" element={<Search />} />
+                <Route path="/new-releases" element={<NewReleases />} />
+                <Route path="/categories" element={<Categories />} />
+                <Route path="/category/:id" element={<Category />} />
+                <Route path="/album/:id" element={<AlbumDetails />} />
+                <Route path="/" element={<Home />} />
+                <Route path="/library" element={<Library />} />
+                <Route path="/playlist/:id" element={<Playlist />} />
+                <Route path="/lyrics/:artist/:trackName" element={<Lyrics />} />
+                <Route path="/Recommendations" element={<Recommendations />} /> 
+                <Route path="/track/:id" element={<TrackDetails />} />
+
               </Route>
               <Route
                 path="*"
@@ -99,7 +91,6 @@ function App() {
               />
             </footer>
           )}
-        </div>
       </Router>
     </PlayerContext.Provider>
   );
