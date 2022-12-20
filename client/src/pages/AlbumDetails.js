@@ -21,6 +21,8 @@ import {
 } from "@material-ui/core";
 import { AuthContext } from "../firebase/Auth";
 import TableContainer from "@mui/material/TableContainer";
+import AddPlaylistPopup from "../components/AddPlaylistPopup";
+
 const useStyles = makeStyles({
   card: {
     maxWidth: 250,
@@ -75,9 +77,19 @@ const AlbumDetails = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [playingTrack, setPlayingTrack] = useContext(PlayerContext);
+  const [popupOpened, setPopupOpened] = useState(false);
 
-  const handleAddToPlaylist = async (trackId) => {
-    return;
+  const handlePopupOpened = () => {
+    setPopupOpened(true);
+  };
+
+  const handlePopupClosed = () => {
+    setPopupOpened(false);
+  };
+
+  const handleAddToPlaylist = async (track) => {
+    const userToken = await currentUser.getIdToken();
+    handlePopupOpened();
   };
 
   const handlePlayingTrack = (track) => {
@@ -128,45 +140,57 @@ const AlbumDetails = () => {
             }`}
           </p>
           <br />
+
           <TableContainer container="true" className={classes.grid} spacing={5}>
             {/* {albumDetails.tracks.items.map((track) => */}
             <div style={{ maxWidth: "1500px" }}>
               <h1 style={{ textAlign: "center" }}>Track</h1>
               <List style={{ marginTop: "30px" }}>
                 {albumDetails.tracks.items?.map((element, idx) => (
-                  <ListItem key={element?.id}>
-                    <ListItemText style={{ maxWidth: "25px" }}>
-                      {idx + 1}.
-                    </ListItemText>
-                    <ListItemText
-                      style={{
-                        maxWidth: "1150px",
-                        textAlign: "start",
-                        textDecoration: "none",
-                      }}
-                    >
-                      <Link to={`/track/${element?.id}`}>{element.name}</Link>
-                    </ListItemText>
-                    <Button
-                      style={{ textAlign: "start" }}
-                      onClick={() => addToPlaylist(element?.id, element?.name)}
-                    >
-                      Add To PlayList
-                    </Button>
-                    <br />
-                    <Button onClick={() => handlePlayingTrack(element)}>
-                      Play
-                    </Button>
-                    <br />
-                    <Button
-                      className="lyrics"
-                      href={`/lyrics/${encodeURIComponent(
-                        albumDetails?.artists[0]?.name,
-                      )}/${encodeURIComponent(element?.name)}`}
-                    >
-                      Lyrics
-                    </Button>
-                  </ListItem>
+                  <div>
+                    <AddPlaylistPopup
+                      track={{ element }}
+                      open={popupOpened}
+                      handleClose={handlePopupClosed}
+                    />
+
+                    <ListItem key={element?.id}>
+                      <ListItemText style={{ maxWidth: "25px" }}>
+                        {idx + 1}.
+                      </ListItemText>
+                      <ListItemText
+                        style={{
+                          maxWidth: "1150px",
+                          textAlign: "start",
+                          textDecoration: "none",
+                        }}
+                      >
+                        <Link to={`/track/${element?.id}`}>{element.name}</Link>
+                      </ListItemText>
+
+                      <Button
+                        variant="contained"
+                        style={{ textAlign: "start" }}
+                        onClick={() => handleAddToPlaylist(element)}
+                      >
+                        Add To PlayList
+                      </Button>
+
+                      <br />
+                      <Button onClick={() => handlePlayingTrack(element)}>
+                        Play
+                      </Button>
+                      <br />
+                      <Button
+                        className="lyrics"
+                        href={`/lyrics/${encodeURIComponent(
+                          albumDetails?.artists[0]?.name,
+                        )}/${encodeURIComponent(element?.name)}`}
+                      >
+                        Lyrics
+                      </Button>
+                    </ListItem>
+                  </div>
                 ))}
               </List>
             </div>
