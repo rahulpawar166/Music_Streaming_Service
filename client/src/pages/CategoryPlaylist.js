@@ -5,6 +5,8 @@ import Loading from "../components/Loading";
 import { Link } from "react-router-dom";
 import PlayerContext from "../components/PlayerContext";
 import { useParams } from "react-router-dom";
+import AddPlaylistPopup from "../components/AddPlaylistPopup";
+
 import {
   Card,
   CardActions,
@@ -111,8 +113,19 @@ const CategoryPlaylist = () => {
   const [error, setError] = useState(null);
   const { currentUser } = useContext(AuthContext);
   const [playingTrack, setPlayingTrack] = useContext(PlayerContext);
-  const handleAddToPlaylist = async (trackId) => {
-    return;
+  const [popupOpened, setPopupOpened] = useState(false);
+
+  const handlePopupOpened = () => {
+    setPopupOpened(true);
+  };
+
+  const handlePopupClosed = () => {
+    setPopupOpened(false);
+  };
+
+  const handleAddToPlaylist = async (track) => {
+    const userToken = await currentUser.getIdToken();
+    handlePopupOpened();
   };
 
   const handlePlayingTrack = (track) => {
@@ -157,15 +170,11 @@ const CategoryPlaylist = () => {
       trackAlbums && (
         <div key={trackAlbums.id}>
           <h1 className={classes.title}>{trackAlbums.name}</h1>
-          {/* <img
-            className="Album"
-            src={trackAlbums.album.images[0]?.url}
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = "/images/no-image.jpg";
-            }}
-            alt={trackAlbums.name}
-          /> */}
+          <AddPlaylistPopup
+            open={popupOpened}
+            handleClose={handlePopupClosed}
+            track={{ trackAlbums }}
+            />
           <br />
           <TableContainer
             container="true"
@@ -195,7 +204,7 @@ const CategoryPlaylist = () => {
                     >
                       {element?.track.name} - {element?.track.artists[0].name}
                     </ListItemText>
-                    <Button
+                    {/* <Button
                       className={classes.addToPlaylistBtn}
                       style={{ textAlign: "start" }}
                       onClick={() =>
@@ -203,7 +212,15 @@ const CategoryPlaylist = () => {
                       }
                     >
                       Add To PlayList
-                    </Button>
+                    </Button> */}
+                    <Button
+                        className={classes.addToPlaylistBtn}
+                        variant="contained"
+                        style={{ textAlign: "start" }}
+                        onClick={() => handleAddToPlaylist(element)}
+                      >
+                        Add To PlayList
+                      </Button>
                     <br />
                     <Button
                       className={classes.playBtn}
