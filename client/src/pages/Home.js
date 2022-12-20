@@ -4,6 +4,7 @@ import Loading from "../components/Loading";
 import { AuthContext } from "../firebase/Auth";
 import { Link } from "react-router-dom";
 import logo from "../icons/incognitomode2.png";
+import FadeIn from 'react-fade-in';
 import {
   Button,
   Card,
@@ -16,32 +17,60 @@ import {
 } from "@material-ui/core";
 
 const useStyles = makeStyles({
+
+  logo: {
+    marginTop: "20px",
+    height: 100,
+    width: 100,
+  },
+
   card: {
     maxWidth: 250,
-    height: "auto",
+    height: "350px",
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 5,
-    border: "1px solid #1e8678",
     boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
+    backgroundColor: "rgba(236, 219, 186, 0.2)"
+  },
+  title: {
+    marginTop: "20px",
+    color: "#346751",
+  },
+  subTitle: {
+    color: "#C84B31",
+    textAlign: "left",
+    marginLeft: "70px"
   },
   titleHead: {
-    borderBottom: "1px solid #1e8678",
-    fontWeight: "bold",
+    color: "#ffffff",
+    fontSize: "5px",
+    height: "auto",
+    overflow: "hidden",
   },
   grid: {
     flexGrow: 1,
     flexDirection: "row",
+    marginLeft: "20px",
+    marginRight: "20px"
   },
   media: {
-    height: "200px",
-    width: "200px",
-    maxHeight: "200px",
-    maxWidth: "200px",
+    margin: "0 0 0 0",
+  },
+  
+  link: {
+    textDecoration: "none"
+  },
+  trackLink: {
+    textDecoration: "none"
   },
   button: {
-    fontWeight: "bold",
-    fontSize: 12,
+    backgroundColor: "#ECDBBA",
+    color: "#161616",
+    '&:hover': {
+      backgroundColor: "#FCDBBB",
+      color: "#161616",
+   }
   },
 });
 
@@ -87,10 +116,18 @@ const Home = () => {
   const buildAlbumCard = (album) => {
     return (
       album && (
+        
         <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={album.id}>
+          <FadeIn>
           <Card className={classes.card} variant="outlined">
             <CardActions>
-              <Link to={`/album/${album.id}`}>
+              <Link className={classes.link} to={`/album/${album.id}`}>
+              <CardMedia
+                  className={classes.media}
+                  component="img"
+                  image={album.images[0].url}
+                  alt={album.name}
+                />
                 <CardHeader
                   className={classes.titleHead}
                   title={
@@ -99,15 +136,11 @@ const Home = () => {
                       : album.name.substring(0, 32)
                   }
                 />
-                <CardMedia
-                  className={classes.media}
-                  component="img"
-                  image={album.images[0].url}
-                  alt={album.name}
-                />
+                
               </Link>
             </CardActions>
           </Card>
+          </FadeIn>
         </Grid>
       )
     );
@@ -117,9 +150,17 @@ const Home = () => {
     return (
       track && (
         <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track.id}>
+          <FadeIn>
           <Card className={classes.card} variant="outlined">
             <CardActions>
-              <Link to={`/track/${track.id}`}>
+              <Link className={classes.link} to={`/track/${track.id}`}>
+              <CardMedia
+                  className={classes.media}
+                  component="img"
+                  image={track.album.images[0].url}
+                  alt={track.name}
+                />
+
                 <CardHeader
                   className={classes.titleHead}
                   title={
@@ -128,15 +169,11 @@ const Home = () => {
                       : track.name.substring(0, 32)
                   }
                 />
-                <CardMedia
-                  className={classes.media}
-                  component="img"
-                  image={track.album.images[0].url}
-                  alt={track.name}
-                />
+                
               </Link>
             </CardActions>
           </Card>
+          </FadeIn>
         </Grid>
       )
     );
@@ -146,20 +183,20 @@ const Home = () => {
   else
     return (
       <div className="fancy-border">
-        <img className="logo" src={logo} alt="logo" width={100} height={100} />
-        <h1>Home</h1>
+        <img className={classes.logo} src={logo} alt="logo" width={100} height={100} />
+        <h1 className={classes.title}>Home</h1>
         <Grid container xs={12}>
           <Grid item className={classes.grid}>
-            <Button className='Recommendations' href={`/Recommendations`}>Want New Music?</Button>
+            <Button className={classes.button} href={`/Recommendations`}>Want New Music?</Button>
 
-            <h2>New Releases</h2>
+            <h2 className={classes.subTitle}>New Releases</h2>
             <Grid container className={classes.grid} spacing={5}>
               {newReleasesData &&
                 newReleasesData.map((album) => buildAlbumCard(album))}
             </Grid>
           </Grid>
           <Grid item className={classes.grid}>
-            <h2>My Music</h2>
+            <h2 className={classes.subTitle}>My Music</h2>
             <Grid container className={classes.grid} spacing={5}>
               {usersTop && usersTop.map((track) => buildTrackCard(track))}
             </Grid>
