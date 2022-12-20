@@ -10,8 +10,8 @@
 -- https://www.mongodb.com/try/download/community<br/>
 - Redis
 -- https://redis.io/docs/getting-started/installation/<br/>
--- Redis supports MacOS and Linux. For Windows, you need to enable WSL2 or install on Ubuntu/Debian
---> To start redis type: redis-cli 
+-- Redis supports MacOS and Linux. For Windows, you need to enable WSL2 or install on Ubuntu/Debian<br/>
+--> To start redis type: `redis-server` and `redis-cli`
 - Heroku
 - NodeJS
 -- Install v16.18.1<br/>
