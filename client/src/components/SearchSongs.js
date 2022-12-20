@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/App.css"
+import "../styles/App.css";
 const SearchSongs = (props) => {
   const handleChange = (e) => {
     props.searchValue(e.target.value);

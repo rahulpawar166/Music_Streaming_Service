@@ -4,7 +4,8 @@ import { Helmet } from "react-helmet";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import PlayerContext from "../components/PlayerContext";
 import Account from "../pages/Account";
-import AlbumDetails from "../pages/AlbumDetails";
+import Album from "../pages/Album";
+import Artist from "../pages/Artist";
 import Categories from "../pages/Categories";
 import Category from "../pages/Category";
 import CategoryPlaylist from "../pages/CategoryPlaylist";
@@ -72,13 +73,14 @@ function App() {
                   path="/categoryplaylist/:id"
                   element={<CategoryPlaylist />}
                 />
-                <Route path="/album/:id" element={<AlbumDetails />} />
+                <Route path="/album/:id" element={<Album />} />
                 <Route path="/" element={<Home />} />
                 <Route path="/library" element={<Library />} />
                 <Route path="/playlist/:id" element={<Playlist />} />
                 <Route path="/lyrics/:artist/:trackName" element={<Lyrics />} />
-                <Route path="/Recommendations" element={<Recommendations />} />
+                <Route path="/recommendations" element={<Recommendations />} />
                 <Route path="/track/:id" element={<TrackDetails />} />
+                <Route path="/artist/:id" element={<Artist />} />
               </Route>
               <Route
                 path="*"

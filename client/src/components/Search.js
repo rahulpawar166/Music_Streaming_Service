@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../firebase/Auth";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import FadeIn from 'react-fade-in';
+import FadeIn from "react-fade-in";
 import {
   Card,
   CardActions,
@@ -27,7 +27,8 @@ const useStyles = makeStyles({
   },
 
   search: {
-    width: "300px"
+    width: "300px",
+    background: "white",
   },
 
   card: {
@@ -37,16 +38,16 @@ const useStyles = makeStyles({
     marginRight: "auto",
     borderRadius: 5,
     boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
-    backgroundColor: "rgba(236, 219, 186, 0.2)"
+    backgroundColor: "rgba(236, 219, 186, 0.2)",
   },
   title: {
     marginTop: "20px",
-    color: "#346751",
+    color: "#008c00",
   },
   subTitle: {
     color: "#C84B31",
     textAlign: "left",
-    marginLeft: "70px"
+    marginLeft: "70px",
   },
   titleHead: {
     color: "#ffffff",
@@ -58,25 +59,25 @@ const useStyles = makeStyles({
     flexGrow: 1,
     flexDirection: "row",
     marginLeft: "0px",
-    marginRight: "20px"
+    marginRight: "20px",
   },
   media: {
     margin: "0 0 0 0",
   },
-  
+
   link: {
-    textDecoration: "none"
+    textDecoration: "none",
   },
   trackLink: {
-    textDecoration: "none"
+    textDecoration: "none",
   },
   button: {
     backgroundColor: "#ECDBBA",
     color: "#161616",
-    '&:hover': {
+    "&:hover": {
       backgroundColor: "#FCDBBB",
       color: "#161616",
-   }
+    },
   },
 });
 
@@ -171,20 +172,26 @@ const Search = () => {
     return (
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={album?.id}>
         <FadeIn>
-        <Card className={classes.card} variant="outlined">
-          <CardActions>
-            <Link className={classes.link} to={`/album/${album?.id}`}>
-            <CardMedia
-                className={classes.media}
-                component="img"
-                image={album?.images[0]?.url}
-                title={album?.name}
-              />
-              <CardHeader className={classes.titleHead} title={album?.name > 30 ? album?.name.substring(0, 27) + "..." : album?.name.substring(0, 30)} />
-              
-            </Link>
-          </CardActions>
-        </Card>
+          <Card className={classes.card} variant="outlined">
+            <CardActions>
+              <Link className={classes.link} to={`/album/${album?.id}`}>
+                <CardMedia
+                  className={classes.media}
+                  component="img"
+                  image={album?.images[0]?.url}
+                  title={album?.name}
+                />
+                <CardHeader
+                  className={classes.titleHead}
+                  title={
+                    album?.name > 30
+                      ? album?.name.substring(0, 27) + "..."
+                      : album?.name.substring(0, 30)
+                  }
+                />
+              </Link>
+            </CardActions>
+          </Card>
         </FadeIn>
       </Grid>
     );
@@ -194,20 +201,26 @@ const Search = () => {
     return (
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={track?.id}>
         <FadeIn>
-        <Card className={classes.card} variant="outlined">
-          <CardActions>
-            <Link className={classes.link} to={`/track/${track?.id}`}>
-            <CardMedia
-                className={classes.media}
-                component="img"
-                image={track?.album.images[0].url}
-                title={track?.name}
-              />
-              <CardHeader className={classes.titleHead} title={track?.name > 30 ? track?.name.substring(0, 27) + "..." : track?.name.substring(0, 30)} />
-              
-            </Link>
-          </CardActions>
-        </Card>
+          <Card className={classes.card} variant="outlined">
+            <CardActions>
+              <Link className={classes.link} to={`/track/${track?.id}`}>
+                <CardMedia
+                  className={classes.media}
+                  component="img"
+                  image={track?.album.images[0].url}
+                  title={track?.name}
+                />
+                <CardHeader
+                  className={classes.titleHead}
+                  title={
+                    track?.name > 30
+                      ? track?.name.substring(0, 27) + "..."
+                      : track?.name.substring(0, 30)
+                  }
+                />
+              </Link>
+            </CardActions>
+          </Card>
         </FadeIn>
       </Grid>
     );
@@ -217,21 +230,26 @@ const Search = () => {
     return (
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={artist?.id}>
         <FadeIn>
-        <Card className={classes.card} variant="outlined">
-          <CardActions>
-            <Link className={classes.link} to={`/artist/${artist?.id}`}>
-            <CardMedia
-                className={classes.media}
-                component="img"
-                image={artist?.images[0]?.url}
-                title={artist?.name}
-              />
-              <CardHeader className={classes.titleHead} title={artist?.name > 30 ? artist?.name.substring(0, 27) + "..." : artist?.name.substring(0, 30)
-              } />
-              
-            </Link>
-          </CardActions>
-        </Card>
+          <Card className={classes.card} variant="outlined">
+            <CardActions>
+              <Link className={classes.link} to={`/artist/${artist?.id}`}>
+                <CardMedia
+                  className={classes.media}
+                  component="img"
+                  image={artist?.images[0]?.url}
+                  title={artist?.name}
+                />
+                <CardHeader
+                  className={classes.titleHead}
+                  title={
+                    artist?.name > 30
+                      ? artist?.name.substring(0, 27) + "..."
+                      : artist?.name.substring(0, 30)
+                  }
+                />
+              </Link>
+            </CardActions>
+          </Card>
         </FadeIn>
       </Grid>
     );
@@ -241,12 +259,20 @@ const Search = () => {
   else {
     return (
       <div className="fancy-border">
-        <a href="/"><img className={classes.logo} src={logo} alt="logo" width={100} height={100} /></a>
+        <a href="/">
+          <img
+            className={classes.logo}
+            src={logo}
+            alt="logo"
+            width={100}
+            height={100}
+          />
+        </a>
         <h1 className={classes.title}>Search</h1>
-        <SearchSongs className={classes.search} searchValue={searchValue}/>
+        <SearchSongs className={classes.search} searchValue={searchValue} />
         <Box>
           <Button
-           className={classes.button}
+            className={classes.button}
             component="label"
             variant="outlined"
             startIcon={<CloudUploadIcon />}

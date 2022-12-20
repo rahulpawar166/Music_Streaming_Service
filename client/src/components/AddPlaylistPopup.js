@@ -18,7 +18,6 @@ const AddPlaylistPopup = (props) => {
   const { currentUser } = useContext(AuthContext);
 
   const handleChange = async (event) => {
-    console.log("set value called");
     setValue(event.target.value);
     console.log(value);
   };
@@ -27,7 +26,6 @@ const AddPlaylistPopup = (props) => {
     props.handleClose();
     try {
       const userToken = await currentUser.getIdToken();
-      console.log(props.track);
       const { data } = await axios.post(
         `http://localhost:3008/playlists/addto/${value}`,
         {
@@ -39,10 +37,11 @@ const AddPlaylistPopup = (props) => {
           },
         },
       );
-      if (!data) throw "Add to Playlist request failed!";
+      if (!data) throw "Add to Playlist  request failed!";
     } catch (error) {
-      console.log("error", error);
+      console.error(error);
     }
+    setValue("");
   };
 
   useEffect(() => {
@@ -57,10 +56,9 @@ const AddPlaylistPopup = (props) => {
             },
           },
         );
-        console.log(data);
         setAllPlayListData(data);
       } catch (error) {
-        console.log("error", error);
+        console.error(error);
       }
     };
     if (currentUser) getPlaylistName();
@@ -81,7 +79,7 @@ const AddPlaylistPopup = (props) => {
             {allPlayListData?.map((element) => {
               return (
                 <FormControlLabel
-                  value={element?._id}
+                  value={element._id}
                   control={<Radio />}
                   label={element?.name}
                 />

@@ -64,7 +64,6 @@ input {
 }
 
 .fancy-border {
-  
   /* width: 150px; */
   /* height: 150px; */
   text-align: center;
@@ -115,14 +114,13 @@ input {
   }
 }
 
-
 .searchBar {
-  background-color: rgb(67, 137, 62);
+  background-color: rgb(238, 242, 244);
   width: 20%;
-  height: 30px;
+  height: 50px;
   padding-left: 10px;
-  color: white;
-  font-size: 14px;
+  color: rgb(152, 8, 8);
+  font-size: 20px;
   font-weight: regular;
   border-radius: 10px;
   margin-bottom: 20px;
