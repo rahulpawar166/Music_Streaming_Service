@@ -146,7 +146,7 @@ const TrackDetails = () => {
             open={popupOpened}
             handleClose={handlePopupClosed}
             track={{ trackDetails }}
-            />
+          />
           <Typography className={classes.title} variant="h1">
             {trackDetails?.name}
           </Typography>
@@ -158,9 +158,14 @@ const TrackDetails = () => {
             src={trackDetails?.album?.images[0]?.url}
             alt={trackDetails?.name}
           />
-          
+
           <br />
-          <Button className={classes.addToPlaylistBtn} onClick={() => handleAddToPlaylist(trackDetails)}>Add To PlayList</Button>
+          <Button
+            className={classes.addToPlaylistBtn}
+            onClick={() => handleAddToPlaylist(trackDetails)}
+          >
+            Add To PlayList
+          </Button>
 
           <Button
             className={classes.playBtn}

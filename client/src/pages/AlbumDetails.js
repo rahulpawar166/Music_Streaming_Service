@@ -79,6 +79,7 @@ const useStyles = makeStyles({
     marginTop: "30px",
   },
 });
+
 const addToPlaylist = async (trackId, trackname, img_url) => {
   try {
     const { data } = await axios.post(
@@ -150,7 +151,6 @@ const AlbumDetails = () => {
       albumDetails && (
         <div key={albumDetails.id}>
           <h1 className={classes.title}>{albumDetails.name}</h1>
-
           <img
             className={classes.albumImg}
             src={albumDetails.images[0].url}
@@ -160,12 +160,6 @@ const AlbumDetails = () => {
             }}
             alt={albumDetails.name}
           />
-          {/* <p style={{ textAlign: "center" }}>
-            Number of Tracks:{" "}
-            {`${albumDetails.total_tracks} ${
-              parseInt(albumDetails.total_tracks) === 1 ? "Song" : "Songs"
-            }`}
-          </p> */}
           <br />
 
           <TableContainer
@@ -173,9 +167,7 @@ const AlbumDetails = () => {
             className={classes.tableContainer}
             spacing={5}
           >
-            {/* {albumDetails.tracks.items.map((track) => */}
             <div style={{ maxWidth: "1500px" }}>
-              {/* <h2 className={classes.subTitle} style={{ textAlign: "center" }}>Track</h2> */}
               <List className={classes.list} style={{ marginTop: "10px" }}>
                 {albumDetails.tracks.items?.map((element, idx) => (
                   <div>
@@ -236,8 +228,6 @@ const AlbumDetails = () => {
                 ))}
               </List>
             </div>
-            {/* buildCard(albumDetails.artists[0].name, track), */}
-            {/* )} */}
           </TableContainer>
         </div>
       )

@@ -174,7 +174,7 @@ const CategoryPlaylist = () => {
             open={popupOpened}
             handleClose={handlePopupClosed}
             track={{ trackAlbums }}
-            />
+          />
           <br />
           <TableContainer
             container="true"
@@ -214,13 +214,13 @@ const CategoryPlaylist = () => {
                       Add To PlayList
                     </Button> */}
                     <Button
-                        className={classes.addToPlaylistBtn}
-                        variant="contained"
-                        style={{ textAlign: "start" }}
-                        onClick={() => handleAddToPlaylist(element)}
-                      >
-                        Add To PlayList
-                      </Button>
+                      className={classes.addToPlaylistBtn}
+                      variant="contained"
+                      style={{ textAlign: "start" }}
+                      onClick={() => handleAddToPlaylist(element)}
+                    >
+                      Add To PlayList
+                    </Button>
                     <br />
                     <Button
                       className={classes.playBtn}
