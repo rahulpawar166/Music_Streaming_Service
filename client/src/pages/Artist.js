@@ -5,7 +5,7 @@ import Loading from "../components/Loading";
 import { Link } from "react-router-dom";
 import PlayerContext from "../components/PlayerContext";
 import { useParams } from "react-router-dom";
-import FadeIn from 'react-fade-in';
+import FadeIn from "react-fade-in";
 
 import {
   Card,
@@ -52,6 +52,11 @@ const useStyles = makeStyles({
   button: {
     fontWeight: "bold",
     fontSize: 12,
+  },
+  title: {
+    fontSize: "40px",
+    marginTop: "20px",
+    color: "#008c00",
   },
 });
 const addToPlaylist = async (trackId, trackname, img_url) => {
@@ -102,13 +107,16 @@ const Artist = () => {
     const fetchData = async () => {
       try {
         const userToken = await currentUser.getIdToken();
-        const { data } = await axios.get(`http://localhost:3008/artists/${id}`, {
-          headers: {
-            FirebaseIdToken: userToken,
+        const { data } = await axios.get(
+          `http://localhost:3008/artists/${id}`,
+          {
+            headers: {
+              FirebaseIdToken: userToken,
+            },
           },
-        });
+        );
         if (!data) throw "Request for album details failed!";
-        console.log(data.items)
+        console.log(data.items);
         setArtistDetails(data.items);
         setLoading(false);
       } catch (e) {
@@ -123,25 +131,28 @@ const Artist = () => {
     return (
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={artist?.id}>
         <FadeIn>
-      <Card className={classes.card} variant="outlined">
-        <CardActions>
-          <Link to={`/album/${artist?.id}`}>
-            <CardHeader className={classes.titleHead} title={artist?.name} />
+          <Card className={classes.card} variant="outlined">
+            <CardActions>
+              <Link to={`/album/${artist?.id}`}>
+                <CardHeader
+                  className={classes.titleHead}
+                  title={artist?.name}
+                />
 
-            <CardMedia
-              className={classes.media}
-              component="img"
-              image={artist?.images[0]?.url}
-              title="album image"
-            />
-          </Link>
-        </CardActions>
-        <Button className={classes.button}>Add</Button>
-      </Card>
-      </FadeIn>
-    </Grid>
+                <CardMedia
+                  className={classes.media}
+                  component="img"
+                  image={artist?.images[0]?.url}
+                  title="album image"
+                />
+              </Link>
+            </CardActions>
+            <Button className={classes.button}>Add</Button>
+          </Card>
+        </FadeIn>
+      </Grid>
       // <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={artist?.id}>
-        
+
       //   <Card className={classes.card} variant="outlined">
       //     <CardActions>
       //     <CardHeader className={classes.titleHead} title={artist?.name > 30 ? artist?.name.substring(0, 27) + "..." : artist?.name.substring(0, 30)
@@ -153,9 +164,7 @@ const Artist = () => {
       //           image={artist?.images[0]?.url}
       //           title={artist?.name}
       //         />
-              
-             
-              
+
       //       {/* </Link> */}
       //     </CardActions>
       //   </Card>
@@ -163,17 +172,18 @@ const Artist = () => {
       // </Grid>
     );
   };
-  
+
   if (loading) return <Loading />;
   else if (error) return <Error message={error} />;
   else
     return (
       <div>
-      <h1>Artists & their Albums</h1>
-      <Grid container className={classes.grid} spacing={5}>
-        {artistDetails && artistDetails.map((artist) => buildArtistCard(artist))}
-      </Grid>
-    </div>
+        <h1 className={classes.title}>Artists & their Albums</h1>
+        <Grid container className={classes.grid} spacing={5}>
+          {artistDetails &&
+            artistDetails.map((artist) => buildArtistCard(artist))}
+        </Grid>
+      </div>
     );
 };
 export default Artist;

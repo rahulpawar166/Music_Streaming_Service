@@ -27,16 +27,16 @@ const useStyles = makeStyles({
     marginRight: "auto",
     borderRadius: 5,
     boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
-    backgroundColor: "rgba(236, 219, 186, 0.2)"
+    backgroundColor: "rgba(236, 219, 186, 0.2)",
   },
   title: {
     marginTop: "20px",
-    color: "#346751",
+    color: "#008c00",
   },
   subTitle: {
     color: "#C84B31",
     textAlign: "left",
-    marginLeft: "70px"
+    marginLeft: "70px",
   },
   titleHead: {
     color: "#ffffff",
@@ -48,25 +48,25 @@ const useStyles = makeStyles({
     flexGrow: 1,
     flexDirection: "row",
     marginLeft: "20px",
-    marginRight: "20px"
+    marginRight: "20px",
   },
   media: {
     margin: "0 0 0 0",
   },
 
   link: {
-    textDecoration: "none"
+    textDecoration: "none",
   },
   trackLink: {
-    textDecoration: "none"
+    textDecoration: "none",
   },
   button: {
     backgroundColor: "#ECDBBA",
     color: "#161616",
-    '&:hover': {
+    "&:hover": {
       backgroundColor: "#FCDBBB",
       color: "#161616",
-   }
+    },
   },
 });
 
@@ -103,7 +103,7 @@ const NewReleases = () => {
         <Card className={classes.card} variant="outlined">
           <CardActions>
             <Link className={classes.link} to={`/album/${album.id}`}>
-            <CardMedia
+              <CardMedia
                 className={classes.media}
                 component="img"
                 image={album.images[0].url}
@@ -117,7 +117,6 @@ const NewReleases = () => {
                     : album.name.substring(0, 32)
                 }
               />
-              
             </Link>
           </CardActions>
         </Card>
@@ -129,7 +128,15 @@ const NewReleases = () => {
   else
     return (
       <div className="fancy-border">
-        <a href="/"><img className={classes.logo} src={logo} alt="logo" width={100} height={100} /></a>
+        <a href="/">
+          <img
+            className={classes.logo}
+            src={logo}
+            alt="logo"
+            width={100}
+            height={100}
+          />
+        </a>
         <h1 className={classes.title}>New Releases</h1>
         <br />
         <Grid container className={classes.grid} spacing={5}>
