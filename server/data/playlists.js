@@ -121,12 +121,19 @@ const addTrack = async (ownerId, playlistId, track) => {
       ...fileArray,
       coverFilename,
     ]);
-    console.log(montageResult);
-    let mvResult = spawnSync("mv", [
-      path.join(__dirname, "..", coverFilename),
-      path.join(__dirname, "..", "..", "client", "public", "images"),
-    ]);
-    console.log(mvResult);
+    let origin = path.join(__dirname, "..", coverFilename);
+    let destination = path.join(
+      __dirname,
+      "..",
+      "..",
+      "client",
+      "public",
+      "images",
+      coverFilename,
+    );
+    fs.copyFileSync(origin, destination);
+    fs.rmSync(origin);
+    console.log(`Moved ${origin} to ${destination}`);
     const updateCoverResult = await playlistCollection.findOneAndUpdate(
       {
         _id: ObjectId(playlistId),
