@@ -5,6 +5,10 @@
 
 # Installation
 - ImageMagick
+-- Install ImageMagick application<br/>
+-- https://imagemagick.org/script/download.php<br/>
+-- ImageMagick support MacOS, Linux and Windows
+-- While setting up the application, Accept the agreement, click on next and check on Install legacy utilites
 - MongoDb
 -- Install the latest version of MongoDB Community Server(package msi)<br/>
 -- https://www.mongodb.com/try/download/community<br/>
