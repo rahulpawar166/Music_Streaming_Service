@@ -42,7 +42,7 @@ const AddPlaylistPopup = (props) => {
           },
         },
       );
-      if (!data) throw "Add to Playlist  request failed!";
+      if (!data) throw "Add to Playlist request failed!";
     } catch (error) {
       console.log("error", error);
     }
@@ -60,7 +60,7 @@ const AddPlaylistPopup = (props) => {
           },
         },
       );
-      console.log(data);
+      if (!data) setAllPlayListData([]);
       setAllPlayListData(data);
     } catch (error) {
       console.log("error", error);
@@ -68,31 +68,33 @@ const AddPlaylistPopup = (props) => {
   };
 
   useEffect(() => {
-    getPlaylistName();
-    console.log(props.track);
-  }, []);
+    if (currentUser) getPlaylistName();
+  }, [currentUser]);
 
   return (
     <Dialog open={props.open}>
       <DialogTitle>Add to Playlist</DialogTitle>
       <DialogContent>
         <FormControl component="fieldset">
-          <FormLabel component="legend">Select Playlist</FormLabel>
+          <FormLabel component="legend">
+            {allPlayListData?.length > 0 ? "Select Playlist" : "No Playlists"}
+          </FormLabel>
           <RadioGroup
             aria-label="playlist"
             name="playlist"
             value={value}
             onChange={handleChange}
           >
-            {allPlayListData?.map((element) => {
-              return (
-                <FormControlLabel
-                  value={element._id}
-                  control={<Radio />}
-                  label={element?.name}
-                />
-              );
-            })}
+            {allPlayListData?.length > 0 &&
+              allPlayListData?.map((element) => {
+                return (
+                  <FormControlLabel
+                    value={element._id}
+                    control={<Radio />}
+                    label={element?.name}
+                  />
+                );
+              })}
           </RadioGroup>
         </FormControl>
       </DialogContent>
@@ -104,9 +106,11 @@ const AddPlaylistPopup = (props) => {
         >
           Cancel
         </Button>
-        <Button variant="contained" color="primary" onClick={handleCreate}>
-          ADD
-        </Button>
+        {allPlayListData?.length > 0 && (
+          <Button variant="contained" color="primary" onClick={handleCreate}>
+            ADD
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );
