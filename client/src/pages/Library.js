@@ -5,10 +5,13 @@ import Loading from "../components/Loading";
 import Error from "../components/Error";
 import { AuthContext } from "../firebase/Auth";
 import { Link } from "react-router-dom";
+import DeleteIcon from "@material-ui/icons/Delete";
 import Button from "@material-ui/core/Button";
 import {
+  Box,
   Card,
   CardActions,
+  CardContent,
   CardHeader,
   CardMedia,
   Grid,
@@ -16,37 +19,76 @@ import {
 } from "@material-ui/core";
 import CreatePlaylistPopup from "../components/CreatePlaylistPopup";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
+  logo: {
+    marginTop: "20px",
+    height: 100,
+    width: 100,
+  },
   card: {
     maxWidth: 250,
-    height: "auto",
+    // height: "350px",
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 5,
-    border: "1px solid #1e8678",
     boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);",
+    backgroundColor: "rgba(236, 219, 186, 0.2)",
+  },
+  title: {
+    marginTop: "20px",
+    color: "#008c00",
+  },
+  subTitle: {
+    color: "#C84B31",
+    textAlign: "left",
+    marginLeft: "70px",
   },
   titleHead: {
-    borderBottom: "1px solid #1e8678",
-    fontWeight: "bold",
+    color: "#ffffff",
+    fontSize: "5px",
+    textDecoration: "none",
+    height: "auto",
+    overflow: "hidden",
   },
   grid: {
-    padding: "0.5rem",
-    flexDirection: "row",
     flexGrow: 1,
+    marginTop: "20px",
+    flexDirection: "row",
+    marginLeft: "0px",
+    marginRight: "20px",
   },
   media: {
-    height: "200px",
-    width: "200px",
-    maxHeight: "200px",
-    maxWidth: "200px",
+    margin: "0 0 0 0",
+  },
+
+  link: {
+    textDecoration: "none",
+  },
+  trackLink: {
+    textDecoration: "none",
+  },
+  centerBtn: {
+    marginBottom: theme.spacing(1),
   },
   button: {
-    // color: "#1e8678",
-    fontWeight: "bold",
-    fontSize: 12,
+    backgroundColor: "#ECDBBA",
+    display: "inline-block",
+    color: "#161616",
+    "&:hover": {
+      backgroundColor: "#FCDBBB",
+      color: "#161616",
+    },
   },
-});
+  deleteBtn: {
+    backgroundColor: "#e31f5f",
+    margin: "0 auto",
+    color: "#ffffff",
+    weight: "bold",
+    "&:hover": {
+      backgroundColor: "#E1114D",
+    },
+  },
+}));
 
 const Playlists = () => {
   const classes = useStyles();
@@ -54,6 +96,7 @@ const Playlists = () => {
   const [userPlaylists, setUserPlaylists] = useState(null);
   const [userPlaylistsLoading, setUserPlaylistsLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [needsRefresh, setNeedsRefresh] = useState(true);
   const [popupOpened, setPopupOpened] = useState(false);
 
   const handlePopupOpened = () => {
@@ -61,6 +104,7 @@ const Playlists = () => {
   };
 
   const handlePopupClosed = () => {
+    setNeedsRefresh(true);
     setPopupOpened(false);
   };
 
@@ -75,7 +119,7 @@ const Playlists = () => {
           },
         },
       );
-      console.log(playlistData);
+      setNeedsRefresh(true);
       if (!playlistData) throw "No playlists were found for this user!";
       setUserPlaylists(playlistData);
     } catch (error) {
@@ -95,7 +139,7 @@ const Playlists = () => {
             },
           },
         );
-        console.log(playlistData);
+        setNeedsRefresh(false);
         if (!playlistData) throw "No playlists were found for this user!";
         setUserPlaylists(playlistData);
         setUserPlaylistsLoading(false);
@@ -106,8 +150,8 @@ const Playlists = () => {
         setError(true);
       }
     };
-    if (currentUser) fetchData();
-  }, [currentUser, popupOpened]);
+    if (currentUser && needsRefresh) fetchData();
+  }, [currentUser, needsRefresh]);
 
   const buildPlaylistCard = (playlist) => {
     console.log(playlist);
@@ -115,9 +159,8 @@ const Playlists = () => {
       playlist && (
         <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={playlist._id}>
           <Card className={classes.card} variant="outlined">
-            {/* <Button onClick={deletePlaylist(playlist._id)}>Delete</Button> */}
-            <CardActions>
-              <Link to={`/playlist/${playlist._id}`}>
+            <CardContent>
+              <Link className={classes.link} to={`/playlist/${playlist._id}`}>
                 <CardHeader
                   className={classes.titleHead}
                   title={playlist.name}
@@ -129,6 +172,14 @@ const Playlists = () => {
                   alt={playlist.name}
                 />
               </Link>
+            </CardContent>
+            <CardActions className={classes.centerBtn}>
+              <Button
+                className={classes.deleteBtn}
+                onClick={() => deletePlaylist(playlist._id)}
+              >
+                <DeleteIcon />
+              </Button>
             </CardActions>
           </Card>
         </Grid>
@@ -141,14 +192,26 @@ const Playlists = () => {
   return (
     <div className="fancy-border">
       <CreatePlaylistPopup open={popupOpened} handleClose={handlePopupClosed} />
-      <img className="logo" src={logo} alt="logo" width={100} height={100} />
-      <h1>Library</h1>
-      <Button variant="contained" onClick={handlePopupOpened}>
-        Create Playlist
-      </Button>
+      <img
+        className={classes.logo}
+        src={logo}
+        alt="logo"
+        width={100}
+        height={100}
+      />
+      <h1 className={classes.title}>Library</h1>
+      <Box>
+        <Button
+          className={classes.button}
+          component="label"
+          variant="contained"
+          onClick={handlePopupOpened}
+        >
+          Create Playlist
+        </Button>
+      </Box>
       <Grid container className={classes.grid} spacing={5}>
-        {userPlaylists &&
-          userPlaylists.map((playlist) => buildPlaylistCard(playlist))}
+        {userPlaylists?.map((playlist) => buildPlaylistCard(playlist))}
       </Grid>
     </div>
   );

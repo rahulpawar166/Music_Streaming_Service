@@ -8,6 +8,7 @@ import {
   ListItem,
   TableContainer,
   ListItemText,
+  Typography,
 } from "@material-ui/core";
 import PlayerContext from "../components/PlayerContext";
 import { AuthContext } from "../firebase/Auth";
@@ -170,21 +171,76 @@ const Playlist = () => {
             alt={playlistData.name + " Cover"}
           />
           <br />
+          {playlistData.tracks ? (
+            playlistData.tracks.map((element, idx) => (
+              <TableContainer
+                container="true"
+                className={classes.tableContainer}
+                spacing={5}
+              >
+                <div style={{ maxWidth: "1500px" }}>
+                  <List className={classes.list} style={{ marginTop: "10px" }}>
+                    <ListItem className={classes.listItem} key={element?.id}>
+                      <ListItemText
+                        className={classes.link}
+                        style={{ maxWidth: "25px" }}
+                      >
+                        {idx + 1}.
+                      </ListItemText>
+                      <ListItemText
+                        style={{
+                          maxWidth: "1150px",
+                          textAlign: "start",
+                          textDecoration: "none",
+                        }}
+                      >
+                        <Link
+                          className={classes.link}
+                          to={`/track/${element?.id}`}
+                        >
+                          {element?.name}
+                        </Link>
+                      </ListItemText>
 
-          <TableContainer
-            container="true"
-            className={classes.tableContainer}
-            spacing={5}
-          >
-            <div style={{ maxWidth: "1500px" }}>
-              <List className={classes.list} style={{ marginTop: "10px" }}>
-                {playlistData?.tracks?.map((element, idx) => (
-                  <ListItem className={classes.listItem} key={element?.id}>
+                      <Button
+                        className={classes.deleteBtn}
+                        onClick={() => deleteFromPlaylist(element?.id)}
+                      >
+                        <DeleteIcon />
+                      </Button>
+                      <Button
+                        className={classes.playBtn}
+                        onClick={() => handlePlayingTrack(element)}
+                      >
+                        Play
+                      </Button>
+                      {/* <Button
+                      className={classes.lyricsBtn}
+                      href={`/lyrics/${encodeURIComponent(
+                        albumDetails?.artists[0]?.name,
+                      )}/${encodeURIComponent(element?.name)}`}
+                    >
+                      Lyrics
+                    </Button> */}
+                    </ListItem>
+                  </List>
+                </div>
+              </TableContainer>
+            ))
+          ) : (
+            <TableContainer
+              container="true"
+              className={classes.tableContainer}
+              spacing={5}
+            >
+              <div style={{ maxWidth: "1500px" }}>
+                <List className={classes.list} style={{ marginTop: "10px" }}>
+                  <ListItem className={classes.listItem}>
                     <ListItemText
                       className={classes.link}
                       style={{ maxWidth: "25px" }}
                     >
-                      {idx + 1}.
+                      0.{" "}
                     </ListItemText>
                     <ListItemText
                       style={{
@@ -193,39 +249,13 @@ const Playlist = () => {
                         textDecoration: "none",
                       }}
                     >
-                      <Link
-                        className={classes.link}
-                        to={`/track/${element?.id}`}
-                      >
-                        {element?.name}
-                      </Link>
+                      Add some songs to start listening!
                     </ListItemText>
-
-                    <Button
-                      className={classes.deleteBtn}
-                      onClick={() => deleteFromPlaylist(element?.id)}
-                    >
-                      <DeleteIcon />
-                    </Button>
-                    <Button
-                      className={classes.playBtn}
-                      onClick={() => handlePlayingTrack(element)}
-                    >
-                      <PlayArrowIcon />
-                    </Button>
-                    {/* <Button
-                      className={classes.lyricsBtn}
-                      href={`/lyrics/${encodeURIComponent(
-                        albumDetails?.artists[0]?.name,
-                      )}/${encodeURIComponent(element?.name)}`}
-                    >
-                      Lyrics
-                    </Button> */}
                   </ListItem>
-                ))}
-              </List>
-            </div>
-          </TableContainer>
+                </List>
+              </div>
+            </TableContainer>
+          )}
         </div>
       )
     );
