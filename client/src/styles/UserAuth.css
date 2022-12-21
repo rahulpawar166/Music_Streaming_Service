@@ -36,20 +36,21 @@
 .card .text-field {
   width: 100%;
   border-radius: 4px;
-  color: white;
+  font: rgb(255, 0, 0);
+  background-color: rgb(255, 255, 255);
 }
 
 .card .text-field input {
-  color: white;
+  color: rgb(255, 0, 0);
 }
 
 .card .text-field label {
-  color: rgb(144, 144, 144);
+  color: rgb(122, 109, 109);
 }
 
 .card .smallBtn {
   padding: 0.25rem;
-  color: rgb(3, 173, 215);
+  color: rgb(38, 179, 214);
 }
 
 .displayBlock {

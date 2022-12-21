@@ -1,5 +1,6 @@
 import "../styles/UserAuth.css";
-import { TextField, Button } from "@mui/material";
+// import { TextField, Button } from "@mui/material";
+import { TextField, Button, makeStyles } from "@material-ui/core";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { Container } from "@mui/system";
@@ -9,11 +10,19 @@ import { doPasswordReset } from "../firebase/FirebaseFunctions";
 import * as Yup from "yup";
 import { useFormik, Form, FormikProvider } from "formik";
 
+const useStyles = makeStyles({
+  textfield: {
+    color: "#1a1a1a",
+    background: "white",
+  },
+});
+
 const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 const ForgotPassword = () => {
+  const classes = useStyles();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [popupDetails, setPopupDetails] = useState({
@@ -98,7 +107,7 @@ const ForgotPassword = () => {
             id="email"
             label="Email"
             variant="outlined"
-            className="text-field"
+            className={classes.textfield}
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             {...getFieldProps("email")}
