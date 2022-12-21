@@ -36,8 +36,8 @@ Username: prausche@stevens.edu
 <br/>Password: %B%CaiYve3xE7CxDyg*f<br/>
 
 - Incognito Credentials
-Username: 
-<br/>Password: <br/>
+Username: krina@gmail.com
+<br/>Password: 123123<br/>
 
 ## How Does Incognito Work?
 1. When you open the website, the first page will be the Authentication page.
