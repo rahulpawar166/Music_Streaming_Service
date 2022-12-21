@@ -26,7 +26,7 @@
 1. Clone the repository
 2. Open the folder in a source-code editor like Visual Studio Code
 3. Type cd client and cd server in two different terminals and Run `npm i` or `npm install` in order to install all the required libraries for this project
-4. Run `npm run seed` to run the task of seeding the db
+4. change directory to server/tasks and Run `npm run seed` to run the task of seeding the db 
 5. Run `npm start` to start the router
 
 ## Credentials
