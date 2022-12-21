@@ -145,7 +145,10 @@ const TrackDetails = () => {
           <AddPlaylistPopup
             open={popupOpened}
             handleClose={handlePopupClosed}
-            track={{ trackDetails }}
+            track={{
+              imageUrl: trackDetails?.album?.images[0]?.url,
+              ...trackDetails,
+            }}
           />
           <Typography className={classes.title} variant="h1">
             {trackDetails?.name}

@@ -1,52 +1,24 @@
+<<<<<<< HEAD
 import "../styles/UserAuth.css";
 // import { TextField, Button } from "@mui/material";
 import { TextField, Button, makeStyles } from "@material-ui/core";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+=======
+import { Button, TextField } from "@mui/material";
+>>>>>>> 427fa4ad856a48df3b75ed35bb2084bc2184550a
 import { Container } from "@mui/system";
-import { useState, forwardRef, useContext } from "react";
+import { useFormik } from "formik";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { doPasswordReset } from "../firebase/FirebaseFunctions";
 import * as Yup from "yup";
-import { useFormik, Form, FormikProvider } from "formik";
-
-const useStyles = makeStyles({
-  textfield: {
-    color: "#1a1a1a",
-    background: "white",
-  },
-});
-
-const Alert = forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
+import { doPasswordReset } from "../firebase/FirebaseFunctions";
+import "../styles/UserAuth.css";
 
 const ForgotPassword = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const [popupDetails, setPopupDetails] = useState({
-    shown: false,
-    message: "",
-    variant: "",
-  });
-
-  const notifyPopup = (message, variant) => {
-    setPopupDetails({
-      shown: false,
-      message: message,
-      variant: variant,
-    });
-  };
-
-  const closeNotification = (e, reason) => {
-    if (reason === "clickaway") return;
-    setPopupDetails({
-      shown: false,
-      message: "",
-      variant: "",
-    });
-  };
 
   const ForgorPasswordSchema = Yup.object().shape({
     email: Yup.string()
@@ -67,35 +39,15 @@ const ForgotPassword = () => {
     try {
       if (values.email) {
         await doPasswordReset(values.email);
-        notifyPopup("Password reset email was sent!", "success");
         navigate("/signin");
-      } else {
-        notifyPopup("Please enter an email address!", "error");
       }
     } catch (error) {
       console.error(error.message);
-      notifyPopup(
-        error.message || "Request to reset password failed!",
-        "error",
-      );
     }
   };
 
   return (
     <div className="container">
-      <Snackbar
-        open={popupDetails.shown}
-        autoHideDuration={2000}
-        onClose={closeNotification}
-      >
-        <Alert
-          onClose={closeNotification}
-          severity={popupDetails.variant}
-          sx={{ width: "100%" }}
-        >
-          {popupDetails.message}
-        </Alert>
-      </Snackbar>
       <div className="card">
         <h1>Forgot Password</h1>
         <Container maxWidth="sm">
