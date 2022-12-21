@@ -3,10 +3,16 @@ const auth = require("../auth");
 const spotifyAxios = require("../spotifyAxios");
 const router = express.Router();
 const redis = require("redis");
-const client = redis.createClient();
+// const client = redis.createClient();
 const flat = require("flat");
 const unflatten = flat.unflatten;
-
+let client
+if(process.env.REDISCLOUD_URL){
+    let redisURL = url.parse(process.env.REDISCLOUD_URL);
+    client = redis.createClient(redisURL)
+} else {
+  client = redis.createClient()
+}
 client.connect().then(() => {});
 
 router.get("/top/tracks", auth, async (req, res) => {

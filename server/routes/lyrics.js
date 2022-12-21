@@ -7,9 +7,9 @@ const redis = require("redis");
 let client
 if(process.env.REDISCLOUD_URL){
     let redisURL = url.parse(process.env.REDISCLOUD_URL);
-    redisClient = redis.createClient(redisURL)
+    client = redis.createClient(redisURL)
 } else {
-    redisClient = redis.createClient()
+  client = redis.createClient()
 }
 
 router.post("/", async (req, res) => {
