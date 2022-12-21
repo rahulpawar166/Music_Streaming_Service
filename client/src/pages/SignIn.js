@@ -4,7 +4,8 @@ import { useState, forwardRef } from "react";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
-import { TextField, Button, IconButton, InputAdornment } from "@mui/material";
+import { IconButton, InputAdornment } from "@mui/material";
+import { TextField, Button, makeStyles } from "@material-ui/core";
 import { Container } from "@mui/system";
 import { doSignIn } from "../firebase/FirebaseFunctions";
 import * as Yup from "yup";
@@ -16,8 +17,16 @@ const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
+const useStyles = makeStyles({
+  textfield: {
+    color: "#1a1a1a",
+    background: "white",
+  },
+});
+
 const SignIn = () => {
   const navigate = useNavigate();
+  const classes = useStyles();
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [popupDetails, setPopupDetails] = useState({
@@ -109,7 +118,7 @@ const SignIn = () => {
                 id="email"
                 label="Email"
                 variant="outlined"
-                className="text-field"
+                className={classes.textfield}
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
                 {...getFieldProps("email")}
@@ -122,7 +131,7 @@ const SignIn = () => {
                 id="password"
                 label="Password"
                 variant="outlined"
-                className="text-field"
+                className={classes.textfield}
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
                 {...getFieldProps("password")}

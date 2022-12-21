@@ -1,4 +1,12 @@
+<<<<<<< HEAD
+import "../styles/UserAuth.css";
+// import { TextField, Button } from "@mui/material";
+import { TextField, Button, makeStyles } from "@material-ui/core";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+=======
 import { Button, TextField } from "@mui/material";
+>>>>>>> 427fa4ad856a48df3b75ed35bb2084bc2184550a
 import { Container } from "@mui/system";
 import { useFormik } from "formik";
 import { useState } from "react";
@@ -8,6 +16,7 @@ import { doPasswordReset } from "../firebase/FirebaseFunctions";
 import "../styles/UserAuth.css";
 
 const ForgotPassword = () => {
+  const classes = useStyles();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
 
@@ -50,7 +59,7 @@ const ForgotPassword = () => {
             id="email"
             label="Email"
             variant="outlined"
-            className="text-field"
+            className={classes.textfield}
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             {...getFieldProps("email")}
