@@ -7,9 +7,15 @@ const xss = require("xss");
 const flat = require("flat");
 const unflatten = flat.unflatten;
 const redis = require("redis");
-const client = redis.createClient();
+// const client = redis.createClient();
 client.connect().then(() => {});
-
+let client
+if(process.env.REDISCLOUD_URL){
+    let redisURL = url.parse(process.env.REDISCLOUD_URL);
+    client = redis.createClient(redisURL)
+} else {
+  client = redis.createClient()
+}
 //return playlist data
 router.post("/playListData", async (req, res) => {
   console.log("inside fetch route");

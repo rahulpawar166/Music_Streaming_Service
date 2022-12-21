@@ -2,8 +2,15 @@ const express = require("express");
 const lyricsFinder = require("lyrics-finder");
 const router = express.Router();
 const redis = require("redis");
-const client = redis.createClient();
-client.connect().then(() => {});
+// const client = redis.createClient();
+// client.connect().then(() => {});
+let client
+if(process.env.REDISCLOUD_URL){
+    let redisURL = url.parse(process.env.REDISCLOUD_URL);
+    client = redis.createClient(redisURL)
+} else {
+  client = redis.createClient()
+}
 
 router.post("/", async (req, res) => {
   try {

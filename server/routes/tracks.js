@@ -4,7 +4,7 @@ const spotifyAxios = require("../spotifyAxios");
 const axios = require("axios");
 const router = express.Router();
 const redis = require("redis");
-const client = redis.createClient();
+// const client = redis.createClient();
 const flat = require("flat");
 const unflatten = flat.unflatten;
 const multer = require("multer");
@@ -29,7 +29,13 @@ const upload = multer({
   //   },
 });
 const fs = require("fs");
-
+let client
+if(process.env.REDISCLOUD_URL){
+    let redisURL = url.parse(process.env.REDISCLOUD_URL);
+    client = redis.createClient(redisURL)
+} else {
+  client = redis.createClient()
+}
 client.connect().then(() => {});
 
 router.get("/:id", auth, async (req, res) => {

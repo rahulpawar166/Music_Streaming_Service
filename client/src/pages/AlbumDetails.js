@@ -80,23 +80,6 @@ const useStyles = makeStyles({
   },
 });
 
-const addToPlaylist = async (trackId, trackname, img_url) => {
-  try {
-    const { data } = await axios.post(
-      `http://localhost:3008/playlist/addTrack`,
-      {
-        uid: window.localStorage.getItem("currentUser"),
-        albumId: trackId,
-        name: window.localStorage.getItem("currentPlaylist"),
-        trackname: trackname,
-        img_url: img_url,
-      },
-    );
-  } catch (error) {
-    console.log("error", error);
-  }
-};
-
 const AlbumDetails = () => {
   const classes = useStyles();
   const { currentUser } = useContext(AuthContext);
@@ -105,6 +88,7 @@ const AlbumDetails = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [playingTrack, setPlayingTrack] = useContext(PlayerContext);
+  const [trackToAdd, setTrackToAdd] = useState(null);
   const [popupOpened, setPopupOpened] = useState(false);
 
   const handlePopupOpened = () => {
@@ -116,7 +100,7 @@ const AlbumDetails = () => {
   };
 
   const handleAddToPlaylist = async (track) => {
-    const userToken = await currentUser.getIdToken();
+    setTrackToAdd(track);
     handlePopupOpened();
   };
 
@@ -150,6 +134,13 @@ const AlbumDetails = () => {
     return (
       albumDetails && (
         <div key={albumDetails.id}>
+          {trackToAdd && (
+            <AddPlaylistPopup
+              open={popupOpened}
+              handleClose={handlePopupClosed}
+              track={{ imageUrl: albumDetails?.images[0]?.url, ...trackToAdd }}
+            />
+          )}
           <h1 className={classes.title}>{albumDetails.name}</h1>
           <img
             className={classes.albumImg}
@@ -171,11 +162,6 @@ const AlbumDetails = () => {
               <List className={classes.list} style={{ marginTop: "10px" }}>
                 {albumDetails.tracks.items?.map((element, idx) => (
                   <div>
-                    <AddPlaylistPopup
-                      open={popupOpened}
-                      handleClose={handlePopupClosed}
-                      track={{ element }}
-                    />
                     <ListItem className={classes.listItem} key={element?.id}>
                       <ListItemText
                         className={classes.link}
