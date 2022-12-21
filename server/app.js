@@ -4,7 +4,7 @@ const cors = require("cors");
 const compression = require("compression");
 const cookieParser = require("cookie-parser");
 const app = express();
-const PORT = 3008;
+const PORT = process.env.PORT || 3008;
 const path = require("path");
 
 app.use(cors());
