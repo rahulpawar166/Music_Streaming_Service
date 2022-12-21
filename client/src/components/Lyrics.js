@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
   lyrics: {
     whiteSpace: "pre-line",
+    
   },
   title: {
     marginTop: "20px",
