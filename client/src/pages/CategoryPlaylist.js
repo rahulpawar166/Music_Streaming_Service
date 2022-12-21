@@ -20,6 +20,7 @@ import {
   ListItem,
   Divider,
   ListItemText,
+  ImageList,
 } from "@material-ui/core";
 
 // import { Card, CardHeader, Grid, makeStyles, Button } from "@material-ui/core";
@@ -87,22 +88,7 @@ const useStyles = makeStyles({
     marginTop: "30px",
   },
 });
-const addToPlaylist = async (trackId, trackname, img_url) => {
-  try {
-    const { data } = await axios.post(
-      `http://localhost:3008/playlist/addTrack`,
-      {
-        uid: window.localStorage.getItem("currentUser"),
-        albumId: trackId,
-        name: window.localStorage.getItem("currentPlaylist"),
-        trackname: trackname,
-        img_url: img_url,
-      },
-    );
-  } catch (error) {
-    console.log("error", error);
-  }
-};
+
 const CategoryPlaylist = () => {
   const classes = useStyles();
   //to get data of particular albums
@@ -113,6 +99,7 @@ const CategoryPlaylist = () => {
   const [error, setError] = useState(null);
   const { currentUser } = useContext(AuthContext);
   const [playingTrack, setPlayingTrack] = useContext(PlayerContext);
+  const [trackToAdd, setTrackToAdd] = useState(null);
   const [popupOpened, setPopupOpened] = useState(false);
 
   const handlePopupOpened = () => {
@@ -124,7 +111,7 @@ const CategoryPlaylist = () => {
   };
 
   const handleAddToPlaylist = async (track) => {
-    const userToken = await currentUser.getIdToken();
+    setTrackToAdd(track);
     handlePopupOpened();
   };
 
@@ -163,18 +150,22 @@ const CategoryPlaylist = () => {
         <Loading />
       </div>
     );
-  } else if (!found) {
-    return <h1>404: not enough data for this page</h1>;
-  } else
+  } else if (!found) return <Error message={"404: Resource not Found"} />;
+  else
     return (
       trackAlbums && (
         <div key={trackAlbums.id}>
           <h1 className={classes.title}>{trackAlbums.name}</h1>
-          <AddPlaylistPopup
-            open={popupOpened}
-            handleClose={handlePopupClosed}
-            track={{ trackAlbums }}
-          />
+          {trackToAdd && (
+            <AddPlaylistPopup
+              open={popupOpened}
+              handleClose={handlePopupClosed}
+              track={{
+                imageUrl: trackToAdd?.album.images[0].url,
+                ...trackToAdd,
+              }}
+            />
+          )}
           <br />
           <TableContainer
             container="true"
@@ -217,7 +208,7 @@ const CategoryPlaylist = () => {
                       className={classes.addToPlaylistBtn}
                       variant="contained"
                       style={{ textAlign: "start" }}
-                      onClick={() => handleAddToPlaylist(element)}
+                      onClick={() => handleAddToPlaylist(element?.track)}
                     >
                       Add To PlayList
                     </Button>
@@ -231,7 +222,9 @@ const CategoryPlaylist = () => {
                     <br />
                     <Button
                       className={classes.lyricsBtn}
-                      href={`/Lyrics/${trackAlbums?.artists?.name}/${element?.track.name}`}
+                      href={`/Lyrics/${encodeURIComponent(
+                        trackAlbums?.artists?.name,
+                      )}/${encodeURIComponent(element?.track.name)}`}
                     >
                       Lyrics
                     </Button>
